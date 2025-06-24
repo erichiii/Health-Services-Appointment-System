@@ -1,3 +1,52 @@
 /* 
 layout.css is used for styling the main layout (e.g., headers and footers)
 */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.clinic-header {
+  width: 100%;
+  max-width: 1920px;
+  height: 90px;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Drop shadow on bottom */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.clinic-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.clinic-nav {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.clinic-nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.book-btn {
+  background-color: #1a73e8;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 999px; /* pill shape */
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.book-btn:hover {
+  background-color: #155ab6;
+}
