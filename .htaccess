@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteBase /Health-Services-Appointment-System/
+
+# what is htaccess? 
+# enables clean URLs
+# redirects all request to main page (index.php)
+
+# Send all non-file, non-folder URLs to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
