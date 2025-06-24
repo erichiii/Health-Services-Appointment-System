@@ -1,3 +1,95 @@
 /* 
 layout.css is used for styling the main layout (e.g., headers and footers)
 */
+
+body {
+  font-family: 'Arimo', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: white;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  margin-top: 0;
+}
+
+/* Footer Layout */
+.main-footer {
+  background: #33b6ff;
+  color: white;
+  padding: 40px 20px;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 45px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Footer Columns */
+.footer-col {
+  flex: 1 1 200px;
+}
+
+.footer-col h4 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 8px;
+}
+
+.footer-col ul li a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-col ul li a:hover {
+  color: #6542c1; 
+}
+
+/* Clinic Logo */
+.logo-container {
+  margin-bottom: 10px;
+}
+
+.clinic-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Social Media Icons */
+.social-icons a i {
+  font-size: 24px;
+  color: white;
+  margin-right: 12px;
+  transition: color 0.3s;
+}
+
+.social-icons a:hover i {
+  color: #6542c1; /*idk what hover color to use, please change*/
+}
+
+.footer-col p i,
+.footer-col p span.icon-placeholder {
+  margin-right: 10px;
+  color: white;
+}

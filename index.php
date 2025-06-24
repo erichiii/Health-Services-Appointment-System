@@ -1,3 +1,3 @@
-<?php
-echo "This is a test";
-?>
+<?php include 'includes/header.php'; ?>
+
+<?php include 'includes/footer.php'; ?>
