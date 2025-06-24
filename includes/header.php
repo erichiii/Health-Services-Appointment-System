@@ -14,7 +14,7 @@
     <header class="clinic-header">
         <div class="header-container">
             <div class="clinic-title">
-                <a>Village East Clinic</a>
+                <a href = "index.php">Village East Clinic</a>
             </div>
             <nav class="clinic-nav">
                 <a href="services.php">Services</a>
