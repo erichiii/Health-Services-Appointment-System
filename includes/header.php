@@ -17,11 +17,11 @@
                 <a href = "index.php">Village East Clinic</a>
             </div>
             <nav class="clinic-nav">
-                <a href="services.php">Services</a>
-                <a href="announcements.php">Announcements</a>
-                <a href="health-programs.php">Health Programs</a>
-                <a href="contact.php">Contact Us</a>
-                <a href="book-appointment.php" class="book-btn">Book Now</a>
+                <a href="#">Services</a>
+                <a href="pages/announcements.php">Announcements</a>
+                <a href="pages/programs.php">Health Programs</a>
+                <a href="pages/contact.php">Contact Us</a>
+                <a href="pages/reservation.php" class="book-btn">Book Now</a>
             </nav>
         </div>
     </header>

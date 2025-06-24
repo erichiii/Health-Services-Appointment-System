@@ -4,7 +4,7 @@ layout.css is used for styling the main layout (e.g., headers and footers)
 
 body {
     margin: 0;
-    font-family: 'Arial'; /* Nunito is currently not working*/
+    font-family: 'Arimo', sans-serif; 
 }
 
 h1, h2, h3, h4, h5, h6 {
