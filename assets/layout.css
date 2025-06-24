@@ -3,59 +3,8 @@ layout.css is used for styling the main layout (e.g., headers and footers)
 */
 
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-.clinic-header {
-  width: 100%;
-  max-width: 1920px;
-  height: 90px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Drop shadow on bottom */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  box-sizing: border-box;
-}
-
-.clinic-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-}
-
-.clinic-nav {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-.clinic-nav a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-}
-
-.book-btn {
-  background-color: #1a73e8;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 999px; /* pill shape */
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.book-btn:hover {
-  background-color: #155ab6;
-  font-family: 'Arimo', sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  color: white;
-  background-color: #f8f9fa;
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    font-family: 'Arial'; /* Nunito is currently not working*/
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -63,6 +12,86 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   margin-top: 0;
 }
+
+/* Header Layout */
+.clinic-header {
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.clinic-title {
+  font-size: 1.5rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: bold;
+  color: #33b6ff;
+  flex: 0 0 auto; /* Don't allow title to grow/shrink */
+}
+
+.clinic-title a {
+  color: #33b6ff;
+  text-decoration: none;
+}
+
+.clinic-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.clinic-nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 4px 8px;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.clinic-nav a:hover {
+  color: #1a73e8;
+}
+
+/* Book Now Button */
+.clinic-nav a.book-btn {
+  background-color: #33b6ff;
+  color: white !important;
+  padding: 10px 30px;         
+  font-size: 1rem;           
+  border-radius: 999px;       
+  font-weight: bold;
+  white-space: nowrap;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.clinic-nav a.book-btn:hover {
+  background-color: #1b72a1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .clinic-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
 
 /* Footer Layout */
 .main-footer {
