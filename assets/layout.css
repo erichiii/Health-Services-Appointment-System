@@ -168,3 +168,136 @@ h1, h2, h3, h4, h5, h6 {
   margin-right: 10px;
   color: white;
 }
+
+/*Homepage Layout*/
+
+.hero-section {
+  padding: 8rem 2rem 8rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  margin-bottom: 5rem;
+  background-color: #E1EDFA; /*placeholder color while no image yet*/
+}
+
+.hero-section-content {
+  margin-left: 17%;
+}
+
+.about-us-btn { /*placeholder*/
+  background: #33b6ff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 10%;
+  transition: background-color 0.3s;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.first-section {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 50px;
+  margin-bottom: 5rem;
+}
+
+.services-schedule {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 0.95rem;
+}
+
+.announcement-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+ }
+
+.announcement-item:last-child, .news-item:last-child {
+  border-bottom: none;
+}
+
+.item-content {
+  flex: 1;
+  margin-left: 15px;
+}
+
+.item-title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.item-date {
+  color: #666;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.item-arrow {
+  color: #33b6ff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.view-all-btn {
+  background: #33b6ff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 89%;
+  transition: background-color 0.3s;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  margin: auto;
+}
+
+.second-section {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  display: grid;
+  gap: 50px;
+  margin-bottom: 5rem;
+}
+
+.call-to-action-section {
+  padding: 8rem 2rem 8rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  margin-bottom: 1rem;
+  text-align: center;
+  background-color: #E1EDFA; /*placeholder color while no image yet*/
+}
+
+.call-to-action-content {
+  margin: auto;
+}
