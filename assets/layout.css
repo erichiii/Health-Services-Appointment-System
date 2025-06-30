@@ -493,13 +493,27 @@ h1, h2, h3, h4, h5, h6 {
   padding: 8rem 2rem 8rem;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  margin-bottom: 1rem;
   text-align: center;
   background-color: #E1EDFA; /*placeholder color while no image yet*/
 }
 
 .call-to-action-content {
-  margin: auto;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.call-to-action-content .card-grid {
+  justify-items: center;
+  max-width: 100%;
+  margin: 0 auto;
+  gap: 10px;
+}
+
+.call-to-action-content .card {
+  text-align: center;
+  max-width: 320px;
+  width: 100%;
+  min-width: 250px;
 }
 
 /* Event Display */
@@ -716,6 +730,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1.3rem;
   color: #333;
   margin: 0 0 10px 0;
+  margin-bottom: 20px;
   text-align: center;
 }
 
@@ -865,4 +880,18 @@ h1, h2, h3, h4, h5, h6 {
   .card {
     padding: 15px;
   }
+}
+
+.icon {
+  width: 80px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #298cf6;
+  font-weight: bold;
+  margin: 0 auto 20px;
+  margin-top: 12px;
+  font-size: 2.2rem;
+  transition: all 0.3s ease;
 }

@@ -233,7 +233,30 @@
 <div class = "call-to-action-section">
   <div class = "call-to-action-content">
     <h2><strong>Visit Us Today</strong></h2>
-    <p class = "subtitle">Here to serve you with quality healthcare services 24/7.</p>
+    <p class = "subtitle">Here to serve you with quality healthcare services.</p>
+    <div class="card-grid cols-3">
+        <div class="card">
+            <div class="icon"><i class="far fa-clock"></i></div>
+            <h3 class="card-title">Operating Hours</h3>
+            <p class="card-text">Mon-Fri: 8:00 AM - 5:00 PM</p>
+            <p class="card-text">Sat: 8:00 AM - 12:00 PM</p>
+            <p class="card-text">Sun: Closed</p>
+        </div>
+
+        <div class="card">
+            <div class="icon"><i class="fas fa-phone"></i></div>
+            <h3 class="card-title">Emergency Hotline</h3>
+            <p class="card-text">24/7 Emergency Services</p>
+            <p class="card-text"><strong>(02) 123-4567</strong></p>
+        </div>
+
+        <div class="card">
+            <div class="icon"><i class="far fa-heart"></i></div>
+            <h3 class="card-title">Health Programs</h3>
+            <p class="card-text">Free vaccination programs</p>
+            <p class="card-text">Health education sessions</p>
+        </div>
+    </div>
   </div>
 </div>
 
