@@ -228,6 +228,7 @@
         </div>
     </div>
   </div>
+</div>
 
 <div class = "call-to-action-section">
   <div class = "call-to-action-content">
