@@ -201,12 +201,33 @@
 <div class = "second-section">
   <div class = "our-services">
     <h2><strong>Our Services</strong></h2>
-  </div>
+  
+    <div class="card-grid cols-4">
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-user-md"></i></div>
+            <h3 class="card-title">Medical Consultation</h3>
+            <p class="card-text">Medical consultations with experienced healthcare providers for comprehensive health assessments and personalized treatment plans.</p>
+        </div>
 
-  <div class = "health-articles">
-    <h2><strong>Health Articles</strong></h2>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-syringe"></i></div>
+            <h3 class="card-title">Vaccination Services</h3>
+            <p class="card-text">Complete vaccination programs for all ages including routine immunizations, travel vaccines, and seasonal flu shots to protect your health.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-heartbeat"></i></div>
+            <h3 class="card-title">Health Check-Ups</h3>
+            <p class="card-text">Regular comprehensive health screenings and check-ups to monitor your well-being and detect potential health issues early.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-ambulance"></i></div>
+            <h3 class="card-title">Emergency Care</h3>
+            <p class="card-text">Immediate medical attention and urgent care services available for emergency situations and critical health conditions.</p>
+        </div>
+    </div>
   </div>
-</div>
 
 <div class = "call-to-action-section">
   <div class = "call-to-action-content">
