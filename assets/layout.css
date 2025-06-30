@@ -222,6 +222,195 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 0.95rem;
 }
 
+.calendar-container {
+  background: white;
+  border-radius: 12px;
+  width: 89%;
+  padding: 40px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.calendar-container {
+  background: white;
+  border-radius: 12px;
+  width: 89%;
+  padding: 40px;
+  margin-bottom: 20px; 
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Calendar */
+.calendar {
+  width: 100%;
+  max-width: 100%;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.calendar-header h3 {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.calendar-nav-btn {
+  background: #33b6ff;
+  color: white;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.calendar-nav-btn:hover {
+  background-color: #1b72a1;
+  color: white;
+  text-decoration: none;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.day {
+  text-align: center;
+  font-weight: 600;
+  color: #666;
+  padding: 12px;
+  font-size: 0.9rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.calendar-date {
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  background: white;
+  color: #333;
+  font-weight: 500;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.calendar-date:hover {
+  background: #e3f2fd;
+  border-color: #33b6ff;
+  color: #333;
+}
+
+.calendar-date.today {
+  background: #33b6ff;
+  color: white;
+  font-weight: 600;
+}
+
+.calendar-date.today:hover {
+  background: #1b72a1;
+  color: white;
+}
+
+.calendar-date.selected {
+  background: #1b72a1;
+  color: white;
+  border-color: #1b72a1;
+}
+
+.calendar-date.selected:hover {
+  background: #155a87;
+  color: white;
+}
+
+.calendar-date.other-month {
+  color: #ccc;
+  background: #f8f9fa;
+}
+
+.calendar-date.other-month:hover {
+  background: #e9ecef;
+  color: #999;
+  border-color: #dee2e6;
+}
+
+.calendar-date.has-event {
+  position: relative;
+}
+
+.calendar-date.has-event::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff6b6b;
+}
+
+.calendar-date.has-event.today::after {
+  background: white;
+}
+
+.calendar-date.has-event.selected::after {
+  background: white;
+}
+
+/* Responsive calendar */
+@media (max-width: 768px) {
+  .calendar-container {
+    width: 95%;
+    padding: 20px;
+  }
+  
+  .calendar-grid {
+    gap: 4px;
+  }
+  
+  .day,
+  .calendar-date {
+    padding: 8px 4px;
+    font-size: 0.8rem;
+    min-height: 35px;
+  }
+  
+  .calendar-header h3 {
+    font-size: 1.2rem;
+  }
+  
+  .calendar-nav-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+}
+
 .announcement-item {
   display: flex;
   justify-content: space-between;
@@ -280,6 +469,22 @@ h1, h2, h3, h4, h5, h6 {
   margin: auto;
 }
 
+.view-all-programs-btn {
+  background: #33b6ff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 94.5%;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
 .second-section {
   max-width: 1200px;
   margin: 40px auto;
@@ -300,4 +505,175 @@ h1, h2, h3, h4, h5, h6 {
 
 .call-to-action-content {
   margin: auto;
+}
+
+/* Event Display */
+.event-display-box {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border: 2px solid #33b6ff;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.event-header h4 {
+  color: #33b6ff;
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  padding: 5px;
+  text-decoration: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.event-content {
+  padding: 0;
+}
+
+.event-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.event-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0 12px 15px;
+  border-bottom: 1px solid #f5f5f5;
+  border-left: 4px solid #33b6ff;
+  margin-left: 1px;
+  padding-left: 10px;
+  background: #f8f9fa;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.event-item:hover {
+  background: #e3f2fd;
+  border-left-color: #1b72a1;
+}
+
+.event-item:last-child {
+  border-bottom: none;
+}
+
+.event-name {
+  color: #333;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.event-actions {
+  text-align: center;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.book-event-btn {
+  background: #33b6ff;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+
+.book-event-btn:hover {
+  background: #1b72a1;
+}
+
+.no-events {
+  text-align: center;
+  padding: 30px 20px;
+  color: #666;
+}
+
+.no-events p {
+  margin: 0 0 20px 0;
+  font-size: 1.1rem;
+}
+
+.contact-btn {
+  background: #6c757d;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+
+.contact-btn:hover {
+  background: #545b62;
+}
+
+/* Responsive adjustments for event box */
+@media (max-width: 768px) {
+  .event-display-box {
+    padding: 20px;
+    margin-top: 15px;
+  }
+  
+  .event-header h4 {
+    font-size: 1.1rem;
+  }
+  
+  .close-btn {
+    font-size: 20px;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .book-event-btn,
+  .contact-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
 }
