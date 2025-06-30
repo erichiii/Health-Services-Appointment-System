@@ -198,7 +198,7 @@
   </div>
 </div>
 
-<div class = "second-section">
+<div class = "second-section" id="services-section">
   <div class = "our-services">
     <h2><strong>Our Services</strong></h2>
   

@@ -17,7 +17,7 @@
                 <a href = "index.php">Village East Clinic</a>
             </div>
             <nav class="clinic-nav">
-                <a href="#">Services</a>
+                <a href="index.php#services-section">Services</a>
                 <a href="pages/announcements.php">Announcements</a>
                 <a href="pages/programs.php">Health Programs</a>
                 <a href="pages/contact.php">Contact Us</a>
