@@ -1,8 +1,12 @@
 <?php
 session_start();
 
+// Include authentication functions
+require_once '../includes/admin_functions.php';
+require_once 'auth.php';
+
 // If already logged in, redirect to dashboard
-if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
+if (isAdminLoggedIn()) {
     header('Location: dashboard.php');
     exit();
 }
@@ -11,17 +15,33 @@ $error_message = '';
 
 // Handle login form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? '';
+    $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    // Simple authentication (you should use a database in production)
-    if ($username === 'admin' && $password === 'admin123') {
-        $_SESSION['admin_logged_in'] = true;
-        $_SESSION['admin_username'] = $username;
-        header('Location: dashboard.php');
-        exit();
+    if (empty($username) || empty($password)) {
+        $error_message = 'Please enter both username and password';
     } else {
-        $error_message = 'Invalid username or password';
+        // Authenticate user against database
+        $admin = authenticateAdmin($username, $password);
+
+        if ($admin) {
+            // Create session token
+            $session_token = createAdminSession($admin['id']);
+
+            if ($session_token) {
+                // Set session data
+                $_SESSION['admin_token'] = $session_token;
+                $_SESSION['admin_data'] = $admin;
+
+                // Redirect to dashboard
+                header('Location: dashboard.php');
+                exit();
+            } else {
+                $error_message = 'Login failed. Please try again.';
+            }
+        } else {
+            $error_message = 'Invalid username or password';
+        }
     }
 }
 ?>
