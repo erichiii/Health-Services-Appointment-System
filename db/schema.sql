@@ -22,3 +22,7 @@ CREATE TABLE admin_users (
     INDEX idx_username (username),
     INDEX idx_email (email)
 );
+
+-- Insert default admin user (username: admin, password: password)
+INSERT INTO admin_users (username, email, password_hash, full_name) VALUES
+('admin', 'admin@villagesteastclinic.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'System Administrator');
