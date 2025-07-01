@@ -23,6 +23,17 @@ CREATE TABLE admin_users (
     INDEX idx_email (email)
 );
 
+CREATE TABLE admin_sessions (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    admin_id INT NOT NULL,
+    session_token VARCHAR(255) UNIQUE NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (admin_id) REFERENCES admin_users(id) ON DELETE CASCADE,
+    INDEX idx_session_token (session_token),
+    INDEX idx_expires_at (expires_at)
+);
+
 -- Insert default admin user (username: admin, password: admin123)
 INSERT INTO admin_users (username, email, password_hash, full_name) VALUES
 ('admin', 'admin@villagesteastclinic.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'System Administrator');
