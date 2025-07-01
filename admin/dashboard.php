@@ -1,20 +1,24 @@
 <?php
 session_start();
 
-// Check if user is logged in
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header('Location: login.php');
-    exit();
-}
+// Include authentication functions
+require_once '../includes/admin_functions.php';
+require_once 'auth.php';
+
+// Require admin login
+requireAdminLogin();
 
 // Handle logout
 if (isset($_GET['logout'])) {
-    session_destroy();
-    header('Location: login.php');
-    exit();
+    adminLogout();
 }
 
-$admin_username = $_SESSION['admin_username'] ?? 'Admin';
+// Get current admin data
+$admin = getCurrentAdmin();
+$admin_username = $admin['full_name'] ?? $admin['username'] ?? 'Admin';
+
+// Get dashboard statistics
+$stats = getDashboardStats();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,6 +44,7 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
                 </div>
                 <div class="admin-user-info">
                     <span>Welcome, <?php echo htmlspecialchars($admin_username); ?></span>
+                    <span class="admin-role">(Administrator)</span>
                     <a href="?logout=1" class="logout-btn">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
@@ -78,27 +83,27 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
                         <div class="stat-card">
                             <i class="fas fa-stethoscope"></i>
                             <h4>Services</h4>
-                            <p>Coming Soon</p>
+                            <p><?php echo number_format($stats['total_services']); ?> Active</p>
                         </div>
                         <div class="stat-card">
                             <i class="fas fa-calendar-alt"></i>
-                            <h4>Services Schedule</h4>
-                            <p>Coming Soon</p>
+                            <h4>Today's Appointments</h4>
+                            <p><?php echo number_format($stats['today_appointments']); ?> Scheduled</p>
                         </div>
                         <div class="stat-card">
                             <i class="fas fa-calendar-check"></i>
-                            <h4>Appointments</h4>
-                            <p>Coming Soon</p>
+                            <h4>Total Appointments</h4>
+                            <p><?php echo number_format($stats['total_appointments']); ?> All Time</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-clock"></i>
+                            <h4>Pending Appointments</h4>
+                            <p><?php echo number_format($stats['pending_appointments']); ?> Awaiting</p>
                         </div>
                         <div class="stat-card">
                             <i class="fas fa-bullhorn"></i>
                             <h4>Announcements</h4>
-                            <p>Coming Soon</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-user-shield"></i>
-                            <h4>Admin Users</h4>
-                            <p>Coming Soon</p>
+                            <p><?php echo number_format($stats['active_announcements']); ?> Active</p>
                         </div>
                     </div>
                 </div>
@@ -146,6 +151,11 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
             display: flex;
             align-items: center;
             gap: 1rem;
+        }
+
+        .admin-role {
+            opacity: 0.8;
+            font-size: 0.9rem;
         }
 
         .logout-btn {
