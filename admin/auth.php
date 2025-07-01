@@ -63,18 +63,12 @@ function adminLogout()
 }
 
 /**
- * Check admin permission level
+ * Check if admin is logged in (simplified - no role hierarchy)
  */
 function hasAdminPermission($required_role = 'admin')
 {
-    $admin = getCurrentAdmin();
-    if (!$admin) return false;
-
-    $roles = ['staff' => 1, 'admin' => 2, 'super_admin' => 3];
-    $user_level = $roles[$admin['role']] ?? 0;
-    $required_level = $roles[$required_role] ?? 2;
-
-    return $user_level >= $required_level;
+    // Since role field is removed, any logged-in admin has full access
+    return isAdminLoggedIn();
 }
 
 /**
@@ -113,19 +107,12 @@ function getAdminNavigation()
         ]
     ];
 
-    // Add admin-only items
-    if (hasAdminPermission('super_admin')) {
-        $nav[] = [
-            'url' => 'users.php',
-            'title' => 'Admin Users',
-            'icon' => 'fas fa-users'
-        ];
-        $nav[] = [
-            'url' => 'settings.php',
-            'title' => 'Settings',
-            'icon' => 'fas fa-cog'
-        ];
-    }
+    // Add admin management items (all logged-in admins can access)
+    $nav[] = [
+        'url' => 'users.php',
+        'title' => 'Admin Users',
+        'icon' => 'fas fa-users'
+    ];
 
     return $nav;
 }
