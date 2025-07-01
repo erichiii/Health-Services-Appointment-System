@@ -11,6 +11,7 @@
 <body>
 
 <?php include 'includes/header.php'; ?>
+<?php include 'includes/db_functions.php'; ?>
 
 <div class = "hero-section">
   <div class = "hero-section-content">
