@@ -62,12 +62,11 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
                     <h2>Dashboard Under Development</h2>
                     <p>We're building a comprehensive administrative interface. The dashboard will soon include:</p>
                     <ul class="admin-feature-list">
-                        <li><i class="fas fa-check"></i> Appointment management system</li>
-                        <li><i class="fas fa-check"></i> Patient records and database</li>
-                        <li><i class="fas fa-check"></i> Health program administration</li>
+                        <li><i class="fas fa-check"></i> Services management and configuration</li>
+                        <li><i class="fas fa-check"></i> Services schedule administration</li>
+                        <li><i class="fas fa-check"></i> Appointment booking and management</li>
                         <li><i class="fas fa-check"></i> Announcements and content management</li>
-                        <li><i class="fas fa-check"></i> System reports and analytics</li>
-                        <li><i class="fas fa-check"></i> User management and permissions</li>
+                        <li><i class="fas fa-check"></i> Admin user management and permissions</li>
                     </ul>
                     <p>Thank you for your patience while we complete the development!</p>
                 </div>
@@ -77,13 +76,18 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
                     <h3>Quick Overview</h3>
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <i class="fas fa-calendar-check"></i>
-                            <h4>Appointments</h4>
+                            <i class="fas fa-stethoscope"></i>
+                            <h4>Services</h4>
                             <p>Coming Soon</p>
                         </div>
                         <div class="stat-card">
-                            <i class="fas fa-users"></i>
-                            <h4>Patients</h4>
+                            <i class="fas fa-calendar-alt"></i>
+                            <h4>Services Schedule</h4>
+                            <p>Coming Soon</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-calendar-check"></i>
+                            <h4>Appointments</h4>
                             <p>Coming Soon</p>
                         </div>
                         <div class="stat-card">
@@ -92,8 +96,8 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
                             <p>Coming Soon</p>
                         </div>
                         <div class="stat-card">
-                            <i class="fas fa-heartbeat"></i>
-                            <h4>Programs</h4>
+                            <i class="fas fa-user-shield"></i>
+                            <h4>Admin Users</h4>
                             <p>Coming Soon</p>
                         </div>
                     </div>
