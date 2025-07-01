@@ -107,7 +107,7 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
             margin: 0;
             padding: 0;
             font-family: 'Nunito', sans-serif;
-            background-color: #f5f6fa;
+            background-color: #E1EDFA;
             min-height: 100vh;
         }
 
@@ -118,7 +118,7 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
         }
 
         .admin-header {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
+            background: #33b6ff;
             color: white;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
@@ -179,7 +179,7 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
 
         .dashboard-header h1 {
             font-size: 2.5rem;
-            color: #2c3e50;
+            color: #333;
             margin-bottom: 0.5rem;
             font-weight: 700;
         }
@@ -201,12 +201,12 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
 
         .progress-icon {
             font-size: 3rem;
-            color: #e67e22;
+            color: #33b6ff;
             margin-bottom: 1.5rem;
         }
 
         .admin-progress-notice h2 {
-            color: #2c3e50;
+            color: #333;
             margin-bottom: 1rem;
             font-weight: 600;
         }
@@ -233,7 +233,7 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
         }
 
         .admin-feature-list li i {
-            color: #27ae60;
+            color: #33b6ff;
             margin-right: 0.8rem;
             font-size: 0.9rem;
         }
@@ -246,7 +246,7 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
         }
 
         .quick-stats h3 {
-            color: #2c3e50;
+            color: #333;
             margin-bottom: 1.5rem;
             font-weight: 600;
         }
@@ -258,11 +258,11 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
         }
 
         .stat-card {
-            background: #f8f9fa;
+            background: white;
             padding: 1.5rem;
             border-radius: 8px;
             text-align: center;
-            border-left: 4px solid #3498db;
+            border-left: 4px solid #33b6ff;
             transition: transform 0.3s;
         }
 
@@ -272,12 +272,12 @@ $admin_username = $_SESSION['admin_username'] ?? 'Admin';
 
         .stat-card i {
             font-size: 2rem;
-            color: #3498db;
+            color: #33b6ff;
             margin-bottom: 1rem;
         }
 
         .stat-card h4 {
-            color: #2c3e50;
+            color: #333;
             margin: 0 0 0.5rem 0;
             font-weight: 600;
         }

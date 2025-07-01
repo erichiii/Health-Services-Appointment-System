@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 0;
             padding: 0;
             font-family: 'Nunito', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #33b6ff 0%, #6542c1 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .clinic-logo-section {
-            background: #2c3e50;
+            background: #33b6ff;
             color: white;
             text-align: center;
             padding: 2rem;
@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .login-form h3 {
             text-align: center;
             margin: 0 0 1.5rem 0;
-            color: #2c3e50;
+            color: #333;
             font-weight: 600;
         }
 
@@ -161,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .input-group label {
             display: block;
             margin-bottom: 0.5rem;
-            color: #2c3e50;
+            color: #333;
             font-weight: 600;
             font-size: 0.9rem;
         }
@@ -190,12 +190,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .input-wrapper input:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: #33b6ff;
         }
 
         .login-btn {
             width: 100%;
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            background: #33b6ff;
             color: white;
             border: none;
             padding: 0.875rem;
@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .login-btn:hover {
-            background: linear-gradient(135deg, #2980b9, #1f5f99);
+            background: #1b72a1;
             transform: translateY(-1px);
         }
 
@@ -232,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .login-footer a:hover {
-            color: #2c3e50;
+            color: #333;
         }
 
         @media (max-width: 480px) {
