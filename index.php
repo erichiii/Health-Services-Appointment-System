@@ -75,10 +75,9 @@
             <div class="calendar-container" id="calendar-section">
                 <div class="calendar">
                     <div class="calendar-header">
-                        <a href="?month=<?php echo $prev_month; ?>&year=<?php echo $prev_year; ?><?php echo $selected_date ? '&date=' . $selected_date : ''; ?>#calendar-section" class="calendar-nav-btn">
-                            << /a>
-                                <h3><?php echo $month_name . ' ' . $current_year; ?></h3>
-                                <a href="?month=<?php echo $next_month; ?>&year=<?php echo $next_year; ?><?php echo $selected_date ? '&date=' . $selected_date : ''; ?>#calendar-section" class="calendar-nav-btn">></a>
+                        <a href="?month=<?php echo $prev_month; ?>&year=<?php echo $prev_year; ?><?php echo $selected_date ? '&date=' . $selected_date : ''; ?>#calendar-section" class="calendar-nav-btn">‹</a>
+                        <h3><?php echo $month_name . ' ' . $current_year; ?></h3>
+                        <a href="?month=<?php echo $next_month; ?>&year=<?php echo $next_year; ?><?php echo $selected_date ? '&date=' . $selected_date : ''; ?>#calendar-section" class="calendar-nav-btn">›</a>
                     </div>
 
                     <div class="calendar-grid">
