@@ -4,7 +4,7 @@
     <!-- Contact Div -->
         <div class = "contact-info">
             <div class = "logo">
-                <img src = "images/logo.png" alt = "Clinic Logo" class = "clinic-logo">
+                <img src = "<?php echo isset($base_path) ? $base_path : ''; ?>images/logo.png" alt = "Clinic Logo" class = "clinic-logo">
             </div>
             <p><i class = "fa fa-map-marker-alt" style = "color: white;"></i><strong>&emsp;Brgy. Sto Domingo, Village East Executive</strong></p> 
             <p><strong>&emsp;&emsp;Homes, Cainta, Rizal, Philippines</strong></p>
@@ -16,10 +16,10 @@
         <div class = "footer-col">
             <h4>SERVICES</h4>
             <ul>
-                <li><a href = "#">Medical Consultation</a></li>
-                <li><a href = "#">Vaccination Services</a></li>
-                <li><a href = "#">Health Check-ups</a></li>
-                <li><a href = "#">Urgent Care</a></li>
+                <li><a href = "<?php echo isset($base_path) ? $base_path : ''; ?>index.php#services-section">Medical Consultation</a></li>
+                <li><a href = "<?php echo isset($base_path) ? $base_path : ''; ?>index.php#services-section">Vaccination Services</a></li>
+                <li><a href = "<?php echo isset($base_path) ? $base_path : ''; ?>index.php#services-section">Health Check-ups</a></li>
+                <li><a href = "<?php echo isset($base_path) ? $base_path : ''; ?>index.php#services-section">Urgent Care</a></li>
             </ul>
         </div>
     
@@ -27,9 +27,9 @@
         <div class = "footer-col">
             <h4>HEALTH PROGRAMS</h4>
             <ul>
-                <li><a href = "#">Vaccine Registration</a></li>
-                <li><a href = "#">Program Enrollment</a></li>
-                <li><a href = "#">Appointment Booking</a></li>
+                <li><a href = "<?php echo isset($base_path) ? $base_path : ''; ?>pages/programs.php">Vaccine Registration</a></li>
+                <li><a href = "<?php echo isset($base_path) ? $base_path : ''; ?>pages/programs.php">Program Enrollment</a></li>
+                <li><a href = "<?php echo isset($base_path) ? $base_path : ''; ?>pages/reservation.php">Appointment Booking</a></li>
             </ul>
         </div>
 
@@ -37,9 +37,9 @@
         <div class = "footer-col">
             <h4>ANNOUNCEMENTS</h4>
             <ul>
-                <li><a href="#">General Information</a></li>
-                <li><a href="#">Health Articles</a></li>
-                <li><a href="#">News Network</a></li>
+                <li><a href="<?php echo isset($base_path) ? $base_path : ''; ?>pages/announcements.php">General Information</a></li>
+                <li><a href="<?php echo isset($base_path) ? $base_path : ''; ?>pages/announcements.php">Health Articles</a></li>
+                <li><a href="<?php echo isset($base_path) ? $base_path : ''; ?>pages/announcements.php">News Network</a></li>
             </ul>
             
             <h4>CONNECT</h4>
