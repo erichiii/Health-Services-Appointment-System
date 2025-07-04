@@ -26,7 +26,7 @@
     <div class="first-section">
         <div class="services-schedule">
             <h2><strong>Services Schedule</strong></h2>
-            <p class="subtitle">Select a date to see available services.</p>
+            <p class="subtitle">Select a date to see special events and programs. Regular appointments available daily.</p>
 
             <!-- Calendar -->
             <?php
@@ -43,14 +43,11 @@
                 $current_year++;
             }
 
-            // sample events data - should be replaced with database data. this for sample only
-            $events = [
-                '2025-06-07' => ['Anti-Rabies Vaccination'],
-                '2025-06-30' => ['General Health Checkup', 'Blood Pressure Monitoring'],
-                '2025-07-15' => ['Health Checkup'],
-                '2025-07-20' => ['Dental Care'],
-                '2025-08-10' => ['Vaccination Drive']
-            ];
+            // Get events from database using the new functions
+            $events = getCalendarEvents($current_year, $current_month);
+            
+            // Get service category routes
+            $categoryRoutes = getServiceCategoryRoutes();
 
             // get calendar data
             $first_day = mktime(0, 0, 0, $current_month, 1, $current_year);
@@ -119,7 +116,23 @@
                             // check if date has events
                             if (isset($events[$date_string])) {
                                 $classes[] = 'has-event';
-                                $title = 'title="' . implode(', ', $events[$date_string]) . '"';
+                                
+                                // Get event categories for this date
+                                $categories = array_unique(array_map(function($event) {
+                                    return $event['category'];
+                                }, $events[$date_string]));
+                                
+                                // Add category-specific classes
+                                if (count($categories) > 1) {
+                                    $classes[] = 'has-mixed';
+                                } else {
+                                    $classes[] = 'has-' . $categories[0];
+                                }
+                                
+                                $event_names = array_map(function($event) {
+                                    return $event['service_name'];
+                                }, $events[$date_string]);
+                                $title = 'title="' . implode(', ', $event_names) . '"';
                             } else {
                                 $title = '';
                             }
@@ -140,31 +153,69 @@
                         ?>
                     </div>
 
+                    <!-- Color Legend -->
+                    <div class="calendar-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot vaccine"></div>
+                            <span>Vaccine Registration</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot program"></div>
+                            <span>Program Enrollment</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <?php if ($selected_date): ?>
                 <div class="event-display-box">
                     <div class="event-header">
-                        <h4>Events for <?php echo date('F j, Y', strtotime($selected_date)); ?></h4>
+                        <h4>Services for <?php echo date('F j, Y', strtotime($selected_date)); ?></h4>
                         <a href="?month=<?php echo $current_month; ?>&year=<?php echo $current_year; ?>#calendar-section" class="close-btn">&times;</a>
                     </div>
                     <div class="event-content">
                         <?php if (isset($events[$selected_date]) && !empty($events[$selected_date])): ?>
-                            <ul class="event-list">
-                                <?php foreach ($events[$selected_date] as $event): ?>
-                                    <li class="event-item">
-                                        <span class="event-name"><?php echo htmlspecialchars($event); ?></span>
-                                    </li>
+                            <div class="event-list">
+                                <?php 
+                                foreach ($events[$selected_date] as $event): 
+                                    $categoryClass = $event['category'] . '-card';
+                                ?>
+                                    <div class="event-item <?php echo $categoryClass; ?>">
+                                        <div class="event-details">
+                                            <h5 class="event-name">
+                                                <?php echo htmlspecialchars($event['service_name']); ?>
+                                            </h5>
+                                            <p class="event-time"><?php echo date('g:i A', strtotime($event['start_time'])) . ' - ' . date('g:i A', strtotime($event['end_time'])); ?></p>
+                                            <p class="event-slots">
+                                                <?php if ($event['available_slots'] > 0): ?>
+                                                    <span class="slots-available">✅ <?php echo $event['available_slots']; ?> slots available</span>
+                                                <?php else: ?>
+                                                    <span class="slots-full">❌ Fully booked</span>
+                                                <?php endif; ?>
+                                            </p>
+                                        </div>
+                                        <div class="event-actions">
+                                            <?php if ($event['available_slots'] > 0): ?>
+                                                <a href="<?php echo $categoryRoutes[$event['category']]['page']; ?>?service_id=<?php echo $event['service_id']; ?>&schedule_id=<?php echo $event['schedule_id']; ?>&type=<?php echo $event['category']; ?>&date=<?php echo $selected_date; ?>" 
+                                                   class="book-event-btn category-<?php echo $event['category']; ?>">
+                                                    <?php echo $categoryRoutes[$event['category']]['action']; ?>
+                                                </a>
+                                            <?php else: ?>
+                                                <span class="fully-booked-text">Fully Booked</span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
                                 <?php endforeach; ?>
-                            </ul>
-                            <div class="event-actions">
-                                <a href="pages/reservation.php?date=<?php echo $selected_date; ?>" class="book-event-btn">Book Appointment</a>
                             </div>
                         <?php else: ?>
                             <div class="no-events">
-                                <p>No services scheduled for this date.</p>
-                                <a href="pages/contact.php" class="contact-btn">Contact us for availability</a>
+                                <p>No special events scheduled for this date.</p>
+                                <p><strong>Need a regular appointment?</strong></p>
+                                <p>General consultations, health checkups, and routine services are available daily.</p>
+                                <div class="appointment-buttons">
+                                    <a href="pages/appointment.php?date=<?php echo $selected_date; ?>" class="contact-btn">Book General Appointment</a>
+                                    <a href="pages/contact.php" class="contact-btn secondary">Contact Us</a>
+                                </div>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -176,28 +227,48 @@
 
         <div class="announcements-column">
             <h2><strong>Announcements</strong></h2>
-            <!-- placeholder only -->
-            <div class="announcement-item">
-                <div class="item-content">
-                    <div class="item-title">Anti-Rabies Vaccination</div>
-                    <div class="item-date">📅 June 7, 2025</div>
-                </div>
-                <div class="item-arrow">→</div>
-            </div>
-            <div class="announcement-item">
-                <div class="item-content">
-                    <div class="item-title">Anti-Rabies Vaccination</div>
-                    <div class="item-date">📅 June 7, 2025</div>
-                </div>
-                <div class="item-arrow">→</div>
-            </div>
-            <div class="announcement-item">
-                <div class="item-content">
-                    <div class="item-title">Anti-Rabies Vaccination</div>
-                    <div class="item-date">📅 June 7, 2025</div>
-                </div>
-                <div class="item-arrow">→</div>
-            </div>
+            
+            <?php
+            // Get announcements from database
+            try {
+                $db = getDbConnection();
+                $stmt = $db->prepare("SELECT * FROM announcements WHERE is_active = 1 ORDER BY announcement_date DESC LIMIT 3");
+                $stmt->execute();
+                $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
+                if (!empty($announcements)) {
+                    foreach ($announcements as $announcement) {
+                        echo '<div class="announcement-item">';
+                        echo '<div class="item-content">';
+                        echo '<div class="item-title">' . htmlspecialchars($announcement['title']) . '</div>';
+                        echo '<div class="item-date">📅 ' . date('F j, Y', strtotime($announcement['announcement_date'])) . '</div>';
+                        echo '</div>';
+                        echo '<div class="item-arrow">→</div>';
+                        echo '</div>';
+                    }
+                } else {
+                    // Fallback to placeholder if no announcements
+                    echo '<div class="announcement-item">';
+                    echo '<div class="item-content">';
+                    echo '<div class="item-title">Anti-Rabies Vaccination</div>';
+                    echo '<div class="item-date">📅 June 7, 2025</div>';
+                    echo '</div>';
+                    echo '<div class="item-arrow">→</div>';
+                    echo '</div>';
+                }
+            } catch (PDOException $e) {
+                error_log("Database error: " . $e->getMessage());
+                // Fallback to placeholder
+                echo '<div class="announcement-item">';
+                echo '<div class="item-content">';
+                echo '<div class="item-title">Anti-Rabies Vaccination</div>';
+                echo '<div class="item-date">📅 June 7, 2025</div>';
+                echo '</div>';
+                echo '<div class="item-arrow">→</div>';
+                echo '</div>';
+            }
+            ?>
+            
             <a href="pages/announcements.php" class="view-all-btn">View All Announcements</a>
         </div>
     </div>
