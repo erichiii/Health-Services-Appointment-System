@@ -135,3 +135,18 @@ INSERT INTO service_schedules (service_id, schedule_date, start_time, end_time, 
 
 -- Note: Regular appointments (general consultations, routine checkups, etc.) are available daily and do not require special scheduling entries.
 -- Only special events, campaigns, and program enrollments are scheduled here.
+
+-- Audit log for all admin actions
+CREATE TABLE admin_action_audit_log (
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    admin_id INT UNSIGNED,
+    action ENUM('create', 'edit', 'delete') NOT NULL,
+    target_table VARCHAR(64) NOT NULL,
+    target_id INT UNSIGNED,
+    action_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    changes TEXT,
+    FOREIGN KEY (admin_id) REFERENCES admin_users(id) ON DELETE SET NULL,
+    INDEX idx_admin_id (admin_id),
+    INDEX idx_target_table (target_table),
+    INDEX idx_action_time (action_time)
+);
