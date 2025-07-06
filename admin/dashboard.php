@@ -1,9 +1,5 @@
 <?php
-session_start();
-
-// Include authentication functions
-require_once '../includes/admin_functions.php';
-require_once 'auth.php';
+require_once '../includes/admin_layout.php';
 
 // Require admin login
 requireAdminLogin();
@@ -19,314 +15,428 @@ $admin_username = $admin['full_name'] ?? $admin['username'] ?? 'Admin';
 
 // Get dashboard statistics
 $stats = getDashboardStats();
+
+// Get data for dashboard sections
+$recent_appointments = getAppointmentsAdmin(10, 0); // Get 10 most recent
+$recent_announcements = getAnnouncementsAdmin(10, 0); // Get 10 most recent
+$upcoming_services = getServiceSchedulesAdmin(10); // Get 10 upcoming
+
+// Filter upcoming services to only show future dates
+$upcoming_services = array_filter($upcoming_services, function ($schedule) {
+    return $schedule['schedule_date'] >= date('Y-m-d');
+});
+$upcoming_services = array_slice($upcoming_services, 0, 10);
+
+// Calculate programs count (services with category 'program')
+$services = getServicesAdmin();
+$program_count = count(array_filter($services, function ($service) {
+    return $service['category'] === 'program' && $service['is_active'];
+}));
+
+// Render the dashboard
+renderAdminLayout('Dashboard', function () use ($stats, $recent_appointments, $recent_announcements, $upcoming_services, $program_count) {
 ?>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Village East Clinic</title>
-    <link rel="stylesheet" href="../assets/layout.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&family=Nunito:wght@200;400;600;700&display=swap" rel="stylesheet">
-</head>
-
-<body>
-    <div class="admin-wrapper">
-        <!-- Admin Header -->
-        <header class="admin-header">
-            <div class="admin-header-content">
-                <div class="admin-logo">
-                    <h2><i class="fas fa-user-shield"></i> Village East Clinic Admin</h2>
-                </div>
-                <div class="admin-user-info">
-                    <span>Welcome, <?php echo htmlspecialchars($admin_username); ?></span>
-                    <span class="admin-role">(Administrator)</span>
-                    <a href="?logout=1" class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                </div>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="admin-main">
-            <div class="admin-container">
-                <div class="dashboard-header">
-                    <h1>Dashboard</h1>
-                    <p class="dashboard-subtitle">Administrative control panel for Village East Clinic</p>
-                </div>
-
-                <div class="admin-progress-notice">
-                    <div class="progress-icon">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                    <h2>Dashboard Under Development</h2>
-                    <p>We're building a comprehensive administrative interface. The dashboard will soon include:</p>
-                    <ul class="admin-feature-list">
-                        <li><i class="fas fa-check"></i> Services management and configuration</li>
-                        <li><i class="fas fa-check"></i> Services schedule administration</li>
-                        <li><i class="fas fa-check"></i> Appointment booking and management</li>
-                        <li><i class="fas fa-check"></i> Announcements and content management</li>
-                        <li><i class="fas fa-check"></i> Admin user management and permissions</li>
-                    </ul>
-                    <p>Thank you for your patience while we complete the development!</p>
-                </div>
-
-                <!-- Quick Stats Preview -->
-                <div class="quick-stats">
-                    <h3>Quick Overview</h3>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <i class="fas fa-stethoscope"></i>
-                            <h4>Services</h4>
-                            <p><?php echo number_format($stats['total_services']); ?> Active</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-calendar-alt"></i>
-                            <h4>Today's Appointments</h4>
-                            <p><?php echo number_format($stats['today_appointments']); ?> Scheduled</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-calendar-check"></i>
-                            <h4>Total Appointments</h4>
-                            <p><?php echo number_format($stats['total_appointments']); ?> All Time</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-clock"></i>
-                            <h4>Pending Appointments</h4>
-                            <p><?php echo number_format($stats['pending_appointments']); ?> Awaiting</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-bullhorn"></i>
-                            <h4>Announcements</h4>
-                            <p><?php echo number_format($stats['active_announcements']); ?> Active</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Nunito', sans-serif;
-            background-color: #E1EDFA;
-            min-height: 100vh;
-        }
-
-        .admin-wrapper {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .admin-header {
-            background: #33b6ff;
-            color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .admin-header-content {
-            max-width: 1200px;
+        .dashboard-container {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 1rem 2rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .metric-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .metric-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0;
+            color: #333;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 0.5rem 0 0 0;
+            color: #666;
+        }
+
+        .metric-desc {
+            font-size: 0.8rem;
+            color: #999;
+            margin: 0.25rem 0 0 0;
+        }
+
+        .icon-appointments {
+            background: #3b82f6;
+        }
+
+        .icon-today {
+            background: #f59e0b;
+        }
+
+        .icon-services {
+            background: #10b981;
+        }
+
+        .icon-announcements {
+            background: #8b5cf6;
+        }
+
+        .dashboard-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 1.25rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .admin-logo h2 {
+        .section-title {
             margin: 0;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 600;
-        }
-
-        .admin-user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .admin-role {
-            opacity: 0.8;
-            font-size: 0.9rem;
-        }
-
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            transition: background 0.3s;
+            color: #1e293b;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 0.9rem;
         }
 
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .admin-main {
-            flex: 1;
-            padding: 2rem 0;
-        }
-
-        .admin-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .dashboard-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .dashboard-header h1 {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-        }
-
-        .dashboard-subtitle {
-            font-size: 1.1rem;
-            color: #7f8c8d;
-            margin: 0;
-        }
-
-        .admin-progress-notice {
-            background: white;
-            border-radius: 12px;
-            padding: 3rem;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 3rem;
-        }
-
-        .progress-icon {
-            font-size: 3rem;
+        .expand-btn {
+            background: none;
+            border: none;
             color: #33b6ff;
-            margin-bottom: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.2s;
         }
 
-        .admin-progress-notice h2 {
-            color: #333;
-            margin-bottom: 1rem;
+        .expand-btn:hover {
+            background: #e0f2fe;
+        }
+
+        .section-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .section-content.collapsed {
+            display: none;
+        }
+
+        .section-item {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .section-item:hover {
+            background: #f8fafc;
+        }
+
+        .section-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-primary {
             font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
         }
 
-        .admin-progress-notice p {
-            color: #5a6c7d;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
+        .item-secondary {
+            font-size: 0.85rem;
+            color: #64748b;
         }
 
-        .admin-feature-list {
-            list-style: none;
-            padding: 0;
-            margin: 2rem 0;
-            text-align: left;
-            display: inline-block;
+        .item-meta {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 0.25rem;
         }
 
-        .admin-feature-list li {
-            color: #5a6c7d;
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .admin-feature-list li i {
-            color: #33b6ff;
-            margin-right: 0.8rem;
-            font-size: 0.9rem;
-        }
-
-        .quick-stats {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .quick-stats h3 {
-            color: #333;
-            margin-bottom: 1.5rem;
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 600;
+            margin-left: 0.5rem;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
         }
 
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
+        .status-confirmed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-active {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .empty-state {
+            padding: 3rem 1rem;
             text-align: center;
-            border-left: 4px solid #33b6ff;
-            transition: transform 0.3s;
+            color: #64748b;
         }
 
-        .stat-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .stat-card i {
+        .empty-state i {
             font-size: 2rem;
-            color: #33b6ff;
             margin-bottom: 1rem;
+            opacity: 0.5;
         }
 
-        .stat-card h4 {
-            color: #333;
-            margin: 0 0 0.5rem 0;
-            font-weight: 600;
-        }
-
-        .stat-card p {
-            color: #7f8c8d;
-            margin: 0;
-            font-style: italic;
-        }
-
-        @media (max-width: 768px) {
-            .admin-header-content {
-                padding: 1rem;
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .admin-container {
-                padding: 0 1rem;
-            }
-
-            .dashboard-header h1 {
-                font-size: 2rem;
-            }
-
-            .admin-progress-notice {
-                padding: 2rem 1.5rem;
-            }
-
-            .stats-grid {
+        @media (max-width: 1024px) {
+            .dashboard-sections {
                 grid-template-columns: 1fr;
             }
         }
-    </style>
-</body>
 
-</html>
+        @media (max-width: 640px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section-header {
+                padding: 1rem;
+            }
+
+            .section-item {
+                padding: 0.75rem 1rem;
+            }
+        }
+    </style>
+
+    <div class="dashboard-container">
+        <!-- Metrics Cards -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon icon-appointments">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h2 class="metric-number"><?php echo number_format($stats['total_appointments']); ?></h2>
+                <p class="metric-label">Total Appointments</p>
+                <p class="metric-desc">All time appointments</p>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon icon-today">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h2 class="metric-number"><?php echo number_format($stats['today_appointments']); ?></h2>
+                <p class="metric-label">Today's Appointments</p>
+                <p class="metric-desc">Scheduled for today</p>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon icon-services">
+                    <i class="fas fa-stethoscope"></i>
+                </div>
+                <h2 class="metric-number"><?php echo number_format($stats['total_services']); ?></h2>
+                <p class="metric-label">Active Services</p>
+                <p class="metric-desc">Available services</p>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon icon-announcements">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <h2 class="metric-number"><?php echo number_format($stats['active_announcements']); ?></h2>
+                <p class="metric-label">Active Announcements</p>
+                <p class="metric-desc">Published announcements</p>
+            </div>
+        </div>
+
+        <!-- Dashboard Sections -->
+        <div class="dashboard-sections">
+            <!-- Recent Appointments -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-calendar-check" style="color: #33b6ff;"></i>
+                        Recent Appointments
+                    </h3>
+                    <button class="expand-btn" onclick="toggleSection('appointments')">
+                        <i class="fas fa-plus" id="appointments-icon"></i>
+                    </button>
+                </div>
+                <div class="section-content" id="appointments-content">
+                    <?php if (empty($recent_appointments)): ?>
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-check"></i>
+                            <p>No recent appointments</p>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($recent_appointments as $appointment): ?>
+                            <div class="section-item" onclick="window.location.href='appointments.php?id=<?php echo $appointment['id']; ?>'">
+                                <div class="item-primary"><?php echo htmlspecialchars($appointment['client_name']); ?></div>
+                                <div class="item-secondary">
+                                    <?php echo date('M j, Y', strtotime($appointment['schedule_date'] ?? $appointment['created_at'])); ?>
+                                    <span class="status-badge status-<?php echo $appointment['status']; ?>">
+                                        <?php echo ucfirst($appointment['status']); ?>
+                                    </span>
+                                </div>
+                                <div class="item-meta"><?php echo htmlspecialchars($appointment['service_name'] ?? 'Service'); ?></div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Announcements -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-bullhorn" style="color: #33b6ff;"></i>
+                        Announcements
+                    </h3>
+                    <button class="expand-btn" onclick="toggleSection('announcements')">
+                        <i class="fas fa-plus" id="announcements-icon"></i>
+                    </button>
+                </div>
+                <div class="section-content" id="announcements-content">
+                    <?php if (empty($recent_announcements)): ?>
+                        <div class="empty-state">
+                            <i class="fas fa-bullhorn"></i>
+                            <p>No recent announcements</p>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($recent_announcements as $announcement): ?>
+                            <div class="section-item" onclick="window.location.href='announcements.php?action=edit&id=<?php echo $announcement['id']; ?>'">
+                                <div class="item-primary"><?php echo htmlspecialchars($announcement['title']); ?></div>
+                                <div class="item-secondary">
+                                    <?php echo date('M j, Y', strtotime($announcement['announcement_date'])); ?>
+                                    <?php if ($announcement['is_featured']): ?>
+                                        <span class="status-badge status-active">Featured</span>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="item-meta"><?php echo htmlspecialchars(substr($announcement['content'], 0, 60)); ?>...</div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Upcoming Services -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-calendar-alt" style="color: #33b6ff;"></i>
+                        Upcoming Services
+                    </h3>
+                    <button class="expand-btn" onclick="toggleSection('services')">
+                        <i class="fas fa-plus" id="services-icon"></i>
+                    </button>
+                </div>
+                <div class="section-content" id="services-content">
+                    <?php if (empty($upcoming_services)): ?>
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-alt"></i>
+                            <p>No upcoming services</p>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($upcoming_services as $service): ?>
+                            <div class="section-item" onclick="window.location.href='schedules.php?action=edit&id=<?php echo $service['id']; ?>'">
+                                <div class="item-primary"><?php echo htmlspecialchars($service['service_name']); ?></div>
+                                <div class="item-secondary">
+                                    <?php echo date('M j, Y', strtotime($service['schedule_date'])); ?>
+                                    <span class="status-badge status-active">
+                                        <?php echo $service['max_appointments']; ?> Slots
+                                    </span>
+                                </div>
+                                <div class="item-meta">
+                                    <?php echo date('g:i A', strtotime($service['start_time'])); ?> -
+                                    <?php echo date('g:i A', strtotime($service['end_time'])); ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Overview -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">System Overview</h3>
+            </div>
+            <div style="display: grid; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px;">
+                    <span style="color: #6b7280;">Total Database Records</span>
+                    <strong style="color: #333;"><?php echo number_format($stats['total_appointments'] + $stats['total_services'] + $stats['active_announcements']); ?></strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px;">
+                    <span style="color: #6b7280;">Active Services</span>
+                    <strong style="color: #333;"><?php echo number_format($stats['total_services']); ?></strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px;">
+                    <span style="color: #6b7280;">System Status</span>
+                    <strong style="color: #10b981;">
+                        <i class="fas fa-circle" style="font-size: 0.6rem; margin-right: 0.5rem;"></i>
+                        Online
+                    </strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSection(sectionName) {
+            const content = document.getElementById(sectionName + '-content');
+            const icon = document.getElementById(sectionName + '-icon');
+
+            if (content.classList.contains('collapsed')) {
+                content.classList.remove('collapsed');
+                icon.className = 'fas fa-minus';
+            } else {
+                content.classList.add('collapsed');
+                icon.className = 'fas fa-plus';
+            }
+        }
+    </script>
+<?php
+});
+?>
