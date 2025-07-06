@@ -139,7 +139,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
 }
 
 // Render the page
-renderAdminLayout('Services Management', function () use ($services, $editing_service, $page, $total_pages, $search, $category_filter, $status_filter, $total_services) {
+renderAdminLayout('Services Management', function () use ($services, $editing_service, $page, $total_pages, $search, $category_filter, $status_filter, $total_services, $offset, $limit) {
     $csrf_token = generateCSRFToken();
     $categories = [
         'vaccine' => 'Vaccine',
