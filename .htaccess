@@ -7,6 +7,13 @@
 RewriteEngine On
 RewriteBase / 
 
+# Map clean URLs to pages/*.php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php !-f
+RewriteCond %{REQUEST_FILENAME} !^pages/
+RewriteRule ^(about|announcements|appointment|contact|program-enrollment|programs|reservation|vaccine)$ pages/$1.php [L]
+
 # Enable clean URLs by removing .php extension
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
