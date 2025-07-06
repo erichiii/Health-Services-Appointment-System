@@ -129,14 +129,14 @@ function getServicesAdmin()
 /**
  * Create new service
  */
-function createService($name, $description, $duration)
+function createService($name, $description, $duration, $category = 'appointment')
 {
     global $pdo;
 
     try {
-        $sql = "INSERT INTO services (name, description, duration) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO services (name, description, duration, category) VALUES (?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$name, $description, $duration]);
+        $stmt->execute([$name, $description, $duration, $category]);
 
         return ['success' => true, 'message' => 'Service created successfully!', 'id' => $pdo->lastInsertId()];
     } catch (PDOException $e) {
@@ -148,17 +148,17 @@ function createService($name, $description, $duration)
 /**
  * Update service
  */
-function updateService($id, $name, $description, $duration, $is_active = true)
+function updateService($id, $name, $description, $duration, $category = 'appointment', $is_active = true)
 {
     global $pdo;
 
     try {
         $sql = "UPDATE services 
-                SET name = ?, description = ?, duration = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
+                SET name = ?, description = ?, duration = ?, category = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
                 WHERE id = ?";
 
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$name, $description, $duration, $is_active ? 1 : 0, $id]);
+        $stmt->execute([$name, $description, $duration, $category, $is_active ? 1 : 0, $id]);
 
         return ['success' => true, 'message' => 'Service updated successfully!'];
     } catch (PDOException $e) {
@@ -381,6 +381,76 @@ function getAppointmentById($id)
     }
 }
 
+/**
+ * Delete appointment
+ */
+function deleteAppointment($id)
+{
+    global $pdo;
+
+    try {
+        $sql = "DELETE FROM appointments WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+
+        return ['success' => true, 'message' => 'Appointment deleted successfully!'];
+    } catch (PDOException $e) {
+        error_log("Error deleting appointment: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to delete appointment.'];
+    }
+}
+
+/**
+ * Bulk delete appointments
+ */
+function bulkDeleteAppointments($ids)
+{
+    global $pdo;
+
+    try {
+        if (empty($ids)) {
+            return ['success' => false, 'message' => 'No appointments selected.'];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $sql = "DELETE FROM appointments WHERE id IN ($placeholders)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($ids);
+
+        $count = $stmt->rowCount();
+        return ['success' => true, 'message' => "$count appointments deleted successfully!"];
+    } catch (PDOException $e) {
+        error_log("Error bulk deleting appointments: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to delete appointments.'];
+    }
+}
+
+/**
+ * Bulk update appointment status
+ */
+function bulkUpdateAppointmentStatus($ids, $status)
+{
+    global $pdo;
+
+    try {
+        if (empty($ids)) {
+            return ['success' => false, 'message' => 'No appointments selected.'];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $sql = "UPDATE appointments SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id IN ($placeholders)";
+        $params = array_merge([$status], $ids);
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+
+        $count = $stmt->rowCount();
+        return ['success' => true, 'message' => "$count appointments updated successfully!"];
+    } catch (PDOException $e) {
+        error_log("Error bulk updating appointments: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to update appointments.'];
+    }
+}
+
 // Announcements Management Functions
 
 /**
@@ -487,6 +557,58 @@ function getAnnouncementById($id)
     }
 }
 
+/**
+ * Bulk delete announcements
+ */
+function bulkDeleteAnnouncements($ids)
+{
+    global $pdo;
+
+    try {
+        if (empty($ids)) {
+            return ['success' => false, 'message' => 'No announcements selected.'];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $sql = "DELETE FROM announcements WHERE id IN ($placeholders)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($ids);
+
+        $count = $stmt->rowCount();
+        return ['success' => true, 'message' => "$count announcements deleted successfully!"];
+    } catch (PDOException $e) {
+        error_log("Error bulk deleting announcements: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to delete announcements.'];
+    }
+}
+
+/**
+ * Bulk toggle announcement status
+ */
+function bulkToggleAnnouncementStatus($ids, $is_active)
+{
+    global $pdo;
+
+    try {
+        if (empty($ids)) {
+            return ['success' => false, 'message' => 'No announcements selected.'];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $sql = "UPDATE announcements SET is_active = ?, updated_at = CURRENT_TIMESTAMP WHERE id IN ($placeholders)";
+        $params = array_merge([$is_active ? 1 : 0], $ids);
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+
+        $count = $stmt->rowCount();
+        $status = $is_active ? 'activated' : 'deactivated';
+        return ['success' => true, 'message' => "$count announcements $status successfully!"];
+    } catch (PDOException $e) {
+        error_log("Error bulk updating announcements: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to update announcements.'];
+    }
+}
+
 // Admin Users Management Functions
 
 /**
@@ -586,6 +708,146 @@ function updateAdminPassword($id, $new_password)
     } catch (PDOException $e) {
         error_log("Error updating password: " . $e->getMessage());
         return ['success' => false, 'message' => 'Failed to update password.'];
+    }
+}
+
+/**
+ * Get admin user by ID
+ */
+function getAdminUserById($id)
+{
+    global $pdo;
+
+    try {
+        $sql = "SELECT id, username, email, full_name, is_active, last_login, created_at FROM admin_users WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+
+        return $stmt->fetch();
+    } catch (PDOException $e) {
+        error_log("Error fetching admin user: " . $e->getMessage());
+        return null;
+    }
+}
+
+/**
+ * Delete admin user
+ */
+function deleteAdminUser($id)
+{
+    global $pdo;
+
+    try {
+        // Don't allow deleting the last admin
+        $count = $pdo->query("SELECT COUNT(*) FROM admin_users WHERE is_active = 1")->fetchColumn();
+        if ($count <= 1) {
+            return ['success' => false, 'message' => 'Cannot delete the last active admin user.'];
+        }
+
+        $sql = "DELETE FROM admin_users WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+
+        return ['success' => true, 'message' => 'Admin user deleted successfully!'];
+    } catch (PDOException $e) {
+        error_log("Error deleting admin user: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to delete admin user.'];
+    }
+}
+
+/**
+ * Bulk delete services
+ */
+function bulkDeleteServices($ids)
+{
+    global $pdo;
+
+    try {
+        if (empty($ids)) {
+            return ['success' => false, 'message' => 'No services selected.'];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $sql = "DELETE FROM services WHERE id IN ($placeholders)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($ids);
+
+        $count = $stmt->rowCount();
+        return ['success' => true, 'message' => "$count services deleted successfully!"];
+    } catch (PDOException $e) {
+        error_log("Error bulk deleting services: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to delete services.'];
+    }
+}
+
+/**
+ * Bulk toggle service status
+ */
+function bulkToggleServiceStatus($ids, $is_active)
+{
+    global $pdo;
+
+    try {
+        if (empty($ids)) {
+            return ['success' => false, 'message' => 'No services selected.'];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $sql = "UPDATE services SET is_active = ?, updated_at = CURRENT_TIMESTAMP WHERE id IN ($placeholders)";
+        $params = array_merge([$is_active ? 1 : 0], $ids);
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+
+        $count = $stmt->rowCount();
+        $status = $is_active ? 'activated' : 'deactivated';
+        return ['success' => true, 'message' => "$count services $status successfully!"];
+    } catch (PDOException $e) {
+        error_log("Error bulk updating services: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to update services.'];
+    }
+}
+
+/**
+ * Delete service schedule
+ */
+function deleteServiceSchedule($id)
+{
+    global $pdo;
+
+    try {
+        $sql = "DELETE FROM service_schedules WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+
+        return ['success' => true, 'message' => 'Service schedule deleted successfully!'];
+    } catch (PDOException $e) {
+        error_log("Error deleting service schedule: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to delete service schedule.'];
+    }
+}
+
+/**
+ * Bulk delete service schedules
+ */
+function bulkDeleteServiceSchedules($ids)
+{
+    global $pdo;
+
+    try {
+        if (empty($ids)) {
+            return ['success' => false, 'message' => 'No schedules selected.'];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $sql = "DELETE FROM service_schedules WHERE id IN ($placeholders)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($ids);
+
+        $count = $stmt->rowCount();
+        return ['success' => true, 'message' => "$count schedules deleted successfully!"];
+    } catch (PDOException $e) {
+        error_log("Error bulk deleting schedules: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to delete schedules.'];
     }
 }
 
