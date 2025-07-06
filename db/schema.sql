@@ -138,11 +138,11 @@ INSERT INTO service_schedules (service_id, schedule_date, start_time, end_time, 
 
 -- Audit log for all admin actions
 CREATE TABLE admin_action_audit_log (
-    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    admin_id INT UNSIGNED,
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    admin_id INT,
     action ENUM('create', 'edit', 'delete') NOT NULL,
     target_table VARCHAR(64) NOT NULL,
-    target_id INT UNSIGNED,
+    target_id INT,
     action_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     changes TEXT,
     FOREIGN KEY (admin_id) REFERENCES admin_users(id) ON DELETE SET NULL,
