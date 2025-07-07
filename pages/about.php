@@ -12,8 +12,6 @@
         'Healthcare philosophy and approach'
     ];
     
-    // Include the reusable progress page
-    include '../includes/in_progress.php';
 ?>
 
 <main class="main-content">
