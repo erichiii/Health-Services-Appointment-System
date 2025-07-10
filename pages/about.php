@@ -16,6 +16,12 @@
 
 <main class="main-content">
     <div class="container">
+        <div class="page-header">
+            <h1><?php echo htmlspecialchars($page_title); ?></h1>
+            <p class="page-subtitle"><?php echo htmlspecialchars($page_subtitle); ?></p>
+        </div>
+    </div>
+    <div class="container">
         <div class="about-content-wide smooth-box">
             <p class="about-welcome">
                 Welcome to Village East Clinic, the dedicated health service portal of Village East Executive Homes, located in Barangay Sto. Domingo, Cainta, Rizal. Our clinic was established with one goal in mind: to bring quality, accessible, and community-focused healthcare closer to every resident.
@@ -37,6 +43,37 @@
 </main>
 
 <style>
+.main-content {
+    min-height: 70vh;
+    padding: 2rem 0;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin-bottom: 0;
+}
+
 .about-content-wide.smooth-box {
     max-width: 1000px;
     margin: 0 auto;
