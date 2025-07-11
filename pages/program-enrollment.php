@@ -1,4 +1,5 @@
 <?php
+
 $programTypeMap = [
     'senior-health' => 'Senior Citizen Health Plan',
     'maternal-health' => 'Maternal Health Program',
@@ -15,7 +16,7 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
 ?>
 
 
-<form method = "POST" action = "submit-form.php" class = "vaccine-form">
+<form method = "POST" action = "submit-form.php" class = "form">
     <fieldset>
         <legend>Personal Information</legend>
         <div class = "form-row">
@@ -83,7 +84,7 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         </div>
     </fieldset>
     <?php endif; ?>
-    
+
     <fieldset>
         <legend>Medical Information</legend>
         <div class = "form-group">
@@ -106,3 +107,4 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         <button type="submit" class="btn-primary">Submit Enrollment</button>
     </div>
 </form>
+
