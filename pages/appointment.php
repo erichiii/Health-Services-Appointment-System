@@ -4,7 +4,7 @@ $appointmentTypeMap = [
     'general-consultation' => 'General Consultation',
     'specialist-referral' => 'Specialist Referral',
     'lab-tests' => 'Lab Tests',
-    'follow-up visits' => 'Follow-up Visits'
+    'follow-up' => 'Follow-up Visits'
 ];
 
 $selectedSubcategory = $_GET['subcategory'] ?? '';
