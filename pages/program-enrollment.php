@@ -11,6 +11,7 @@ $selectedSubcategory = $_SESSION['selected_subcategory'] ?? $_GET['subcategory']
 $preselectedProgramType = $programTypeMap[$selectedSubcategory] ?? '';
 
 $isSeniorPlan = ($preselectedProgramType === 'Senior Citizen Health Plan');
+$isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
 ?>
 
 
@@ -82,10 +83,16 @@ $isSeniorPlan = ($preselectedProgramType === 'Senior Citizen Health Plan');
         </div>
     </fieldset>
     <?php endif; ?>
-
+    
     <fieldset>
         <legend>Medical Information</legend>
         <div class = "form-group">
+            <?php if ($isMaternalHealth): ?>
+                <div class="form-group">
+                    <label>Expected Delivery Date *</label>
+                    <input type="date" name="expected_delivery" required>
+                </div>
+            <?php endif; ?>
             <label>Notes / Medical History</label>
             <textarea name = "notes" placeholder="Any medical history or notes you want to share, such as prior conditions or if joining with a child"></textarea>
         </div>    
