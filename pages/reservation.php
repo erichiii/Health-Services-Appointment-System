@@ -52,6 +52,22 @@ include '../includes/in_progress.php';*/
         ]
     ];
 
+    $subcategoryForms = [
+        'child-immunization' => 'vaccine.php',
+        'adult-vaccine' => 'vaccine.php',
+        'travel-vaccine' => 'vaccine.php',
+        'booster-shot' => 'vaccine.php',
+        'senior-health' => 'program-enrollment.php',
+        'maternal-health' => 'program-enrollment.php',
+        'diabetes-management' => 'program-enrollment.php',
+        'hypertension-monitoring' => 'program-enrollment.php',
+        'general-consultation' => 'appointment.php',
+        'specialist-referral' => 'appointment.php',
+        'lab-tests' => 'appointment.php',
+        'follow-up' => 'appointment.php'
+    ];
+
+
     $selectedCategoryName = "";
     $selectedSubcategoryName = "";
     if($selectedSubcategory){
@@ -104,9 +120,24 @@ include '../includes/in_progress.php';*/
             </div>
             <?php endforeach; ?>
         </div>
+
+        <div id="confirmation" class="form-section" style="margin-top: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <?php
+            if ($selectedSubcategory && isset($subcategoryForms[$selectedSubcategory])) {
+                $formFile = $subcategoryForms[$selectedSubcategory];
+                $formPath = __DIR__ . '/' . $formFile;
+
+                if (file_exists($formPath)) {
+                    include $formPath;
+                } else {
+                    echo "<p>Sorry, the form for this service is currently unavailable.</p>";
+                }
+            } elseif (isset($_GET['confirmed'])) {
+                echo "<p style='text-align: center; padding: 2rem;'>Please select a valid subcategory.</p>";
+            }
+            ?>
+        </div>
     </div>
-
-
 
 <?php include '../includes/footer.php'; ?>
 
@@ -156,7 +187,6 @@ include '../includes/in_progress.php';*/
         border: 2px solid #33b6ff;
         box-shadow: 0 8px 25px rgba(51, 182, 255, 0.2);
     }
-
     /* Only active cards can expand beyond min-height */
     .category-card.active {
         min-height: auto;
@@ -164,7 +194,6 @@ include '../includes/in_progress.php';*/
 
     .category-card.active:hover {
         border-color: #1b72a1;
-        box-shadow: 0 12px 30px rgba(51, 182, 255, 0.3);
     }
 
     /* Category Header */
@@ -335,4 +364,6 @@ include '../includes/in_progress.php';*/
     html {
         scroll-behavior: smooth;
     }
+
+
 </style>

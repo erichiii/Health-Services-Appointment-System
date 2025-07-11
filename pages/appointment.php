@@ -1,3 +1,12 @@
-<?php include '../includes/header.php';?>
+<?php 
+    // Set page-specific content
+    $page_title = 'General Appointment';
+    $page_subtitle = 'Book a general appointment online';
+    $page_features = [
+        'Available date and time slots',
+        'Dynamic form prefill',
+    ];
 
-<?php include '../includes/footer.php'; ?>
+    // Include the reusable progress page
+    include '../includes/in_progress.php';
+?>
