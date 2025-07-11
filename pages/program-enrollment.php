@@ -9,6 +9,8 @@ $programTypeMap = [
 
 $selectedSubcategory = $_SESSION['selected_subcategory'] ?? $_GET['subcategory'] ?? '';
 $preselectedProgramType = $programTypeMap[$selectedSubcategory] ?? '';
+
+$isSeniorPlan = ($preselectedProgramType === 'Senior Citizen Health Plan');
 ?>
 
 
@@ -71,6 +73,15 @@ $preselectedProgramType = $programTypeMap[$selectedSubcategory] ?? '';
         </div>
     </fieldset>
 
+    <?php if ($isSeniorPlan): ?>
+    <fieldset>
+        <legend>Senior Citizen Requirements</legend>
+        <div class="form-group">
+            <label>Upload Proof of Eligibility (e.g., Senior Citizen ID) *</label>
+            <input type="file" name="proof_id" accept=".jpg,.jpeg,.png,.pdf" required>
+        </div>
+    </fieldset>
+    <?php endif; ?>
 
     <fieldset>
         <legend>Medical Information</legend>
@@ -79,7 +90,6 @@ $preselectedProgramType = $programTypeMap[$selectedSubcategory] ?? '';
             <textarea name = "notes" placeholder="Any medical history or notes you want to share, such as prior conditions or if joining with a child"></textarea>
         </div>    
     </fieldset>
-
 
     <div class="form-actions">
         <label>
