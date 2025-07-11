@@ -30,10 +30,10 @@
                 <label>Vaccine Type *</label> <!-- will make this dynamic later -->
                 <select name = "vaccine_type" required>
                     <option value = "">Select</option>
-                    <option value = "Child Immunization" <?= $preselectedVaccineType === 'Child Immunization' ? 'selected' : ''?>>Child</option>
-                    <option value = "Adult Vaccine" <?= $preselectedVaccineType === 'Adult Vaccine' ? 'selected' : ''?>>Adult Vaccine</option>
-                    <option value = "Travel Vaccine" <?= $preselectedVaccineType === 'Travel Vaccine' ? 'selected' : ''?>>Travel Vaccine</option>
-                    <option value = "Booster Shot" <?= $preselectedVaccineType === 'Booster Shot' ? 'selected' : ''?>>Booster Shot</option>
+                    <option value = "Child" <?= $preselectedVaccineType === 'Child' ? 'selected' : ''?>>Child Immunization</option>
+                    <option value = "Adult" <?= $preselectedVaccineType === 'Adult' ? 'selected' : ''?>>Adult Vaccine</option>
+                    <option value = "Travel" <?= $preselectedVaccineType === 'Travel' ? 'selected' : ''?>>Travel Vaccine</option>
+                    <option value = "Booster" <?= $preselectedVaccineType === 'Booster' ? 'selected' : ''?>>Booster Shot</option>
                 </select>
             </div>
             <div class = "form-group">
@@ -65,6 +65,6 @@
     </fieldset>
 
     <div class="form-actions">
-        <button type="submit" class="btn-primary">Schedule Appointment</button>
+        <button type="submit" class="btn-primary">Submit Registration</button>
     </div>
 </form>
