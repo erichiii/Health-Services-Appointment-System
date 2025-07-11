@@ -209,6 +209,57 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         font-family: inherit;
     }
     
+    /* Custom File Upload Styling */
+    input[type="file"] {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        outline: none;
+        text-decoration: none;
+        color: #333;
+        border: 2px dashed #33b6ff;
+        border-radius: 8px;
+        background: #f8f9fa;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        font-family: 'Nunito', sans-serif;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    input[type="file"]:hover {
+        background: #e3f2fd;
+        border-color: #1b72a1;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(51, 182, 255, 0.2);
+    }
+    
+    input[type="file"]:focus {
+        border-color: #1b72a1;
+        background: #e3f2fd;
+        outline: none;
+    }
+    
+    /* Custom file input appearance */
+    input[type="file"]::file-selector-button {
+        background: #33b6ff;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-right: 1rem;
+        transition: all 0.3s ease;
+        font-family: 'Nunito', sans-serif;
+    }
+    
+    input[type="file"]::file-selector-button:hover {
+        background: linear-gradient(135deg, #1b72a1 0%, #155a87 100%);
+        box-shadow: 0 2px 8px rgba(51, 182, 255, 0.3);
+    }
+    
     input:focus,
     select:focus,
     textarea:focus {
