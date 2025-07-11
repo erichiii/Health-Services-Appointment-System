@@ -1,3 +1,17 @@
+<?php
+$vaccineTypeMap = [
+    'child-immunization' => 'Child',
+    'adult-vaccine' => 'Adult',
+    'travel-vaccine' => 'Travel',
+    'booster-shot' => 'Booster'
+];
+
+
+$selectedSubcategory = $_GET['subcategory'] ?? '';
+$preselectedVaccineType = $vaccineTypeMap[$selectedSubcategory] ?? '';
+?>
+
+
 <form method = "POST" action = "submit-form.php" class = "vaccine-form">
     <fieldset>
         <legend>Personal Information</legend>
@@ -27,7 +41,7 @@
         <legend>Vaccine Information</legend>
         <div class = "form-row">
             <div class = "form-group">
-                <label>Vaccine Type *</label> <!-- will make this dynamic later -->
+                <label>Vaccine Type *</label>
                 <select name = "vaccine_type" required>
                     <option value = "">Select</option>
                     <option value = "Child" <?= $preselectedVaccineType === 'Child' ? 'selected' : ''?>>Child Immunization</option>
