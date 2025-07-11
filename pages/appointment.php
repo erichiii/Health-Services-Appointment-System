@@ -121,6 +121,39 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
     </fieldset>
     <?php endif; ?>
 
+    <!-- Specialist Referral Fields -->
+    <?php if ($isSpecialistReferral): ?>
+    <fieldset>
+        <legend>Specialist Referral Details</legend>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Referring Doctor (if any)</label>
+                <input type="text" name="referring_doctor" placeholder="Name of the doctor referring you to a specialist">
+            </div>
+            <div class="form-group">
+                <label>Specialist Needed *</label>
+                <select name="specialist_needed" required>
+                    <option value="">Select</option>
+                    <option value="Cardiologist">Cardiologist</option>
+                    <option value="Dermatologist">Dermatologist</option>
+                    <option value="Neurologist">Neurologist</option>
+                    <option value="Orthopedist">Orthopedist</option>
+                    <option value="Gynecologist">Gynecologist</option>
+                    <option value="Pediatrician">Pediatrician</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Reason for Referral *</label>
+            <textarea name="referral_reason" required placeholder="Please explain why you need to see a specialist"></textarea>
+        </div>
+        <div class="form-group">
+            <label><br>Upload Previous Diagnosis or Notes (Optional)</label>
+            <input type="file" name="diagnosis_files" accept=".jpg,.jpeg,.png,.pdf">
+        </div>
+    </fieldset>
+    <?php endif; ?>
 
     <fieldset>
         <legend>Medical Information</legend>
@@ -204,6 +237,7 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
     input[type="text"],
     input[type="email"],
     input[type="date"],
+    input[type="file"],
     select,
     textarea {
         padding: 0.7rem 1rem;
@@ -212,6 +246,55 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
         font-size: 1rem;
         transition: border-color 0.2s ease-in-out;
         font-family: inherit;
+    }
+
+    input[type="file"] {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        outline: none;
+        text-decoration: none;
+        color: #333;
+        border: 2px dashed #33b6ff;
+        border-radius: 8px;
+        background: #f8f9fa;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        font-family: 'Nunito', sans-serif;
+        width: 100%;
+        box-sizing: border-box;
+    }
+   
+    input[type="file"]:hover {
+        background: #e3f2fd;
+        border-color: #1b72a1;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(51, 182, 255, 0.2);
+    }
+   
+    input[type="file"]:focus {
+        border-color: #1b72a1;
+        background: #e3f2fd;
+        outline: none;
+    }
+   
+    input[type="file"]::file-selector-button {
+        background: #33b6ff;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-right: 1rem;
+        transition: all 0.3s ease;
+        font-family: 'Nunito', sans-serif;
+    }
+   
+    input[type="file"]::file-selector-button:hover {
+        background: linear-gradient(135deg, #1b72a1 0%, #155a87 100%);
+        box-shadow: 0 2px 8px rgba(51, 182, 255, 0.3);
     }
 
     .radio-group,
