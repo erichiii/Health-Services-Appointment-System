@@ -154,6 +154,35 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
         </div>
     </fieldset>
     <?php endif; ?>
+    
+    <!-- Lab Tests Fields -->
+    <?php if ($isLabTests): ?>
+    <fieldset>
+        <legend>Lab Tests Details</legend>
+        <div class = "form-group">
+            <label>Type of Lab Test *</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="lab_tests[]" value="Blood Test"> Blood Test</label>
+                <label><input type="checkbox" name="lab_tests[]" value="X-Ray"> X-Ray</label>
+                <label><input type="checkbox" name="lab_tests[]" value="Urine Test"> Urine Test</label>
+                <label><input type="checkbox" name="lab_tests[]" value="ECG"> ECG</label>
+                <label><input type="checkbox" name="lab_tests[]" value="Ultrasound"> Ultrasound</label>
+                <label><input type="checkbox" name="lab_tests[]" value="Other"> Other</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label><br>Fasting Required? *</label>
+            <div class="radio-group">
+                <label><input type="radio" name="fasting_required" value="yes" required> Yes</label>
+                <label><input type="radio" name="fasting_required" value="no" required> No</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label><br>Upload Doctor's Request (Optional)</label>
+            <input type="file" name="doctor_request" accept=".jpg,.jpeg,.png,.pdf">
+        </div>
+    </fieldset>
+    <?php endif; ?>
 
     <fieldset>
         <legend>Medical Information</legend>
@@ -297,11 +326,44 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
         box-shadow: 0 2px 8px rgba(51, 182, 255, 0.3);
     }
 
-    .radio-group,
-    .checkbox-group {
+    .radio-group {
         display: flex;
+        gap: 30px;
+        margin-top: 0.5rem;
+    }
+    
+    .checkbox-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 0.75rem;
         margin-top: 0.5rem;
+    }
+
+    .form-actions input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #33b6ff;
+        cursor: pointer;
+        appearance: none;
+        border: 2px solid #33b6ff;
+        border-radius: 3px;
+        background-color: white;
+        position: relative;
+    }
+    
+    .form-actions input[type="checkbox"]:checked {
+        background-color: #33b6ff;
+    }
+    
+    .form-actions input[type="checkbox"]:checked::after {
+        content: '✓';
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
    
     .radio-group label,
@@ -321,8 +383,7 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
         background-color: #f8f9fa;
     }
    
-    .radio-group input[type="radio"],
-    .checkbox-group input[type="checkbox"] {
+    .radio-group input[type="radio"] {
         width: 18px;
         height: 18px;
         accent-color: #33b6ff;
