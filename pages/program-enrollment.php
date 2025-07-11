@@ -1,3 +1,17 @@
+<?php
+$programTypeMap = [
+    'senior-health' => 'Senior Citizen Health Plan',
+    'maternal-health' => 'Maternal Health Program',
+    'diabetes-management' => 'Diabetes Management',
+    'hypertension-monitoring' => 'Hypertension Monitoring'
+];
+
+
+$selectedSubcategory = $_SESSION['selected_subcategory'] ?? $_GET['subcategory'] ?? '';
+$preselectedProgramType = $programTypeMap[$selectedSubcategory] ?? '';
+?>
+
+
 <form method = "POST" action = "submit-form.php" class = "vaccine-form">
     <fieldset>
         <legend>Personal Information</legend>
@@ -23,17 +37,18 @@
         </div>
     </fieldset>
 
+
     <fieldset>
         <legend>Program Information</legend>
         <div class = "form-row">
             <div class = "form-group">
-                <label>Program Type *</label> <!-- will make this dynamic later -->
+                <label>Program Type *</label>
                 <select name = "vaccine_type" required>
                     <option value = "">Select</option>
-                    <option value = "Senior Citizen Health Plan" <?= $preselectedVaccineType === 'Senior Citizen Health Plan' ? 'selected' : ''?>>Senior Citizen Health Plan</option>
-                    <option value = "Maternal Health Program" <?= $preselectedVaccineType === 'Maternal Health Program' ? 'selected' : ''?>>Maternal Health Program</option>
-                    <option value = "Diabetes Management" <?= $preselectedVaccineType === 'Diabetes Management' ? 'selected' : ''?>>Diabetes Management</option>
-                    <option value = "Hypertension Monitoring" <?= $preselectedVaccineType === 'Hypertension Monitoring' ? 'selected' : ''?>>Hypertension Monitoring</option>
+                    <option value = "Senior Citizen Health Plan" <?= $preselectedProgramType === 'Senior Citizen Health Plan' ? 'selected' : ''?>>Senior Citizen Health Plan</option>
+                    <option value = "Maternal Health Program" <?= $preselectedProgramType === 'Maternal Health Program' ? 'selected' : ''?>>Maternal Health Program</option>
+                    <option value = "Diabetes Management" <?= $preselectedProgramType === 'Diabetes Management' ? 'selected' : ''?>>Diabetes Management</option>
+                    <option value = "Hypertension Monitoring" <?= $preselectedProgramType === 'Hypertension Monitoring' ? 'selected' : ''?>>Hypertension Monitoring</option>
                 </select>
             </div>
             <div class = "form-group">
@@ -56,6 +71,7 @@
         </div>
     </fieldset>
 
+
     <fieldset>
         <legend>Medical Information</legend>
         <div class = "form-group">
@@ -63,6 +79,7 @@
             <textarea name = "notes" placeholder="Any medical history or notes you want to share, such as prior conditions or if joining with a child"></textarea>
         </div>    
     </fieldset>
+
 
     <div class="form-actions">
         <label>
