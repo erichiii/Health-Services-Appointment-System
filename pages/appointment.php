@@ -184,6 +184,27 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
     </fieldset>
     <?php endif; ?>
 
+    <!-- Follow-up Visits Fields -->
+    <?php if ($isFollowUp): ?>
+    <fieldset>
+        <legend>Follow-up Visit Details</legend>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Previous Appointment Date *</label>
+                <input type="date" name="previous_appointment_date" required>
+            </div>
+            <div class="form-group">
+                <label>Doctor Seen Last Time *</label>
+                <input type="text" name="previous_doctor" required placeholder="Dr. Name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Progress Notes / Updates *</label>
+            <textarea name="progress_notes" required placeholder="Please describe your progress since last visit, any changes in symptoms, medication effects, etc."></textarea>
+        </div>
+    </fieldset>
+    <?php endif; ?>
+
     <fieldset>
         <legend>Medical Information</legend>
         <div class = "form-group">
@@ -338,8 +359,8 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
         gap: 0.75rem;
         margin-top: 0.5rem;
     }
-
-    .form-actions input[type="checkbox"] {
+   
+    .checkbox-group input[type="checkbox"] {
         width: 18px;
         height: 18px;
         accent-color: #33b6ff;
@@ -351,11 +372,11 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
         position: relative;
     }
     
-    .form-actions input[type="checkbox"]:checked {
+    .checkbox-group input[type="checkbox"]:checked {
         background-color: #33b6ff;
     }
     
-    .form-actions input[type="checkbox"]:checked::after {
+    .checkbox-group input[type="checkbox"]:checked::after {
         content: '✓';
         color: white;
         font-size: 14px;
