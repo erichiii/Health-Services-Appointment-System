@@ -127,9 +127,9 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
     .form {
         background-color: #fff;
         padding: 2rem;
-        width: 156%;
+        width: 208%;
         margin: 2rem auto;
-        transform: translateX(-20%);
+        transform: translateX(-27%);
         border-radius: 12px;
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
         font-family: 'Nunito', sans-serif;
@@ -209,7 +209,6 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         font-family: inherit;
     }
     
-    /* Custom File Upload Styling */
     input[type="file"] {
         position: relative;
         display: inline-block;
@@ -241,7 +240,6 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         outline: none;
     }
     
-    /* Custom file input appearance */
     input[type="file"]::file-selector-button {
         background: #33b6ff;
         color: white;
@@ -280,9 +278,47 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
     
     .form-actions {
         display: flex;
-        justify-content: flex-end;
+        flex-direction: column;
+        align-items: flex-end;
         gap: 1rem;
         margin-top: 1rem;
+    }
+    
+    .form-actions label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: 'Nunito', sans-serif;
+        font-weight: 500;
+        color: #555;
+        cursor: pointer;
+    }
+    
+    .form-actions input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #33b6ff;
+        cursor: pointer;
+        appearance: none;
+        border: 2px solid #33b6ff;
+        border-radius: 3px;
+        background-color: white;
+        position: relative;
+    }
+    
+    .form-actions input[type="checkbox"]:checked {
+        background-color: #33b6ff;
+    }
+    
+    .form-actions input[type="checkbox"]:checked::after {
+        content: '✓';
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
     
     button.btn-primary {
