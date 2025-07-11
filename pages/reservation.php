@@ -99,7 +99,7 @@ include '../includes/in_progress.php';*/
             <div class="category-card <?php echo ($activeCategory === $categoryKey) ? 'active' : ''; ?> <?php echo $selectedSubcategory && in_array($selectedSubcategory, array_keys($categoryData['subcategories'])) ? 'has-selection' : ''; ?>" data-category="<?php echo $categoryKey; ?>">
                 
                 <!-- Category Header (toggles dropdown) -->
-                <a href="?category=<?php echo ($activeCategory === $categoryKey) ? '' : $categoryKey; ?>#category-<?php echo $categoryKey; ?>" 
+                <a href="?category=<?php echo ($activeCategory === $categoryKey) ? '' : $categoryKey; ?>"
                    class="category-header" id="category-<?php echo $categoryKey; ?>">
                     <h3><?php echo $categoryData['title']; ?></h3>
                     <p><?php echo $categoryData['description']; ?></p>
