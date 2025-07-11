@@ -89,6 +89,39 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
         </div>
     </fieldset>
 
+    <!-- General Consultation Fields -->
+    <?php if ($isGeneralConsultation): ?>
+    <fieldset>
+        <legend>General Consultation Details</legend>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Purpose of Visit *</label>
+                <select name="purpose_of_visit" required>
+                    <option value="">Select</option>
+                    <option value="Fever">Fever</option>
+                    <option value="Cough">Cough</option>
+                    <option value="Regular Check-up">Regular Check-up</option>
+                    <option value="Headache">Headache</option>
+                    <option value="Body Pain">Body Pain</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Symptoms</label>
+            <textarea name="symptoms" placeholder="Please describe your symptoms in detail"></textarea>
+        </div>
+        <div class="form-group">
+            <label><br>Have you visited this clinic before?</label>
+            <div class="radio-group">
+                <label><input type="radio" name="previous_visits" value="yes"> Yes</label>
+                <label><input type="radio" name="previous_visits" value="no"> No</label>
+            </div>
+        </div>
+    </fieldset>
+    <?php endif; ?>
+
+
     <fieldset>
         <legend>Medical Information</legend>
         <div class = "form-group">
@@ -179,6 +212,38 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
         font-size: 1rem;
         transition: border-color 0.2s ease-in-out;
         font-family: inherit;
+    }
+
+    .radio-group,
+    .checkbox-group {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+    }
+   
+    .radio-group label,
+    .checkbox-group label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 6px;
+        transition: background-color 0.2s ease;
+    }
+   
+    .radio-group label:hover,
+    .checkbox-group label:hover {
+        background-color: #f8f9fa;
+    }
+   
+    .radio-group input[type="radio"],
+    .checkbox-group input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #33b6ff;
+        cursor: pointer;
     }
     
     input:focus,
