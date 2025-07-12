@@ -878,12 +878,18 @@ function getDashboardStats()
         // Active announcements
         $active_announcements = $pdo->query("SELECT COUNT(*) FROM announcements WHERE is_active = 1")->fetchColumn();
 
+        // Reservation statistics
+        $total_reservations = $pdo->query("SELECT COUNT(*) FROM reservations")->fetchColumn();
+        $pending_reservations = $pdo->query("SELECT COUNT(*) FROM reservations WHERE status = 'pending'")->fetchColumn();
+
         return [
             'total_appointments' => $total_appointments,
             'pending_appointments' => $pending_appointments,
             'today_appointments' => $today_appointments,
             'total_services' => $total_services,
-            'active_announcements' => $active_announcements
+            'active_announcements' => $active_announcements,
+            'total_reservations' => $total_reservations,
+            'pending_reservations' => $pending_reservations
         ];
     } catch (PDOException $e) {
         error_log("Error fetching dashboard stats: " . $e->getMessage());
@@ -892,7 +898,241 @@ function getDashboardStats()
             'pending_appointments' => 0,
             'today_appointments' => 0,
             'total_services' => 0,
-            'active_announcements' => 0
+            'active_announcements' => 0,
+            'total_reservations' => 0,
+            'pending_reservations' => 0
         ];
+    }
+}
+
+// Reservation Management Functions
+
+/**
+ * Get all reservations for admin
+ */
+function getReservationsAdmin($limit = 50, $offset = 0, $status = null)
+{
+    global $pdo;
+
+    try {
+        $sql = "SELECT r.*, s.name as service_name 
+                FROM reservations r 
+                LEFT JOIN services s ON r.service_id = s.id";
+
+        $params = [];
+
+        if ($status) {
+            $sql .= " WHERE r.status = ?";
+            $params[] = $status;
+        }
+
+        $sql .= " ORDER BY r.created_at DESC";
+
+        if ($limit) {
+            $sql .= " LIMIT ? OFFSET ?";
+            $params[] = $limit;
+            $params[] = $offset;
+        }
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        error_log("Error fetching reservations: " . $e->getMessage());
+        return [];
+    }
+}
+
+/**
+ * Get reservation by ID
+ */
+function getReservationById($id)
+{
+    global $pdo;
+
+    try {
+        $sql = "SELECT r.*, s.name as service_name 
+                FROM reservations r 
+                LEFT JOIN services s ON r.service_id = s.id 
+                WHERE r.id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+
+        return $stmt->fetch();
+    } catch (PDOException $e) {
+        error_log("Error fetching reservation: " . $e->getMessage());
+        return null;
+    }
+}
+
+/**
+ * Update reservation status
+ */
+function updateReservationStatus($id, $status, $notes = '')
+{
+    global $pdo;
+
+    try {
+        $sql = "UPDATE reservations 
+                SET status = ?, notes = ?, updated_at = CURRENT_TIMESTAMP 
+                WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$status, $notes, $id]);
+
+        return ['success' => true, 'message' => 'Reservation status updated successfully!'];
+    } catch (PDOException $e) {
+        error_log("Error updating reservation status: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to update reservation status.'];
+    }
+}
+
+/**
+ * Delete reservation
+ */
+function deleteReservation($id)
+{
+    global $pdo;
+
+    try {
+        $sql = "DELETE FROM reservations WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+
+        return ['success' => true, 'message' => 'Reservation deleted successfully!'];
+    } catch (PDOException $e) {
+        error_log("Error deleting reservation: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to delete reservation.'];
+    }
+}
+
+/**
+ * Bulk delete reservations
+ */
+function bulkDeleteReservations($ids)
+{
+    global $pdo;
+
+    try {
+        if (empty($ids)) {
+            return ['success' => false, 'message' => 'No reservations selected.'];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $sql = "DELETE FROM reservations WHERE id IN ($placeholders)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($ids);
+
+        $count = $stmt->rowCount();
+        return ['success' => true, 'message' => "$count reservations deleted successfully!"];
+    } catch (PDOException $e) {
+        error_log("Error bulk deleting reservations: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to delete reservations.'];
+    }
+}
+
+/**
+ * Bulk update reservation status
+ */
+function bulkUpdateReservationStatus($ids, $status)
+{
+    global $pdo;
+
+    try {
+        if (empty($ids)) {
+            return ['success' => false, 'message' => 'No reservations selected.'];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $sql = "UPDATE reservations SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id IN ($placeholders)";
+        $params = array_merge([$status], $ids);
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+
+        $count = $stmt->rowCount();
+        return ['success' => true, 'message' => "$count reservations updated to $status successfully!"];
+    } catch (PDOException $e) {
+        error_log("Error bulk updating reservations: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to update reservations.'];
+    }
+}
+
+/**
+ * Convert reservation to appointment
+ */
+function convertReservationToAppointment($reservation_id, $service_schedule_id, $appointment_time)
+{
+    global $pdo;
+
+    try {
+        $pdo->beginTransaction();
+
+        // Get reservation details
+        $reservation = getReservationById($reservation_id);
+        if (!$reservation) {
+            throw new Exception('Reservation not found');
+        }
+
+        // Create appointment
+        $sql = "INSERT INTO appointments (service_schedule_id, client_name, client_email, client_phone, appointment_time, status, notes) 
+                VALUES (?, ?, ?, ?, ?, 'confirmed', ?)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            $service_schedule_id,
+            $reservation['client_name'],
+            $reservation['email_address'],
+            $reservation['contact_number'],
+            $appointment_time,
+            $reservation['notes']
+        ]);
+
+        $appointment_id = $pdo->lastInsertId();
+
+        // Update reservation status and link to appointment
+        $sql = "UPDATE reservations 
+                SET status = 'scheduled', appointment_id = ?, updated_at = CURRENT_TIMESTAMP 
+                WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$appointment_id, $reservation_id]);
+
+        $pdo->commit();
+
+        return ['success' => true, 'message' => 'Reservation converted to appointment successfully!', 'appointment_id' => $appointment_id];
+    } catch (Exception $e) {
+        $pdo->rollback();
+        error_log("Error converting reservation to appointment: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to convert reservation to appointment.'];
+    }
+}
+
+/**
+ * Create new reservation (for admin use)
+ */
+function createReservation($service_id, $service_category, $service_subcategory, $vehai_id, $client_name, $date_of_birth, $contact_number, $email_address, $home_address, $preferred_date, $preferred_time, $notes = '')
+{
+    global $pdo;
+
+    try {
+        $sql = "INSERT INTO reservations (service_id, service_category, service_subcategory, vehai_id, client_name, date_of_birth, contact_number, email_address, home_address, preferred_date, preferred_time, notes) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            $service_id,
+            $service_category,
+            $service_subcategory,
+            $vehai_id,
+            $client_name,
+            $date_of_birth,
+            $contact_number,
+            $email_address,
+            $home_address,
+            $preferred_date,
+            $preferred_time,
+            $notes
+        ]);
+
+        return ['success' => true, 'message' => 'Reservation created successfully!', 'id' => $pdo->lastInsertId()];
+    } catch (PDOException $e) {
+        error_log("Error creating reservation: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to create reservation.'];
     }
 }

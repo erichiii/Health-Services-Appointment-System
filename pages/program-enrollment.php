@@ -16,102 +16,107 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
 ?>
 
 
-<form method = "POST" action = "submit-form.php" class = "form">
+<form method="POST" action="reservation.php" class="form">
     <fieldset>
         <legend>Personal Information</legend>
-        <div class = "form-row-vehai">
-            <div class = "form-group">
+        <div class="form-row-vehai">
+            <div class="form-group">
                 <label>Vehai ID</label>
-                <input type = "text" name = "vehaiID">
+                <input type="text" name="vehaiID">
             </div>
         </div>
-        <div class = "form-row">
-            <div class = "form-group">
+        <div class="form-row">
+            <div class="form-group">
                 <label>Full Name *</label>
-                <input type = "text" name = "fullname" required>
+                <input type="text" name="fullname" required>
             </div>
-            <div class = "form-group">
+            <div class="form-group">
                 <label>Date of Birth *</label>
-                <input type = "date" name = "birthdate" required>
+                <input type="date" name="birthdate" required>
             </div>
         </div>
-        <div class = "form-row">
-            <div class = "form-group">
+        <div class="form-row">
+            <div class="form-group">
                 <label>Contact Number *</label>
-                <input type = "text" name = "contact" required>
+                <input type="text" name="contact" required>
             </div>
-            <div class = "form-group">
+            <div class="form-group">
                 <label>Email Address</label>
-                <input type = "email" name = "email" placeholder = "Optional - For confirmation notices and updates">
+                <input type="email" name="email" placeholder="Optional - For confirmation notices and updates">
             </div>
         </div>
-        <div class = "form-row">
-            <div class = "form-group">
+        <div class="form-row">
+            <div class="form-group">
                 <label>Home Address *</label>
-                <input type = "text" name = "address" required>
+                <input type="text" name="address" required>
             </div>
         </div>
     </fieldset>
 
 
+    <!-- Hidden fields for form processing -->
+    <input type="hidden" name="service_category" value="program">
+    <input type="hidden" name="service_subcategory" value="<?php echo htmlspecialchars($selectedSubcategory ?? ''); ?>">
+
     <fieldset>
         <legend>Program Information</legend>
-        <div class = "form-row">
-            <div class = "form-group">
+        <div class="form-row">
+            <div class="form-group">
                 <label>Program Type *</label>
-                <select name = "vaccine_type" required>
-                    <option value = "">Select</option>
-                    <option value = "Senior Citizen Health Plan" <?= $preselectedProgramType === 'Senior Citizen Health Plan' ? 'selected' : ''?>>Senior Citizen Health Plan</option>
-                    <option value = "Maternal Health Program" <?= $preselectedProgramType === 'Maternal Health Program' ? 'selected' : ''?>>Maternal Health Program</option>
-                    <option value = "Diabetes Management" <?= $preselectedProgramType === 'Diabetes Management' ? 'selected' : ''?>>Diabetes Management</option>
-                    <option value = "Hypertension Monitoring" <?= $preselectedProgramType === 'Hypertension Monitoring' ? 'selected' : ''?>>Hypertension Monitoring</option>
+                <select name="vaccine_type" required>
+                    <option value="">Select</option>
+                    <option value="Senior Citizen Health Plan" <?= $preselectedProgramType === 'Senior Citizen Health Plan' ? 'selected' : '' ?>>Senior Citizen Health Plan</option>
+                    <option value="Maternal Health Program" <?= $preselectedProgramType === 'Maternal Health Program' ? 'selected' : '' ?>>Maternal Health Program</option>
+                    <option value="Diabetes Management" <?= $preselectedProgramType === 'Diabetes Management' ? 'selected' : '' ?>>Diabetes Management</option>
+                    <option value="Hypertension Monitoring" <?= $preselectedProgramType === 'Hypertension Monitoring' ? 'selected' : '' ?>>Hypertension Monitoring</option>
                 </select>
             </div>
         </div>
-        <div class = "form-row">
-            <div class = "form-group">
+        <div class="form-row">
+            <div class="form-group">
                 <label>Preferred Date *</label> <!--should also be prefilled if clicked from homepage -->
-                <input type = "date" name = "preferred_date" required>
+                <input type="date" name="preferred_date" required>
                 <small>Note: Subject to availability</small>
             </div>
-            <div class = "form-group">
-                <label>Preferred Time *</label> <!-- should be based on available dates. connect to database later -->
-                <select name = "preferred_time:" required>
-                    <option>8:00 AM</option>
-                    <option>9:00 AM</option>
-                    <option>10:00 AM</option>
-                    <option>11:00 AM</option>
-                    <option>1:00 PM</option>
-                    <option>2:00 PM</option>
-                    <option>3:00 PM</option>
+            <div class="form-group">
+                <label>Preferred Time *</label>
+                <select name="preferred_time" required>
+                    <option value="">Select Time</option>
+                    <option value="8:00 AM">8:00 AM</option>
+                    <option value="9:00 AM">9:00 AM</option>
+                    <option value="10:00 AM">10:00 AM</option>
+                    <option value="11:00 AM">11:00 AM</option>
+                    <option value="1:00 PM">1:00 PM</option>
+                    <option value="2:00 PM">2:00 PM</option>
+                    <option value="3:00 PM">3:00 PM</option>
                 </select>
             </div>
         </div>
     </fieldset>
 
     <?php if ($isSeniorPlan): ?>
-    <fieldset>
-        <legend>Senior Citizen Requirements</legend>
-        <div class="form-group">
-            <label>Upload Proof of Eligibility (e.g., Senior Citizen ID) *</label>
-            <input type="file" name="proof_id" accept=".jpg,.jpeg,.png,.pdf" required>
-        </div>
-    </fieldset>
+        <fieldset>
+            <legend>Senior Citizen Requirements</legend>
+            <div class="form-group">
+                <label>Upload Proof of Eligibility (e.g., Senior Citizen ID) *</label>
+                <input type="file" name="proof_id" accept=".jpg,.jpeg,.png,.pdf" required>
+            </div>
+        </fieldset>
     <?php endif; ?>
 
     <fieldset>
         <legend>Medical Information</legend>
-        <div class = "form-group">
+        <div class="form-group">
             <?php if ($isMaternalHealth): ?>
                 <div class="form-group-if">
                     <label>Expected Delivery Date *</label>
                     <input type="date" name="expected_delivery" required>
                 </div>
             <?php endif; ?>
-            <div class = "form-group"></div>
+            <div class="form-group"></div>
             <label>Notes / Medical History</label>
-            <textarea name = "notes" placeholder="Any medical history or notes you want to share, such as prior conditions or if joining with a child"></textarea>
-        </div>    
+            <textarea name="notes" placeholder="Any medical history or notes you want to share, such as prior conditions or if joining with a child"></textarea>
+        </div>
     </fieldset>
 
     <div class="form-actions">
@@ -136,13 +141,13 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         font-size: 1rem;
         border-top: 5px solid #33b6ff;
     }
-    
+
     fieldset {
         border: none;
         margin-bottom: 2rem;
         padding: 0;
     }
-    
+
     legend {
         font-size: 1.3rem;
         font-weight: 600;
@@ -151,7 +156,7 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         padding-bottom: 1rem;
         position: relative;
     }
-    
+
     legend::after {
         content: '';
         position: absolute;
@@ -161,7 +166,7 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         height: 2px;
         background-color: #e9ecef;
     }
-    
+
     .form-row {
         display: flex;
         flex-wrap: wrap;
@@ -176,7 +181,7 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         gap: 1.5rem;
         margin-bottom: 1.5rem;
     }
-    
+
     .form-group {
         flex: 1;
         display: flex;
@@ -189,13 +194,13 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         display: flex;
         flex-direction: column;
     }
-    
+
     label {
         font-weight: 600;
         margin-bottom: 0.5rem;
         color: #2c3e50;
     }
-    
+
     input[type="text"],
     input[type="email"],
     input[type="date"],
@@ -208,7 +213,7 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         transition: border-color 0.2s ease-in-out;
         font-family: inherit;
     }
-    
+
     input[type="file"] {
         position: relative;
         display: inline-block;
@@ -226,20 +231,20 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         width: 100%;
         box-sizing: border-box;
     }
-    
+
     input[type="file"]:hover {
         background: #e3f2fd;
         border-color: #1b72a1;
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(51, 182, 255, 0.2);
     }
-    
+
     input[type="file"]:focus {
         border-color: #1b72a1;
         background: #e3f2fd;
         outline: none;
     }
-    
+
     input[type="file"]::file-selector-button {
         background: #33b6ff;
         color: white;
@@ -252,30 +257,30 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         transition: all 0.3s ease;
         font-family: 'Nunito', sans-serif;
     }
-    
+
     input[type="file"]::file-selector-button:hover {
         background: linear-gradient(135deg, #1b72a1 0%, #155a87 100%);
         box-shadow: 0 2px 8px rgba(51, 182, 255, 0.3);
     }
-    
+
     input:focus,
     select:focus,
     textarea:focus {
         border-color: #33b6ff;
         outline: none;
     }
-    
+
     textarea {
         resize: vertical;
         min-height: 100px;
     }
-    
+
     small {
         font-size: 0.85rem;
         color: #6c757d;
         margin-top: 0.5rem;
     }
-    
+
     .form-actions {
         display: flex;
         flex-direction: column;
@@ -283,7 +288,7 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         gap: 1rem;
         margin-top: 1rem;
     }
-    
+
     .form-actions label {
         display: flex;
         align-items: center;
@@ -293,7 +298,7 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         color: #555;
         cursor: pointer;
     }
-    
+
     .form-actions input[type="checkbox"] {
         width: 18px;
         height: 18px;
@@ -305,11 +310,11 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         background-color: white;
         position: relative;
     }
-    
+
     .form-actions input[type="checkbox"]:checked {
         background-color: #33b6ff;
     }
-    
+
     .form-actions input[type="checkbox"]:checked::after {
         content: '✓';
         color: white;
@@ -320,7 +325,7 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         left: 50%;
         transform: translate(-50%, -50%);
     }
-    
+
     button.btn-primary {
         background-color: #28a745;
         color: white;
@@ -331,11 +336,11 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         cursor: pointer;
         transition: background-color 0.2s ease-in-out;
     }
-    
+
     button.btn-primary:hover {
         background-color: #218838;
     }
-    
+
     button[type="button"] {
         background-color: #6c757d;
         color: white;
@@ -345,22 +350,20 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         border-radius: 8px;
         cursor: pointer;
     }
-    
+
     button[type="button"]:hover {
         background-color: #5a6268;
     }
-    
+
     @media (max-width: 768px) {
         .form {
             width: 95%;
             padding: 1.5rem;
             margin: 1rem auto;
         }
-    
+
         .form-row {
             flex-direction: column;
         }
     }
-    
-
 </style>

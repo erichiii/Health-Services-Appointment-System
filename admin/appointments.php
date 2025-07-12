@@ -132,27 +132,52 @@ renderAdminLayout('Appointments Management', function () use ($appointments, $ed
                 <h3 class="card-title">Update Appointment Status</h3>
                 <a href="appointments.php" class="btn btn-secondary btn-sm">Cancel</a>
             </div>
-            <form method="POST" style="display: grid; gap: 1rem;">
+            <form method="POST" style="padding: 1.5rem;">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="action" value="update_status">
                 <input type="hidden" name="id" value="<?php echo $editing_appointment['id']; ?>">
 
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
                     <div>
-                        <h4 style="margin: 0 0 1rem 0; color: #333;">Appointment Details</h4>
-                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px;">
-                            <p><strong>Client:</strong> <?php echo htmlspecialchars($editing_appointment['client_name']); ?></p>
-                            <p><strong>Email:</strong> <?php echo htmlspecialchars($editing_appointment['client_email'] ?? 'N/A'); ?></p>
-                            <p><strong>Phone:</strong> <?php echo htmlspecialchars($editing_appointment['client_phone'] ?? 'N/A'); ?></p>
-                            <p><strong>Service:</strong> <?php echo htmlspecialchars($editing_appointment['service_name']); ?></p>
-                            <p><strong>Date:</strong> <?php echo date('M j, Y', strtotime($editing_appointment['schedule_date'])); ?></p>
-                            <p><strong>Time:</strong> <?php echo date('g:i A', strtotime($editing_appointment['appointment_time'] ?? $editing_appointment['start_time'])); ?></p>
+                        <h4 style="margin: 0 0 1rem 0; color: #374151; font-weight: 600; font-size: 1.1rem;">Appointment Details</h4>
+                        <div style="background: #f9fafb; padding: 1.5rem; border-radius: 8px; border: 1px solid #e5e7eb;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div>
+                                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Client:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo htmlspecialchars($editing_appointment['client_name']); ?></span>
+                                    </p>
+                                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Email:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo htmlspecialchars($editing_appointment['client_email'] ?? 'N/A'); ?></span>
+                                    </p>
+                                    <p style="margin: 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Phone:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo htmlspecialchars($editing_appointment['client_phone'] ?? 'N/A'); ?></span>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Service:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo htmlspecialchars($editing_appointment['service_name']); ?></span>
+                                    </p>
+                                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Date:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo date('M j, Y', strtotime($editing_appointment['schedule_date'])); ?></span>
+                                    </p>
+                                    <p style="margin: 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Time:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo date('g:i A', strtotime($editing_appointment['appointment_time'] ?? $editing_appointment['start_time'])); ?></span>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div>
+                        <h4 style="margin: 0 0 1rem 0; color: #374151; font-weight: 600; font-size: 1.1rem;">Update Status</h4>
                         <div>
-                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Status *</label>
-                            <select name="status" required style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Status *</label>
+                            <select name="status" required style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; background: white;">
                                 <option value="pending" <?php echo $editing_appointment['status'] === 'pending' ? 'selected' : ''; ?>>Pending</option>
                                 <option value="confirmed" <?php echo $editing_appointment['status'] === 'confirmed' ? 'selected' : ''; ?>>Confirmed</option>
                                 <option value="completed" <?php echo $editing_appointment['status'] === 'completed' ? 'selected' : ''; ?>>Completed</option>
@@ -162,13 +187,14 @@ renderAdminLayout('Appointments Management', function () use ($appointments, $ed
                     </div>
                 </div>
 
-                <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Notes</label>
-                    <textarea name="notes" rows="3"
-                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; resize: vertical;"><?php echo htmlspecialchars($editing_appointment['notes'] ?? ''); ?></textarea>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Notes</label>
+                    <textarea name="notes" rows="4"
+                        placeholder="Add any notes or comments about this appointment..."
+                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; resize: vertical; font-family: inherit;"><?php echo htmlspecialchars($editing_appointment['notes'] ?? ''); ?></textarea>
                 </div>
 
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
                     <a href="appointments.php" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">Update Appointment</button>
                 </div>

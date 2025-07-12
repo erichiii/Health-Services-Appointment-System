@@ -168,30 +168,30 @@ renderAdminLayout('Services Management', function () use ($services, $editing_se
                 </h3>
                 <a href="services.php" class="btn btn-secondary btn-sm">Cancel</a>
             </div>
-            <form method="POST" style="display: grid; gap: 1rem;">
+            <form method="POST" style="padding: 1.5rem;">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="action" value="<?php echo $editing_service ? 'update' : 'create'; ?>">
                 <?php if ($editing_service): ?>
                     <input type="hidden" name="id" value="<?php echo $editing_service['id']; ?>">
                 <?php endif; ?>
 
-                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Service Name *</label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Service Name *</label>
                         <input type="text" name="name"
                             value="<?php echo htmlspecialchars($editing_service['name'] ?? ''); ?>"
                             required
                             style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
                     </div>
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Duration (minutes)</label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Duration (minutes)</label>
                         <input type="number" name="duration" min="5" max="480"
                             value="<?php echo $editing_service['duration'] ?? 30; ?>"
                             style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
                     </div>
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Category</label>
-                        <select name="category" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Category</label>
+                        <select name="category" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; background: white;">
                             <?php foreach ($categories as $value => $label): ?>
                                 <option value="<?php echo $value; ?>"
                                     <?php echo ($editing_service['category'] ?? 'appointment') === $value ? 'selected' : ''; ?>>
@@ -202,15 +202,16 @@ renderAdminLayout('Services Management', function () use ($services, $editing_se
                     </div>
                 </div>
 
-                <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Description *</label>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Description *</label>
                     <textarea name="description" rows="4" required
-                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; resize: vertical;"><?php echo htmlspecialchars($editing_service['description'] ?? ''); ?></textarea>
+                        placeholder="Enter service description..."
+                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; resize: vertical; font-family: inherit;"><?php echo htmlspecialchars($editing_service['description'] ?? ''); ?></textarea>
                 </div>
 
                 <?php if ($editing_service): ?>
-                    <div>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #333; cursor: pointer;">
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #374151; cursor: pointer;">
                             <input type="checkbox" name="is_active"
                                 <?php echo ($editing_service['is_active'] ?? true) ? 'checked' : ''; ?>
                                 style="width: 18px; height: 18px;">
@@ -219,7 +220,7 @@ renderAdminLayout('Services Management', function () use ($services, $editing_se
                     </div>
                 <?php endif; ?>
 
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
                     <a href="services.php" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">
                         <?php echo $editing_service ? 'Update Service' : 'Create Service'; ?>

@@ -130,17 +130,17 @@ renderAdminLayout('Schedules Management', function () use ($schedules, $editing_
                 </h3>
                 <a href="schedules.php" class="btn btn-secondary btn-sm">Cancel</a>
             </div>
-            <form method="POST" style="display: grid; gap: 1rem;">
+            <form method="POST" style="padding: 1.5rem;">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="action" value="<?php echo $editing_schedule ? 'update' : 'create'; ?>">
                 <?php if ($editing_schedule): ?>
                     <input type="hidden" name="id" value="<?php echo $editing_schedule['id']; ?>">
                 <?php endif; ?>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Service *</label>
-                        <select name="service_id" required style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Service *</label>
+                        <select name="service_id" required style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; background: white;">
                             <option value="">Select Service</option>
                             <?php foreach ($services as $service): ?>
                                 <option value="<?php echo $service['id']; ?>"
@@ -151,7 +151,7 @@ renderAdminLayout('Schedules Management', function () use ($schedules, $editing_
                         </select>
                     </div>
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Schedule Date *</label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Schedule Date *</label>
                         <input type="date" name="schedule_date"
                             value="<?php echo $editing_schedule['schedule_date'] ?? date('Y-m-d'); ?>"
                             required
@@ -159,23 +159,23 @@ renderAdminLayout('Schedules Management', function () use ($schedules, $editing_
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Start Time *</label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Start Time *</label>
                         <input type="time" name="start_time"
                             value="<?php echo $editing_schedule['start_time'] ?? '09:00'; ?>"
                             required
                             style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
                     </div>
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">End Time *</label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">End Time *</label>
                         <input type="time" name="end_time"
                             value="<?php echo $editing_schedule['end_time'] ?? '17:00'; ?>"
                             required
                             style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
                     </div>
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Max Appointments *</label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Max Appointments *</label>
                         <input type="number" name="max_appointments" min="1" max="100"
                             value="<?php echo $editing_schedule['max_appointments'] ?? '10'; ?>"
                             required
@@ -183,15 +183,16 @@ renderAdminLayout('Schedules Management', function () use ($schedules, $editing_
                     </div>
                 </div>
 
-                <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Notes</label>
-                    <textarea name="notes" rows="3"
-                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; resize: vertical;"><?php echo htmlspecialchars($editing_schedule['notes'] ?? ''); ?></textarea>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Notes</label>
+                    <textarea name="notes" rows="4"
+                        placeholder="Add any notes about this schedule..."
+                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; resize: vertical; font-family: inherit;"><?php echo htmlspecialchars($editing_schedule['notes'] ?? ''); ?></textarea>
                 </div>
 
                 <?php if ($editing_schedule): ?>
-                    <div>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #333; cursor: pointer;">
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #374151; cursor: pointer;">
                             <input type="checkbox" name="is_active"
                                 <?php echo ($editing_schedule['is_active'] ?? true) ? 'checked' : ''; ?>
                                 style="width: 18px; height: 18px;">
@@ -200,7 +201,7 @@ renderAdminLayout('Schedules Management', function () use ($schedules, $editing_
                     </div>
                 <?php endif; ?>
 
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
                     <a href="schedules.php" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">
                         <?php echo $editing_schedule ? 'Update Schedule' : 'Create Schedule'; ?>

@@ -20,6 +20,7 @@ $stats = getDashboardStats();
 $recent_appointments = getAppointmentsAdmin(10, 0); // Get 10 most recent
 $recent_announcements = getAnnouncementsAdmin(10, 0); // Get 10 most recent
 $upcoming_services = getServiceSchedulesAdmin(10); // Get 10 upcoming
+$recent_reservations = getReservationsAdmin(10, 0); // Get 10 most recent
 
 // Filter upcoming services to only show future dates
 $upcoming_services = array_filter($upcoming_services, function ($schedule) {
@@ -34,7 +35,7 @@ $program_count = count(array_filter($services, function ($service) {
 }));
 
 // Render the dashboard
-renderAdminLayout('Dashboard', function () use ($stats, $recent_appointments, $recent_announcements, $upcoming_services, $program_count) {
+renderAdminLayout('Dashboard', function () use ($stats, $recent_appointments, $recent_announcements, $upcoming_services, $recent_reservations, $program_count) {
 ?>
     <style>
         .dashboard-container {
@@ -104,6 +105,10 @@ renderAdminLayout('Dashboard', function () use ($stats, $recent_appointments, $r
 
         .icon-announcements {
             background: #8b5cf6;
+        }
+
+        .icon-reservations {
+            background: #f59e0b;
         }
 
         .dashboard-sections {
@@ -231,6 +236,12 @@ renderAdminLayout('Dashboard', function () use ($stats, $recent_appointments, $r
 
         @media (max-width: 1024px) {
             .dashboard-sections {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-sections {
                 grid-template-columns: 1fr;
             }
         }
@@ -288,10 +299,53 @@ renderAdminLayout('Dashboard', function () use ($stats, $recent_appointments, $r
                 <p class="metric-label">Active Announcements</p>
                 <p class="metric-desc">Published announcements</p>
             </div>
+
+            <div class="metric-card">
+                <div class="metric-icon icon-reservations">
+                    <i class="fas fa-calendar-plus"></i>
+                </div>
+                <h2 class="metric-number"><?php echo number_format($stats['pending_reservations']); ?></h2>
+                <p class="metric-label">Pending Reservations</p>
+                <p class="metric-desc">Awaiting processing</p>
+            </div>
         </div>
 
         <!-- Dashboard Sections -->
         <div class="dashboard-sections">
+            <!-- Recent Reservations -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-calendar-plus" style="color: #33b6ff;"></i>
+                        Recent Reservations
+                    </h3>
+                    <button class="expand-btn" onclick="toggleSection('reservations')">
+                        <i class="fas fa-plus" id="reservations-icon"></i>
+                    </button>
+                </div>
+                <div class="section-content" id="reservations-content">
+                    <?php if (empty($recent_reservations)): ?>
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-plus"></i>
+                            <p>No recent reservations</p>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($recent_reservations as $reservation): ?>
+                            <div class="section-item" onclick="window.location.href='reservations.php?action=edit&id=<?php echo $reservation['id']; ?>'">
+                                <div class="item-primary"><?php echo htmlspecialchars($reservation['client_name']); ?></div>
+                                <div class="item-secondary">
+                                    <?php echo date('M j, Y', strtotime($reservation['preferred_date'])); ?>
+                                    <span class="status-badge status-<?php echo $reservation['status']; ?>">
+                                        <?php echo ucfirst($reservation['status']); ?>
+                                    </span>
+                                </div>
+                                <div class="item-meta"><?php echo htmlspecialchars($reservation['service_name'] ?? 'Service') . ' - ' . ucfirst($reservation['service_category']); ?></div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+
             <!-- Recent Appointments -->
             <div class="dashboard-section">
                 <div class="section-header">
@@ -320,40 +374,6 @@ renderAdminLayout('Dashboard', function () use ($stats, $recent_appointments, $r
                                     </span>
                                 </div>
                                 <div class="item-meta"><?php echo htmlspecialchars($appointment['service_name'] ?? 'Service'); ?></div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </div>
-            </div>
-
-            <!-- Announcements -->
-            <div class="dashboard-section">
-                <div class="section-header">
-                    <h3 class="section-title">
-                        <i class="fas fa-bullhorn" style="color: #33b6ff;"></i>
-                        Announcements
-                    </h3>
-                    <button class="expand-btn" onclick="toggleSection('announcements')">
-                        <i class="fas fa-plus" id="announcements-icon"></i>
-                    </button>
-                </div>
-                <div class="section-content" id="announcements-content">
-                    <?php if (empty($recent_announcements)): ?>
-                        <div class="empty-state">
-                            <i class="fas fa-bullhorn"></i>
-                            <p>No recent announcements</p>
-                        </div>
-                    <?php else: ?>
-                        <?php foreach ($recent_announcements as $announcement): ?>
-                            <div class="section-item" onclick="window.location.href='announcements.php?action=edit&id=<?php echo $announcement['id']; ?>'">
-                                <div class="item-primary"><?php echo htmlspecialchars($announcement['title']); ?></div>
-                                <div class="item-secondary">
-                                    <?php echo date('M j, Y', strtotime($announcement['announcement_date'])); ?>
-                                    <?php if ($announcement['is_featured']): ?>
-                                        <span class="status-badge status-active">Featured</span>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="item-meta"><?php echo htmlspecialchars(substr($announcement['content'], 0, 60)); ?>...</div>
                             </div>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -406,7 +426,11 @@ renderAdminLayout('Dashboard', function () use ($stats, $recent_appointments, $r
             <div style="display: grid; gap: 1rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px;">
                     <span style="color: #6b7280;">Total Database Records</span>
-                    <strong style="color: #333;"><?php echo number_format($stats['total_appointments'] + $stats['total_services'] + $stats['active_announcements']); ?></strong>
+                    <strong style="color: #333;"><?php echo number_format($stats['total_appointments'] + $stats['total_reservations'] + $stats['total_services'] + $stats['active_announcements']); ?></strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px;">
+                    <span style="color: #6b7280;">Total Reservations</span>
+                    <strong style="color: #333;"><?php echo number_format($stats['total_reservations']); ?></strong>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px;">
                     <span style="color: #6b7280;">Active Services</span>
