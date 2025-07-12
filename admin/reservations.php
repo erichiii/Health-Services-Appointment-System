@@ -155,30 +155,64 @@ renderAdminLayout('Reservations Management', function () use ($reservations, $ed
                 <h3 class="card-title">Update Reservation Status</h3>
                 <a href="reservations.php" class="btn btn-secondary btn-sm">Cancel</a>
             </div>
-            <form method="POST" style="display: grid; gap: 1rem;">
+            <form method="POST" style="padding: 1.5rem;">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="action" value="update_status">
                 <input type="hidden" name="id" value="<?php echo $editing_reservation['id']; ?>">
 
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
                     <div>
-                        <h4 style="margin: 0 0 1rem 0; color: #333;">Reservation Details</h4>
-                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px;">
-                            <p><strong>Client:</strong> <?php echo htmlspecialchars($editing_reservation['client_name']); ?></p>
-                            <p><strong>Health ID:</strong> <?php echo htmlspecialchars($editing_reservation['vehai_id'] ?? 'N/A'); ?></p>
-                            <p><strong>Email:</strong> <?php echo htmlspecialchars($editing_reservation['email_address'] ?? 'N/A'); ?></p>
-                            <p><strong>Phone:</strong> <?php echo htmlspecialchars($editing_reservation['contact_number']); ?></p>
-                            <p><strong>Service:</strong> <?php echo htmlspecialchars($editing_reservation['service_name']); ?></p>
-                            <p><strong>Category:</strong> <?php echo ucfirst($editing_reservation['service_category']); ?></p>
-                            <p><strong>Subcategory:</strong> <?php echo htmlspecialchars($editing_reservation['service_subcategory']); ?></p>
-                            <p><strong>Preferred Date:</strong> <?php echo date('M j, Y', strtotime($editing_reservation['preferred_date'])); ?></p>
-                            <p><strong>Preferred Time:</strong> <?php echo date('g:i A', strtotime($editing_reservation['preferred_time'])); ?></p>
+                        <h4 style="margin: 0 0 1rem 0; color: #374151; font-weight: 600; font-size: 1.1rem;">Reservation Details</h4>
+                        <div style="background: #f9fafb; padding: 1.5rem; border-radius: 8px; border: 1px solid #e5e7eb;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div>
+                                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Client:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo htmlspecialchars($editing_reservation['client_name']); ?></span>
+                                    </p>
+                                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Health ID:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo htmlspecialchars($editing_reservation['vehai_id'] ?? 'N/A'); ?></span>
+                                    </p>
+                                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Email:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo htmlspecialchars($editing_reservation['email_address'] ?? 'N/A'); ?></span>
+                                    </p>
+                                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Phone:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo htmlspecialchars($editing_reservation['contact_number']); ?></span>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Service:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo htmlspecialchars($editing_reservation['service_name']); ?></span>
+                                    </p>
+                                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Category:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo ucfirst($editing_reservation['service_category']); ?></span>
+                                    </p>
+                                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Subcategory:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo htmlspecialchars($editing_reservation['service_subcategory']); ?></span>
+                                    </p>
+                                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Preferred Date:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo date('M j, Y', strtotime($editing_reservation['preferred_date'])); ?></span>
+                                    </p>
+                                    <p style="margin: 0; font-size: 0.9rem; color: #6b7280;">
+                                        <strong style="color: #374151; font-weight: 600;">Preferred Time:</strong><br>
+                                        <span style="color: #111827; font-size: 1rem;"><?php echo date('g:i A', strtotime($editing_reservation['preferred_time'])); ?></span>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div>
+                        <h4 style="margin: 0 0 1rem 0; color: #374151; font-weight: 600; font-size: 1.1rem;">Update Status</h4>
                         <div>
-                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Status *</label>
-                            <select name="status" required style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Status *</label>
+                            <select name="status" required style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; background: white;">
                                 <option value="pending" <?php echo $editing_reservation['status'] === 'pending' ? 'selected' : ''; ?>>Pending</option>
                                 <option value="scheduled" <?php echo $editing_reservation['status'] === 'scheduled' ? 'selected' : ''; ?>>Scheduled</option>
                                 <option value="cancelled" <?php echo $editing_reservation['status'] === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
@@ -187,13 +221,14 @@ renderAdminLayout('Reservations Management', function () use ($reservations, $ed
                     </div>
                 </div>
 
-                <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Notes</label>
-                    <textarea name="notes" rows="3"
-                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; resize: vertical;"><?php echo htmlspecialchars($editing_reservation['notes'] ?? ''); ?></textarea>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Notes</label>
+                    <textarea name="notes" rows="4"
+                        placeholder="Add any notes or comments about this reservation..."
+                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; resize: vertical; font-family: inherit;"><?php echo htmlspecialchars($editing_reservation['notes'] ?? ''); ?></textarea>
                 </div>
 
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
                     <a href="reservations.php" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">Update Reservation</button>
                 </div>
@@ -320,71 +355,105 @@ renderAdminLayout('Reservations Management', function () use ($reservations, $ed
                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="action" id="bulk-action" value="">
 
-                <div class="table-container">
-                    <table class="table">
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
                         <thead>
-                            <tr>
-                                <th style="width: 40px;">
-                                    <input type="checkbox" id="select-all" onchange="toggleAll(this)">
+                            <tr style="border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 1rem; text-align: left;">
+                                    <input type="checkbox" id="select-all" onchange="toggleAll(this)" style="width: 18px; height: 18px;">
                                 </th>
-                                <th>Client</th>
-                                <th>Service</th>
-                                <th>Category</th>
-                                <th>Preferred Date/Time</th>
-                                <th>Status</th>
-                                <th>Created</th>
-                                <th style="width: 200px;">Actions</th>
+                                <th style="padding: 1rem; text-align: center; font-weight: 600; color: #374151;">ID</th>
+                                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #374151;">Client</th>
+                                <th style="padding: 1rem; text-align: left; font-weight: 600; color: #374151;">Service</th>
+                                <th style="padding: 1rem; text-align: center; font-weight: 600; color: #374151;">Category</th>
+                                <th style="padding: 1rem; text-align: center; font-weight: 600; color: #374151;">Preferred Date/Time</th>
+                                <th style="padding: 1rem; text-align: center; font-weight: 600; color: #374151;">Status</th>
+                                <th style="padding: 1rem; text-align: center; font-weight: 600; color: #374151;">Created</th>
+                                <th style="padding: 1rem; text-align: center; font-weight: 600; color: #374151;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($reservations as $reservation): ?>
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" name="ids[]" value="<?php echo $reservation['id']; ?>" class="row-checkbox">
+                                <tr style="border-bottom: 1px solid #f3f4f6;">
+                                    <td style="padding: 1rem;">
+                                        <input type="checkbox" name="ids[]" value="<?php echo $reservation['id']; ?>" class="row-checkbox" style="width: 18px; height: 18px;">
                                     </td>
-                                    <td>
-                                        <div style="font-weight: 600; color: #333;"><?php echo htmlspecialchars($reservation['client_name']); ?></div>
-                                        <div style="font-size: 0.85rem; color: #6b7280;">
-                                            <?php if ($reservation['vehai_id']): ?>
-                                                ID: <?php echo htmlspecialchars($reservation['vehai_id']); ?><br>
-                                            <?php endif; ?>
-                                            <?php echo htmlspecialchars($reservation['contact_number']); ?>
+                                    <td style="padding: 1rem; text-align: center; color: #6b7280; font-weight: 600;">
+                                        #<?php echo $reservation['id']; ?>
+                                    </td>
+                                    <td style="padding: 1rem;">
+                                        <div>
+                                            <div style="font-weight: 600; color: #333; margin-bottom: 0.25rem;">
+                                                <?php echo htmlspecialchars($reservation['client_name']); ?>
+                                            </div>
+                                            <div style="font-size: 0.85rem; color: #6b7280; line-height: 1.4;">
+                                                <?php if ($reservation['vehai_id']): ?>
+                                                    ID: <?php echo htmlspecialchars($reservation['vehai_id']); ?><br>
+                                                <?php endif; ?>
+                                                <?php echo htmlspecialchars($reservation['contact_number']); ?>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td>
-                                        <div style="font-weight: 600; color: #333;"><?php echo htmlspecialchars($reservation['service_name']); ?></div>
-                                        <div style="font-size: 0.85rem; color: #6b7280;"><?php echo htmlspecialchars($reservation['service_subcategory']); ?></div>
+                                    <td style="padding: 1rem;">
+                                        <div>
+                                            <div style="font-weight: 600; color: #333; margin-bottom: 0.25rem;">
+                                                <?php echo htmlspecialchars($reservation['service_name']); ?>
+                                            </div>
+                                            <div style="font-size: 0.85rem; color: #6b7280; line-height: 1.4;">
+                                                <?php echo htmlspecialchars($reservation['service_subcategory']); ?>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td>
-                                        <span class="badge badge-<?php echo $reservation['service_category']; ?>">
+                                    <td style="padding: 1rem; text-align: center;">
+                                        <?php
+                                        $category_colors = [
+                                            'vaccine' => '#22c55e',
+                                            'program' => '#f59e0b',
+                                            'general' => '#3b82f6'
+                                        ];
+                                        $color = $category_colors[$reservation['service_category']] ?? '#6b7280';
+                                        ?>
+                                        <span style="background: <?php echo $color; ?>20; color: <?php echo $color; ?>; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
                                             <?php echo ucfirst($reservation['service_category']); ?>
                                         </span>
                                     </td>
-                                    <td>
-                                        <div style="font-weight: 600; color: #333;"><?php echo date('M j, Y', strtotime($reservation['preferred_date'])); ?></div>
-                                        <div style="font-size: 0.85rem; color: #6b7280;"><?php echo date('g:i A', strtotime($reservation['preferred_time'])); ?></div>
+                                    <td style="padding: 1rem; text-align: center;">
+                                        <div>
+                                            <div style="font-weight: 600; color: #333; margin-bottom: 0.25rem;">
+                                                <?php echo date('M j, Y', strtotime($reservation['preferred_date'])); ?>
+                                            </div>
+                                            <div style="font-size: 0.85rem; color: #6b7280;">
+                                                <?php echo date('g:i A', strtotime($reservation['preferred_time'])); ?>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td>
-                                        <span class="status-badge status-<?php echo $reservation['status']; ?>">
+                                    <td style="padding: 1rem; text-align: center;">
+                                        <?php
+                                        $status_colors = [
+                                            'pending' => ['bg' => '#fef3c7', 'text' => '#92400e'],
+                                            'scheduled' => ['bg' => '#d1fae5', 'text' => '#065f46'],
+                                            'cancelled' => ['bg' => '#fee2e2', 'text' => '#dc2626']
+                                        ];
+                                        $status_color = $status_colors[$reservation['status']] ?? ['bg' => '#f3f4f6', 'text' => '#6b7280'];
+                                        ?>
+                                        <span style="background: <?php echo $status_color['bg']; ?>; color: <?php echo $status_color['text']; ?>; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
                                             <?php echo ucfirst($reservation['status']); ?>
                                         </span>
                                     </td>
-                                    <td>
-                                        <div style="font-size: 0.85rem; color: #6b7280;">
-                                            <?php echo date('M j, Y', strtotime($reservation['created_at'])); ?>
-                                        </div>
+                                    <td style="padding: 1rem; text-align: center; color: #6b7280; font-size: 0.85rem;">
+                                        <?php echo date('M j, Y', strtotime($reservation['created_at'])); ?>
                                     </td>
-                                    <td>
-                                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                            <a href="?action=edit&id=<?php echo $reservation['id']; ?>" class="btn btn-sm btn-primary">
-                                                <i class="fas fa-edit"></i> Edit
+                                    <td style="padding: 1rem; text-align: center;">
+                                        <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                                            <a href="?action=edit&id=<?php echo $reservation['id']; ?>" class="btn btn-secondary btn-sm" title="Edit">
+                                                <i class="fas fa-edit"></i>
                                             </a>
                                             <?php if ($reservation['status'] === 'pending'): ?>
-                                                <a href="?action=convert&id=<?php echo $reservation['id']; ?>" class="btn btn-sm btn-success">
-                                                    <i class="fas fa-calendar-plus"></i> Convert
+                                                <a href="?action=convert&id=<?php echo $reservation['id']; ?>" class="btn btn-success btn-sm" title="Convert">
+                                                    <i class="fas fa-calendar-plus"></i>
                                                 </a>
                                             <?php endif; ?>
-                                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteReservation(<?php echo $reservation['id']; ?>)">
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteReservation(<?php echo $reservation['id']; ?>)" title="Delete">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
@@ -398,24 +467,29 @@ renderAdminLayout('Reservations Management', function () use ($reservations, $ed
 
             <!-- Pagination -->
             <?php if ($total_pages > 1): ?>
-                <div class="pagination-container">
-                    <div class="pagination-info">
-                        Showing <?php echo number_format($offset + 1); ?> to <?php echo number_format(min($offset + $limit, $total_reservations)); ?> of <?php echo number_format($total_reservations); ?> reservations
+                <div style="padding: 1rem; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="color: #6b7280; font-size: 0.9rem;">
+                        Showing <?php echo number_format($offset + 1); ?> to <?php echo number_format(min($offset + $limit, $total_reservations)); ?>
+                        of <?php echo number_format($total_reservations); ?> reservations
                     </div>
-                    <div class="pagination">
+                    <div style="display: flex; gap: 0.5rem;">
                         <?php if ($page > 1): ?>
-                            <a href="?page=<?php echo $page - 1; ?>&search=<?php echo urlencode($search); ?>&status=<?php echo urlencode($status_filter); ?>&category=<?php echo urlencode($category_filter); ?>" class="pagination-btn">Previous</a>
+                            <a href="?page=<?php echo $page - 1; ?>&search=<?php echo urlencode($search); ?>&status=<?php echo urlencode($status_filter); ?>&category=<?php echo urlencode($category_filter); ?>"
+                                class="btn btn-secondary btn-sm">Previous</a>
                         <?php endif; ?>
 
                         <?php for ($i = max(1, $page - 2); $i <= min($total_pages, $page + 2); $i++): ?>
-                            <a href="?page=<?php echo $i; ?>&search=<?php echo urlencode($search); ?>&status=<?php echo urlencode($status_filter); ?>&category=<?php echo urlencode($category_filter); ?>"
-                                class="pagination-btn <?php echo $i === $page ? 'active' : ''; ?>">
-                                <?php echo $i; ?>
-                            </a>
+                            <?php if ($i == $page): ?>
+                                <span class="btn btn-primary btn-sm"><?php echo $i; ?></span>
+                            <?php else: ?>
+                                <a href="?page=<?php echo $i; ?>&search=<?php echo urlencode($search); ?>&status=<?php echo urlencode($status_filter); ?>&category=<?php echo urlencode($category_filter); ?>"
+                                    class="btn btn-secondary btn-sm"><?php echo $i; ?></a>
+                            <?php endif; ?>
                         <?php endfor; ?>
 
                         <?php if ($page < $total_pages): ?>
-                            <a href="?page=<?php echo $page + 1; ?>&search=<?php echo urlencode($search); ?>&status=<?php echo urlencode($status_filter); ?>&category=<?php echo urlencode($category_filter); ?>" class="pagination-btn">Next</a>
+                            <a href="?page=<?php echo $page + 1; ?>&search=<?php echo urlencode($search); ?>&status=<?php echo urlencode($status_filter); ?>&category=<?php echo urlencode($category_filter); ?>"
+                                class="btn btn-secondary btn-sm">Next</a>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -423,44 +497,7 @@ renderAdminLayout('Reservations Management', function () use ($reservations, $ed
         <?php endif; ?>
     </div>
 
-    <style>
-        .badge-vaccine {
-            background: #dbeafe;
-            color: #1e40af;
-        }
 
-        .badge-program {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .badge-general {
-            background: #f3e8ff;
-            color: #7c3aed;
-        }
-
-        .status-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .status-pending {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-scheduled {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-cancelled {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-    </style>
 
     <script>
         function toggleAll(checkbox) {

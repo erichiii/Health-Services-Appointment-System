@@ -161,23 +161,23 @@ renderAdminLayout('Announcements Management', function () use ($announcements, $
                 </h3>
                 <a href="announcements.php" class="btn btn-secondary btn-sm">Cancel</a>
             </div>
-            <form method="POST" style="display: grid; gap: 1rem;">
+            <form method="POST" style="padding: 1.5rem;">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="action" value="<?php echo $editing_announcement ? 'update' : 'create'; ?>">
                 <?php if ($editing_announcement): ?>
                     <input type="hidden" name="id" value="<?php echo $editing_announcement['id']; ?>">
                 <?php endif; ?>
 
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Title *</label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Title *</label>
                         <input type="text" name="title"
                             value="<?php echo htmlspecialchars($editing_announcement['title'] ?? ''); ?>"
                             required
                             style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
                     </div>
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Announcement Date *</label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Announcement Date *</label>
                         <input type="date" name="announcement_date"
                             value="<?php echo $editing_announcement['announcement_date'] ?? date('Y-m-d'); ?>"
                             required
@@ -185,21 +185,22 @@ renderAdminLayout('Announcements Management', function () use ($announcements, $
                     </div>
                 </div>
 
-                <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Content *</label>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Content *</label>
                     <textarea name="content" rows="6" required
-                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; resize: vertical;"><?php echo htmlspecialchars($editing_announcement['content'] ?? ''); ?></textarea>
+                        placeholder="Enter announcement content..."
+                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; resize: vertical; font-family: inherit;"><?php echo htmlspecialchars($editing_announcement['content'] ?? ''); ?></textarea>
                 </div>
 
-                <div style="display: flex; gap: 2rem;">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #333; cursor: pointer;">
+                <div style="display: flex; gap: 2rem; margin-bottom: 1.5rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #374151; cursor: pointer;">
                         <input type="checkbox" name="is_featured"
                             <?php echo ($editing_announcement['is_featured'] ?? false) ? 'checked' : ''; ?>
                             style="width: 18px; height: 18px;">
                         Featured Announcement
                     </label>
                     <?php if ($editing_announcement): ?>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #333; cursor: pointer;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #374151; cursor: pointer;">
                             <input type="checkbox" name="is_active"
                                 <?php echo ($editing_announcement['is_active'] ?? true) ? 'checked' : ''; ?>
                                 style="width: 18px; height: 18px;">
@@ -208,7 +209,7 @@ renderAdminLayout('Announcements Management', function () use ($announcements, $
                     <?php endif; ?>
                 </div>
 
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
                     <a href="announcements.php" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary">
                         <?php echo $editing_announcement ? 'Update Announcement' : 'Create Announcement'; ?>
