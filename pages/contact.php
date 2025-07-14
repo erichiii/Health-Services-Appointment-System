@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="Health-Services-Appointment-System\assets\main.css">
+<link rel="stylesheet" href="Health-Services-Appointment-System\assets\layout.css">
 
 <?php
 
