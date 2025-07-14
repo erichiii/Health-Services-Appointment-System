@@ -22,6 +22,7 @@
             </div>
             <nav class="clinic-nav">
                 <a href="<?php echo $base_path; ?>index.php#services-section">Services</a>
+                <a href="<?php echo $base_path; ?>pages/about.php">About Us</a>
                 <a href="<?php echo $base_path; ?>pages/announcements.php">Announcements</a>
                 <a href="<?php echo $base_path; ?>pages/programs.php">Health Programs</a>
                 <a href="<?php echo $base_path; ?>pages/contact.php">Contact Us</a>
