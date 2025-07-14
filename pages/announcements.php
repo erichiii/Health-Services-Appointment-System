@@ -111,8 +111,8 @@ foreach ($announcements as $a) {
 .announcement-modal-content {
     background: #fff;
     border-radius: 12px;
-    max-width: 700px;
-    width: 98vw;
+    max-width: 900px;
+    width: 99vw;
     padding: 32px 28px 24px 28px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.18);
     position: relative;
