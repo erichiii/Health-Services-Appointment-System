@@ -111,8 +111,8 @@ foreach ($announcements as $a) {
 .announcement-modal-content {
     background: #fff;
     border-radius: 12px;
-    max-width: 520px;
-    width: 95vw;
+    max-width: 700px;
+    width: 98vw;
     padding: 32px 28px 24px 28px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.18);
     position: relative;
@@ -222,7 +222,8 @@ foreach ($announcements as $a) {
     <?php endif; ?>
 </div>
 
-<!-- Modal Popup for Announcement Details -->
+<!-- Modal/Screen Popup for Announcement Details -->
+<!-- Utilizes JavaScript for an easier implementation -->
 <div class="announcement-modal" id="announcementModal" aria-modal="true" role="dialog" tabindex="-1">
     <div class="announcement-modal-content">
         <button class="announcement-modal-close" id="announcementModalClose" aria-label="Close">&times;</button>
@@ -232,7 +233,8 @@ foreach ($announcements as $a) {
     </div>
 </div>
 <script>
-// Modal logic
+
+// Modal logic -- JavaScript starts here
 const modal = document.getElementById('announcementModal');
 const modalClose = document.getElementById('announcementModalClose');
 const modalTitle = document.getElementById('modalTitle');
