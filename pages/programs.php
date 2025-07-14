@@ -30,7 +30,7 @@ $category_titles = [
 <style>
 .programs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
     gap: 20px;
     margin-bottom: 32px;
 }
@@ -41,8 +41,8 @@ $category_titles = [
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 18px 14px 14px 14px;
-    min-height: 220px;
+    padding: 18px 32px 24px 32px;
+    min-height: 180px;
     position: relative;
     border: 1.5px solid #e6eaf0;
     margin-bottom: 0;
