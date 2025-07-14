@@ -8,6 +8,24 @@ $page_subtitle = 'Comprehensive healthcare programs for our community';
 
 $programs = getActiveProgramsAndSchedules();
 
+// Segregate by category
+$categories = [
+    'vaccine' => [],
+    'program' => [],
+    'appointment' => []
+];
+foreach ($programs as $p) {
+    if (!$p['schedule_id']) continue;
+    $cat = $p['category'];
+    if (isset($categories[$cat])) {
+        $categories[$cat][] = $p;
+    }
+}
+$category_titles = [
+    'vaccine' => 'Vaccine Registration',
+    'program' => 'Program Enrollment',
+    'appointment' => 'General Appointment'
+];
 ?>
 <style>
 .programs-grid {
@@ -76,10 +94,8 @@ $programs = getActiveProgramsAndSchedules();
 }
 .program-slots {
     margin-bottom: 18px;
-}
-.program-slot-available {
+    font-weight: bold;
     color: #22c55e;
-    font-weight: 500;
     font-size: 1.08rem;
     display: flex;
     align-items: center;
@@ -87,7 +103,7 @@ $programs = getActiveProgramsAndSchedules();
 }
 .program-slot-unavailable {
     color: #aaa;
-    font-weight: 500;
+    font-weight: bold;
     font-size: 1.08rem;
     display: flex;
     align-items: center;
@@ -129,43 +145,49 @@ $programs = getActiveProgramsAndSchedules();
         font-size: 1rem;
     }
 }
+.category-section-title {
+    font-size: 2.1rem;
+    font-weight: 700;
+    margin-top: 2.5rem;
+    margin-bottom: 1.2rem;
+    color: #181818;
+}
 </style>
 <div class="main-content">
-    <h1 style="font-size:2.2rem; margin-bottom: 1.5rem; font-weight:600;">Vaccine Registration</h1>
-    <div class="programs-grid">
-        <?php
-        $has_program = false;
-        foreach ($programs as $p) {
-            if (!$p['schedule_id']) continue; // Only show with schedule
-            $has_program = true;
-            $slots = (int)$p['available_slots'];
-            $is_available = $slots > 0;
-            $time = ($p['start_time'] && $p['end_time']) ?
-                date('g:i A', strtotime($p['start_time'])) . ' - ' . date('g:i A', strtotime($p['end_time'])) : '';
-            echo '<div class="program-card">';
-            echo '<div class="program-card-header">';
-            echo '<div class="program-avatar"><i class="fa fa-calendar"></i></div>';
-            echo '<div>';
-            echo '<div class="program-title">' . htmlspecialchars($p['name']) . '</div>';
-            echo '<div class="program-time">' . htmlspecialchars($time) . '</div>';
-            echo '</div>';
-            echo '</div>';
-            echo '<div class="program-label">Description</div>';
-            echo '<div class="program-description">' . htmlspecialchars($p['description']) . '</div>';
-            echo '<div class="program-label">Slot Availability</div>';
-            if ($is_available) {
-                echo '<div class="program-slots program-slot-available"><i class="fa fa-check-square-o"></i> ' . $slots . ' Slots Available</div>';
-            } else {
-                echo '<div class="program-slots program-slot-unavailable"><i class="fa fa-times-circle-o"></i> No slots available</div>';
-            }
-            echo '<a class="program-enroll-btn" href="reservation.php?service_id=' . $p['service_id'] . '" ' . ($is_available ? '' : 'disabled style=\"pointer-events:none;opacity:0.6;\"') . '>Join Program</a>';
-            echo '</div>';
-        }
-        if (!$has_program) {
-            echo '<div style="color:#888; font-size:1.1rem;">No active programs available at this time.</div>';
-        }
-        ?>
-    </div>
+    <?php foreach ($categories as $cat => $list): ?>
+        <?php if (count($list)): ?>
+            <div class="category-section-title"><?php echo $category_titles[$cat]; ?></div>
+            <div class="programs-grid">
+                <?php foreach ($list as $p):
+                    $slots = (int)$p['available_slots'];
+                    $is_available = $slots > 0;
+                    $time = ($p['start_time'] && $p['end_time']) ?
+                        date('g:i A', strtotime($p['start_time'])) . ' - ' . date('g:i A', strtotime($p['end_time'])) : '';
+                ?>
+                <div class="program-card">
+                    <div class="program-card-header">
+                        <div class="program-avatar"><i class="fa fa-calendar"></i></div>
+                        <div>
+                            <div class="program-title"><?php echo htmlspecialchars($p['name']); ?></div>
+                            <div class="program-time"><?php echo htmlspecialchars($time); ?></div>
+                        </div>
+                    </div>
+                    <div class="program-label">Description</div>
+                    <div class="program-description"><?php echo htmlspecialchars($p['description']); ?></div>
+                    <?php if ($is_available): ?>
+                        <div class="program-slots"><i class="fa fa-check-square-o"></i> <?php echo $slots; ?> Slots Available</div>
+                    <?php else: ?>
+                        <div class="program-slot-unavailable"><i class="fa fa-times-circle-o"></i> No slots available</div>
+                    <?php endif; ?>
+                    <a class="program-enroll-btn" href="reservation.php?service_id=<?php echo $p['service_id']; ?>" <?php if (!$is_available) echo 'disabled style="pointer-events:none;opacity:0.6;"'; ?>>Join Program</a>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    <?php endforeach; ?>
+    <?php if (!count($categories['vaccine']) && !count($categories['program']) && !count($categories['appointment'])): ?>
+        <div style="color:#888; font-size:1.1rem;">No active programs available at this time.</div>
+    <?php endif; ?>
 </div>
 
 <?php include '../includes/footer.php'; ?>
