@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="../assets/main.css">
+
 <?php
 
 include '../includes/header.php';
