@@ -21,10 +21,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
 // Admin navigation items
 $nav_items = [
     ['url' => 'dashboard.php', 'title' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt'],
-    ['url' => 'announcements.php', 'title' => 'Announcements', 'icon' => 'fas fa-bullhorn'],
+    ['url' => 'reservations.php', 'title' => 'Reservations', 'icon' => 'fas fa-calendar-plus'],
+    ['url' => 'appointments.php', 'title' => 'Appointments', 'icon' => 'fas fa-calendar-check'],
     ['url' => 'services.php', 'title' => 'Services', 'icon' => 'fas fa-stethoscope'],
     ['url' => 'schedules.php', 'title' => 'Schedules', 'icon' => 'fas fa-calendar'],
-    ['url' => 'appointments.php', 'title' => 'Appointments', 'icon' => 'fas fa-calendar-check'],
+    ['url' => 'announcements.php', 'title' => 'Announcements', 'icon' => 'fas fa-bullhorn'],
     ['url' => 'users.php', 'title' => 'Admin Users', 'icon' => 'fas fa-users'],
     ['url' => 'settings.php', 'title' => 'Settings', 'icon' => 'fas fa-cog'],
 ];

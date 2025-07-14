@@ -153,39 +153,39 @@ renderAdminLayout('Admin Users Management', function () use ($users, $editing_us
                 </h3>
                 <a href="users.php" class="btn btn-secondary btn-sm">Cancel</a>
             </div>
-            <form method="POST" style="display: grid; gap: 1rem;">
+            <form method="POST" style="padding: 1.5rem;">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="action" value="<?php echo $editing_user ? 'update' : 'create'; ?>">
                 <?php if ($editing_user): ?>
                     <input type="hidden" name="id" value="<?php echo $editing_user['id']; ?>">
                 <?php endif; ?>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Username *</label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Username *</label>
                         <input type="text" name="username" value="<?php echo htmlspecialchars($editing_user['username'] ?? ''); ?>" required style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
                     </div>
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Email *</label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Email *</label>
                         <input type="email" name="email" value="<?php echo htmlspecialchars($editing_user['email'] ?? ''); ?>" required style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
                     </div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Full Name *</label>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Full Name *</label>
                         <input type="text" name="full_name" value="<?php echo htmlspecialchars($editing_user['full_name'] ?? ''); ?>" required style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
                     </div>
                     <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333;">Password <?php echo $editing_user ? '(leave blank to keep unchanged)' : '*'; ?></label>
-                        <input type="password" name="password" <?php echo $editing_user ? '' : 'required'; ?> style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; font-size: 0.9rem;">Password <?php echo $editing_user ? '(leave blank to keep unchanged)' : '*'; ?></label>
+                        <input type="password" name="password" <?php echo $editing_user ? '' : 'required'; ?> placeholder="<?php echo $editing_user ? 'Leave blank to keep current password' : 'Enter password'; ?>" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;">
                     </div>
                 </div>
-                <div>
-                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #333; cursor: pointer;">
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #374151; cursor: pointer;">
                         <input type="checkbox" name="is_active" <?php echo ($editing_user['is_active'] ?? true) ? 'checked' : ''; ?> style="width: 18px; height: 18px;">
                         Active
                     </label>
                 </div>
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
                     <a href="users.php" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-primary"><?php echo $editing_user ? 'Update User' : 'Create User'; ?></button>
                 </div>

@@ -1,6 +1,38 @@
 <?php
-
 include '../includes/header.php';
+include '../includes/db_functions.php';
+
+// Handle form submission
+$success_message = '';
+$error_message = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Prepare data for reservation submission
+    $reservation_data = [
+        'service_category' => $_POST['service_category'] ?? '',
+        'service_subcategory' => $_POST['service_subcategory'] ?? '',
+        'vehai_id' => $_POST['vehaiID'] ?? null,
+        'client_name' => $_POST['fullname'] ?? '',
+        'date_of_birth' => $_POST['birthdate'] ?? '',
+        'contact_number' => $_POST['contact'] ?? '',
+        'email_address' => $_POST['email'] ?? null,
+        'home_address' => $_POST['address'] ?? '',
+        'preferred_date' => $_POST['preferred_date'] ?? '',
+        'preferred_time' => $_POST['preferred_time'] ?? '',
+        'notes' => $_POST['notes'] ?? null
+    ];
+
+    // Submit reservation
+    $result = submitReservation($reservation_data);
+
+    if ($result['success']) {
+        $success_message = $result['message'];
+        // Clear form data after successful submission
+        $_POST = [];
+    } else {
+        $error_message = $result['message'];
+    }
+}
 
 // Set page-specific content
 /*$page_title = 'Book Appointment';
@@ -16,75 +48,91 @@ $page_features = [
 include '../includes/in_progress.php';*/
 
 
-    $activeCategory = isset($_GET['category']) ? $_GET['category'] : 'null';
-    $selectedSubcategory = isset($_GET['subcategory']) ? $_GET['subcategory'] : null;
+$activeCategory = isset($_GET['category']) ? $_GET['category'] : 'null';
+$selectedSubcategory = isset($_GET['subcategory']) ? $_GET['subcategory'] : null;
 
-    $serviceCategories = [
-        'vaccine' => [
-            'title' => 'Vaccine Registration',
-            'description' => 'Immunizations and vaccine services',
-            'subcategories' => [
-                'child-immunization' => 'Child Immunization',
-                'adult-vaccine' => 'Adult Vaccine',
-                'travel-vaccine' => 'Travel Vaccine',
-                'booster-shot' => 'Booster Shot'
-            ]
-        ],
-        'program' => [
-            'title' => 'Program Enrollment',
-            'description' => 'Health programs and wellness plans',
-            'subcategories' => [
-                'senior-health' => 'Senior Citizen Health Plan',
-                'maternal-health' => 'Maternal Health Program',
-                'diabetes-management' => 'Diabetes Management',
-                'hypertension-monitoring' => 'Hypertension Monitoring'
-            ],
-        ],
-        'general' => [
-            'title' => 'General Appointment',
-            'description' => 'Regular consultations and checkups',
-            'subcategories' => [
-                'general-consultation' => 'General Consultation',
-                'specialist-referral' => 'Specialist Referral',
-                'lab-tests' => 'Lab Tests',
-                'follow-up' => 'Follow-up Visits'
-            ]
+$serviceCategories = [
+    'vaccine' => [
+        'title' => 'Vaccine Registration',
+        'description' => 'Immunizations and vaccine services',
+        'subcategories' => [
+            'child-immunization' => 'Child Immunization',
+            'adult-vaccine' => 'Adult Vaccine',
+            'travel-vaccine' => 'Travel Vaccine',
+            'booster-shot' => 'Booster Shot'
         ]
-    ];
+    ],
+    'program' => [
+        'title' => 'Program Enrollment',
+        'description' => 'Health programs and wellness plans',
+        'subcategories' => [
+            'senior-health' => 'Senior Citizen Health Plan',
+            'maternal-health' => 'Maternal Health Program',
+            'diabetes-management' => 'Diabetes Management',
+            'hypertension-monitoring' => 'Hypertension Monitoring'
+        ],
+    ],
+    'general' => [
+        'title' => 'General Appointment',
+        'description' => 'Regular consultations and checkups',
+        'subcategories' => [
+            'general-consultation' => 'General Consultation',
+            'specialist-referral' => 'Specialist Referral',
+            'lab-tests' => 'Lab Tests',
+            'follow-up' => 'Follow-up Visits'
+        ]
+    ]
+];
 
-    $selectedCategoryName = "";
-    $selectedSubcategoryName = "";
-    if($selectedSubcategory){
-        foreach ($serviceCategories as $catKey => $catData){
-            if(isset($catData['subcategories'][$selectedSubcategory])){
-                $selectedCategoryName = $catData['title'];
-                $selectedSubcategoryName = $catData['subcategories'][$selectedSubcategory];
-                break;
-            }
+$subcategoryForms = [
+    'child-immunization' => 'vaccine.php',
+    'adult-vaccine' => 'vaccine.php',
+    'travel-vaccine' => 'vaccine.php',
+    'booster-shot' => 'vaccine.php',
+    'senior-health' => 'program-enrollment.php',
+    'maternal-health' => 'program-enrollment.php',
+    'diabetes-management' => 'program-enrollment.php',
+    'hypertension-monitoring' => 'program-enrollment.php',
+    'general-consultation' => 'appointment.php',
+    'specialist-referral' => 'appointment.php',
+    'lab-tests' => 'appointment.php',
+    'follow-up' => 'appointment.php'
+];
+
+
+$selectedCategoryName = "";
+$selectedSubcategoryName = "";
+if ($selectedSubcategory) {
+    foreach ($serviceCategories as $catKey => $catData) {
+        if (isset($catData['subcategories'][$selectedSubcategory])) {
+            $selectedCategoryName = $catData['title'];
+            $selectedSubcategoryName = $catData['subcategories'][$selectedSubcategory];
+            break;
         }
     }
+}
 ?>
 
-    <div class="hero-section">
-        <div class="hero-section-content">
-            <h1>Book Your Appointment</h1>
-            <p>Schedule your healthcare appointment with ease.</p>
-        </div>
+<div class="hero-section">
+    <div class="hero-section-content">
+        <h1>Book Your Appointment</h1>
+        <p>Schedule your healthcare appointment with ease.</p>
+    </div>
+</div>
+
+<div class="second-section">
+    <div class="our-services">
+        <h2>What is this reservation for?</h2>
     </div>
 
-    <div class = "second-section">
-        <div class = "our-services">
-            <h2>What is this reservation for?</h2>
-        </div>
-        
-        <div class="category-grid">
-            <?php foreach ($serviceCategories as $categoryKey => $categoryData): ?>
+    <div class="category-grid">
+        <?php foreach ($serviceCategories as $categoryKey => $categoryData): ?>
             <!-- <?php echo ucfirst($categoryKey); ?> Card -->
             <div class="category-card <?php echo ($activeCategory === $categoryKey) ? 'active' : ''; ?> <?php echo $selectedSubcategory && in_array($selectedSubcategory, array_keys($categoryData['subcategories'])) ? 'has-selection' : ''; ?>" data-category="<?php echo $categoryKey; ?>">
-                
+
                 <!-- Category Header (toggles dropdown) -->
-                <a href="?category=<?php echo ($activeCategory === $categoryKey) ? '' : $categoryKey; ?>#category-<?php echo $categoryKey; ?>" 
-                   class="category-header" id="category-<?php echo $categoryKey; ?>">
+                <a href="?category=<?php echo ($activeCategory === $categoryKey) ? '' : $categoryKey; ?>"
+                    class="category-header" id="category-<?php echo $categoryKey; ?>">
                     <h3><?php echo $categoryData['title']; ?></h3>
                     <p><?php echo $categoryData['description']; ?></p>
                     <div class="dropdown-arrow"><?php echo ($activeCategory === $categoryKey) ? '⌄' : '⌄'; ?></div>
@@ -92,21 +140,57 @@ include '../includes/in_progress.php';*/
 
                 <!-- Subcategory Dropdown -->
                 <?php if ($activeCategory === $categoryKey): ?>
-                <div class="subcategory-dropdown">
-                    <?php foreach ($categoryData['subcategories'] as $subKey => $subName): ?>
-                    <a href="?subcategory=<?php echo $subKey; ?>&confirmed=1#confirmation" 
-                       class="subcategory-item <?php echo ($selectedSubcategory === $subKey) ? 'selected' : ''; ?>">
-                        <span><?php echo $subName; ?></span>
-                    </a>
-                    <?php endforeach; ?>
-                </div>
+                    <div class="subcategory-dropdown">
+                        <?php foreach ($categoryData['subcategories'] as $subKey => $subName): ?>
+                            <a href="?subcategory=<?php echo $subKey; ?>&confirmed=1#confirmation"
+                                class="subcategory-item <?php echo ($selectedSubcategory === $subKey) ? 'selected' : ''; ?>">
+                                <span><?php echo $subName; ?></span>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
                 <?php endif; ?>
             </div>
-            <?php endforeach; ?>
-        </div>
+        <?php endforeach; ?>
     </div>
 
+    <!-- Success/Error Messages -->
+    <?php if (!empty($success_message)): ?>
+        <div class="alert alert-success" style="margin: 2rem auto; max-width: 800px; padding: 1rem; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; color: #155724;">
+            <i class="fas fa-check-circle"></i> <?php echo htmlspecialchars($success_message); ?>
+        </div>
+    <?php endif; ?>
 
+    <?php if (!empty($error_message)): ?>
+        <div class="alert alert-error" style="margin: 2rem auto; max-width: 800px; padding: 1rem; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 8px; color: #721c24;">
+            <i class="fas fa-exclamation-circle"></i> <?php echo htmlspecialchars($error_message); ?>
+        </div>
+    <?php endif; ?>
+
+    <div id="confirmation" class="form-section" style="margin-top: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <?php
+        if ($selectedSubcategory && isset($subcategoryForms[$selectedSubcategory])) {
+            $formFile = $subcategoryForms[$selectedSubcategory];
+            $formPath = __DIR__ . '/' . $formFile;
+
+            if (file_exists($formPath)) {
+                // Pass the selected subcategory and category to the form
+                $current_category = '';
+                foreach ($serviceCategories as $catKey => $catData) {
+                    if (isset($catData['subcategories'][$selectedSubcategory])) {
+                        $current_category = $catKey;
+                        break;
+                    }
+                }
+                include $formPath;
+            } else {
+                echo "<p>Sorry, the form for this service is currently unavailable.</p>";
+            }
+        } elseif (isset($_GET['confirmed'])) {
+            echo "<p style='text-align: center; padding: 2rem;'>Please select a valid subcategory.</p>";
+        }
+        ?>
+    </div>
+</div>
 
 <?php include '../includes/footer.php'; ?>
 
@@ -133,7 +217,8 @@ include '../includes/in_progress.php';*/
         max-width: 1200px;
         margin: 0 auto;
         padding: 0 2rem;
-        align-items: flex-start; /* Align cards to top */
+        align-items: flex-start;
+        /* Align cards to top */
     }
 
     /* Category Cards */
@@ -164,7 +249,6 @@ include '../includes/in_progress.php';*/
 
     .category-card.active:hover {
         border-color: #1b72a1;
-        box-shadow: 0 12px 30px rgba(51, 182, 255, 0.3);
     }
 
     /* Category Header */
@@ -230,6 +314,7 @@ include '../includes/in_progress.php';*/
             transform: translateY(-10px);
             max-height: 0;
         }
+
         to {
             opacity: 1;
             transform: translateY(0);

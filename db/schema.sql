@@ -80,6 +80,34 @@ CREATE TABLE appointments (
     INDEX idx_schedule_status (service_schedule_id, status)
 );
 
+-- Reservations table for initial reservation requests
+CREATE TABLE reservations (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    service_id INT NOT NULL,
+    service_category ENUM('vaccine', 'program', 'general') NOT NULL,
+    service_subcategory VARCHAR(100) NOT NULL,
+    vehai_id VARCHAR(50) NULL, -- Optional health ID (e.g., 2698 R1, 2799 HR3)
+    client_name VARCHAR(255) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    contact_number VARCHAR(20) NOT NULL,
+    email_address VARCHAR(255) NULL, -- Optional
+    home_address TEXT NOT NULL,
+    preferred_date DATE NOT NULL,
+    preferred_time TIME NOT NULL,
+    notes TEXT NULL, -- Optional medical history/notes
+    status ENUM('pending', 'scheduled', 'cancelled') DEFAULT 'pending',
+    appointment_id INT NULL, -- Links to appointments table when scheduled
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE,
+    FOREIGN KEY (appointment_id) REFERENCES appointments(id) ON DELETE SET NULL,
+    INDEX idx_status (status),
+    INDEX idx_service_category (service_category),
+    INDEX idx_preferred_date (preferred_date),
+    INDEX idx_client_name (client_name),
+    INDEX idx_service_status (service_id, status)
+);
+
 -- Insert default admin user (username: admin, password: admin123)
 INSERT INTO admin_users (username, email, password_hash, full_name) VALUES
 ('admin', 'admin@villagesteastclinic.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'System Administrator');

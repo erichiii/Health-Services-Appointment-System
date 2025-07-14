@@ -9,6 +9,7 @@
     $base_path = file_exists('includes') ? '' : '../';
     ?>
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/layout.css">
+    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
