@@ -39,21 +39,14 @@ foreach ($announcements as $a) {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    transition: box-shadow 0.2s;
-}
-.announcement-card.featured {
-    background: #55c7fa;
-    color: #fff;
-    font-weight: 500;
+    transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+    color: #222;
 }
 .announcement-card .arrow {
     font-size: 2rem;
     color: #55c7fa;
     margin-left: 20px;
     transition: color 0.2s;
-}
-.announcement-card.featured .arrow {
-    color: #fff;
 }
 .announcement-title {
     font-weight: bold;
@@ -63,9 +56,18 @@ foreach ($announcements as $a) {
 .announcement-content {
     font-size: 0.98rem;
     color: #444;
+    transition: color 0.2s;
 }
-.announcement-card.featured .announcement-content {
+.announcement-card:hover {
+    background: #55c7fa;
+    color: #fff;
+}
+.announcement-card:hover .announcement-title,
+.announcement-card:hover .announcement-content {
     color: #eaf7ff;
+}
+.announcement-card:hover .arrow {
+    color: #fff;
 }
 .announcement-date-group {
     margin-top: 40px;
