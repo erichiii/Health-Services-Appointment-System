@@ -426,7 +426,7 @@ function getActiveProgramsAndSchedules()
             WHERE status IN ('pending', 'confirmed')
             GROUP BY service_schedule_id
         ) booked ON ss.id = booked.service_schedule_id
-        WHERE s.is_active = 1 AND s.category = 'program'
+        WHERE s.is_active = 1
         ORDER BY ss.schedule_date ASC, s.name ASC
     ";
     try {
