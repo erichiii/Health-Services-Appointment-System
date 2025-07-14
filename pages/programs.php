@@ -30,9 +30,9 @@ $category_titles = [
 <style>
 .programs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-    gap: 32px;
-    margin-bottom: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
 }
 .program-card {
     background: #fff;
@@ -41,8 +41,8 @@ $category_titles = [
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 28px 28px 24px 28px;
-    min-height: 320px;
+    padding: 18px 14px 14px 14px;
+    min-height: 220px;
     position: relative;
     border: 1.5px solid #e6eaf0;
     margin-bottom: 0;
@@ -135,14 +135,14 @@ $category_titles = [
 @media (max-width: 600px) {
     .programs-grid {
         grid-template-columns: 1fr;
-        gap: 18px;
+        gap: 12px;
     }
     .program-card {
-        padding: 16px 8px 12px 8px;
+        padding: 10px 4px 8px 4px;
     }
     .program-enroll-btn {
-        padding: 12px 0;
-        font-size: 1rem;
+        padding: 10px 0;
+        font-size: 0.95rem;
     }
 }
 .category-section-title {
@@ -186,7 +186,7 @@ $category_titles = [
         <?php endif; ?>
     <?php endforeach; ?>
     <?php if (!count($categories['vaccine']) && !count($categories['program']) && !count($categories['appointment'])): ?>
-        <div style="color:#888; font-size:1.1rem;">No active programs available at this time.</div>
+        <div style="color:#888; font-size:0.95rem; margin: 1.5rem 0 0.5rem 0; padding: 0;">No active programs available at this time.</div>
     <?php endif; ?>
 </div>
 
