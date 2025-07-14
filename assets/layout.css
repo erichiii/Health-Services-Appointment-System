@@ -1108,7 +1108,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: all 0.3s ease;
 }
 
-/* Contact Page Styles (moved from contact.php) */
+/* Contact Page Styles */
 .main-content {
     min-height: 70vh;
     padding: 2rem 0;
