@@ -154,7 +154,6 @@ $category_titles = [
 }
 </style>
 <div class="main-content">
-    <h1 style="font-size:2.2rem; margin-bottom: 1.5rem; font-weight:600;">Program Enrollment</h1>
     <?php foreach ($categories as $cat => $list): ?>
         <?php if (count($list)): ?>
             <div class="category-section-title"><?php echo $category_titles[$cat]; ?></div>
