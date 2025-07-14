@@ -26,6 +26,28 @@ $category_titles = [
     'program' => 'Program Enrollment',
     'appointment' => 'General Appointment'
 ];
+
+// Add mapping from program name to subcategory key for all categories
+$programToSubcategory = [
+    // Vaccine
+    'Child Immunization Campaign' => 'child-immunization',
+    'Adult Vaccine Drive' => 'adult-vaccine',
+    'Travel Vaccine Clinic' => 'travel-vaccine',
+    'COVID-19 Booster Campaign' => 'booster-shot',
+    // Add more if needed
+    // Program Enrollment
+    'Senior Citizen Health Plan' => 'senior-health',
+    'Maternal Health Program' => 'maternal-health',
+    'Diabetes Management Program' => 'diabetes-management',
+    'Hypertension Monitoring Program' => 'hypertension-monitoring',
+    // General Appointment
+    'Free Health Checkup Day' => 'general-consultation',
+    'Specialist Consultation Day' => 'specialist-referral',
+    'Lab Tests' => 'lab-tests',
+    'Follow-up Visits' => 'follow-up',
+    'Dental Care Clinic' => 'lab-tests', // If this is a lab test, otherwise map accordingly
+    // Add more mappings as needed
+];
 ?>
 <style>
 .programs-grid {
@@ -187,7 +209,14 @@ $category_titles = [
                         <div class="program-slot-unavailable"><i class="fa fa-times-circle-o"></i> No slots available</div>
                     <?php endif; ?>
                     <div class="program-btn-wrapper">
-                        <a class="program-enroll-btn" href="reservation.php?service_id=<?php echo $p['service_id']; ?>&type=<?php echo urlencode($p['name']); ?>" <?php if (!$is_available) echo 'disabled style="pointer-events:none;opacity:0.6;"'; ?>>Join Program</a>
+                        <a class="program-enroll-btn" href="<?php
+                            $subcat = isset($programToSubcategory[$p['name']]) ? $programToSubcategory[$p['name']] : '';
+                            if ($subcat) {
+                                echo 'reservation.php?subcategory=' . urlencode($subcat) . '&confirmed=1#confirmation';
+                            } else {
+                                echo 'reservation.php?service_id=' . $p['service_id'];
+                            }
+                        ?>" <?php if (!$is_available) echo 'disabled style="pointer-events:none;opacity:0.6;"'; ?>>Join Program</a>
                     </div>
                 </div>
                 <?php endforeach; ?>
