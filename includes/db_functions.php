@@ -3,7 +3,21 @@ require_once 'db_connection.php';
 
 function getAnnouncements($limit = 10, $featured_only = false)
 {
-    return; // TODO: Implement function
+    global $pdo;
+    try {
+        $sql = "SELECT * FROM announcements WHERE is_active = 1";
+        if ($featured_only) {
+            $sql .= " AND is_featured = 1";
+        }
+        $sql .= " ORDER BY is_featured DESC, announcement_date DESC, created_at DESC LIMIT ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(1, (int)$limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        error_log("Error fetching announcements: " . $e->getMessage());
+        return [];
+    }
 }
 
 
