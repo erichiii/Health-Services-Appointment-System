@@ -155,9 +155,26 @@ foreach ($announcements as $a) {
     .announcement-card .arrow { margin-left: 0; margin-top: 10px; }
     .announcement-modal-content { padding: 18px 8px 12px 8px; }
 }
+.main-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 30px;
+    padding-bottom: 60px;
+}
+@media (max-width: 600px) {
+    .main-content {
+        padding-left: 8px;
+        padding-right: 8px;
+        padding-top: 18px;
+        padding-bottom: 24px;
+    }
+}
 </style>
 
-<div style="max-width: 900px; margin: 0 auto; padding: 30px 0 60px 0;">
+<div class="main-content">
     <div class="announcement-date-group">
         <div class="announcement-date-label">Today</div>
         <div class="announcement-date-sub"><?php echo date('F j, Y'); ?></div>
