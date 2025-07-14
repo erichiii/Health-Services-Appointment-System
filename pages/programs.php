@@ -12,46 +12,67 @@ $programs = getActiveProgramsAndSchedules();
 <style>
 .programs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
     gap: 32px;
     margin-bottom: 40px;
 }
 .program-card {
     background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    min-height: 170px;
-    position: relative;
-    overflow: hidden;
-    border: none;
-    margin-bottom: 0;
-}
-.program-card-left-border {
-    width: 8px;
-    background: #f59e0b;
-    border-radius: 8px 0 0 8px;
-    flex-shrink: 0;
-}
-.program-card-content {
-    flex: 1 1 auto;
-    padding: 28px 24px 18px 28px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    padding: 28px 28px 24px 28px;
+    min-height: 320px;
+    position: relative;
+    border: 1.5px solid #e6eaf0;
+    margin-bottom: 0;
+    transition: box-shadow 0.18s;
+}
+.program-card:hover {
+    box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+}
+.program-card-header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 18px;
+}
+.program-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: #e6f0fa;
+    margin-right: 18px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
     justify-content: center;
+    font-size: 2rem;
+    color: #7bb6e6;
 }
 .program-title {
     font-size: 1.25rem;
     font-weight: 700;
-    margin-bottom: 4px;
     color: #222;
+    margin-bottom: 2px;
 }
 .program-time {
-    font-size: 1.05rem;
+    font-size: 1.02rem;
+    color: #666;
+    margin-bottom: 0;
+}
+.program-label {
+    font-weight: 700;
+    margin-top: 12px;
+    margin-bottom: 2px;
+    font-size: 1.01rem;
+    color: #222;
+}
+.program-description {
+    font-size: 1.01rem;
     color: #444;
-    margin-bottom: 10px;
+    margin-bottom: 0;
 }
 .program-slots {
     margin-bottom: 18px;
@@ -73,24 +94,25 @@ $programs = getActiveProgramsAndSchedules();
     gap: 6px;
 }
 .program-enroll-btn {
-    display: inline-block;
-    background: #f59e0b;
+    display: block;
+    background: #55c7fa;
     color: #fff;
-    font-weight: 600;
-    font-size: 1.08rem;
+    font-weight: 700;
+    font-size: 1.13rem;
     border: none;
-    border-radius: 8px;
-    padding: 14px 0;
+    border-radius: 7px;
+    padding: 15px 0;
     text-align: center;
-    width: 90%;
-    margin: 0 5% 18px 5%;
+    width: 100%;
+    margin-top: 18px;
     text-decoration: none;
     transition: background 0.18s, color 0.18s, opacity 0.18s;
     cursor: pointer;
+    letter-spacing: 0.01em;
 }
 .program-enroll-btn:disabled,
 .program-enroll-btn[disabled] {
-    background: #f59e0b;
+    background: #55c7fa;
     opacity: 0.6;
     cursor: not-allowed;
 }
@@ -99,8 +121,8 @@ $programs = getActiveProgramsAndSchedules();
         grid-template-columns: 1fr;
         gap: 18px;
     }
-    .program-card-content {
-        padding: 18px 10px 12px 16px;
+    .program-card {
+        padding: 16px 8px 12px 8px;
     }
     .program-enroll-btn {
         padding: 12px 0;
@@ -109,7 +131,7 @@ $programs = getActiveProgramsAndSchedules();
 }
 </style>
 <div class="main-content">
-    <h1 style="font-size:2.2rem; margin-bottom: 1.5rem; font-weight:600;">Program Enrollment</h1>
+    <h1 style="font-size:2.2rem; margin-bottom: 1.5rem; font-weight:600;">Vaccine Registration</h1>
     <div class="programs-grid">
         <?php
         $has_program = false;
@@ -121,19 +143,22 @@ $programs = getActiveProgramsAndSchedules();
             $time = ($p['start_time'] && $p['end_time']) ?
                 date('g:i A', strtotime($p['start_time'])) . ' - ' . date('g:i A', strtotime($p['end_time'])) : '';
             echo '<div class="program-card">';
-            echo '<div class="program-card-left-border"></div>';
-            echo '<div class="program-card-content">';
+            echo '<div class="program-card-header">';
+            echo '<div class="program-avatar"><i class="fa fa-calendar"></i></div>';
+            echo '<div>';
             echo '<div class="program-title">' . htmlspecialchars($p['name']) . '</div>';
             echo '<div class="program-time">' . htmlspecialchars($time) . '</div>';
-            echo '<div class="program-slots">';
+            echo '</div>';
+            echo '</div>';
+            echo '<div class="program-label">Description</div>';
+            echo '<div class="program-description">' . htmlspecialchars($p['description']) . '</div>';
+            echo '<div class="program-label">Slot Availability</div>';
             if ($is_available) {
-                echo '<span class="program-slot-available"><i class="fa fa-check-square-o"></i> ' . $slots . ' slots available</span>';
+                echo '<div class="program-slots program-slot-available"><i class="fa fa-check-square-o"></i> ' . $slots . ' Slots Available</div>';
             } else {
-                echo '<span class="program-slot-unavailable"><i class="fa fa-times-circle-o"></i> No slots available</span>';
+                echo '<div class="program-slots program-slot-unavailable"><i class="fa fa-times-circle-o"></i> No slots available</div>';
             }
-            echo '</div>';
-            echo '</div>';
-            echo '<a class="program-enroll-btn" href="reservation.php?service_id=' . $p['service_id'] . '" ' . ($is_available ? '' : 'disabled style="pointer-events:none;opacity:0.6;"') . '>Enroll in Program</a>';
+            echo '<a class="program-enroll-btn" href="reservation.php?service_id=' . $p['service_id'] . '" ' . ($is_available ? '' : 'disabled style=\"pointer-events:none;opacity:0.6;\"') . '>Join Program</a>';
             echo '</div>';
         }
         if (!$has_program) {
