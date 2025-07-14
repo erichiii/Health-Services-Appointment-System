@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="Health-Services-Appointment-System\assets\layout.css">
-
 <?php
 
 include '../includes/header.php';
