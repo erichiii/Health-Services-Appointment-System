@@ -10,6 +10,20 @@ $vaccineTypeMap = [
 
 $selectedSubcategory = $_GET['subcategory'] ?? '';
 $preselectedVaccineType = $vaccineTypeMap[$selectedSubcategory] ?? '';
+
+// Add: Preselect from 'type' URL param if present
+if (isset($_GET['type']) && $_GET['type']) {
+    $typeMap = [
+        'Child Immunization' => 'Child',
+        'Adult Vaccine' => 'Adult',
+        'Travel Vaccine' => 'Travel',
+        'Booster Shot' => 'Booster',
+    ];
+    $typeParam = $_GET['type'];
+    if (isset($typeMap[$typeParam])) {
+        $preselectedVaccineType = $typeMap[$typeParam];
+    }
+}
 ?>
 
 

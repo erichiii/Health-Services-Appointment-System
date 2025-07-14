@@ -187,7 +187,7 @@ $category_titles = [
                         <div class="program-slot-unavailable"><i class="fa fa-times-circle-o"></i> No slots available</div>
                     <?php endif; ?>
                     <div class="program-btn-wrapper">
-                        <a class="program-enroll-btn" href="reservation.php?service_id=<?php echo $p['service_id']; ?>" <?php if (!$is_available) echo 'disabled style="pointer-events:none;opacity:0.6;"'; ?>>Join Program</a>
+                        <a class="program-enroll-btn" href="reservation.php?service_id=<?php echo $p['service_id']; ?>&type=<?php echo urlencode($p['name']); ?>" <?php if (!$is_available) echo 'disabled style="pointer-events:none;opacity:0.6;"'; ?>>Join Program</a>
                     </div>
                 </div>
                 <?php endforeach; ?>
