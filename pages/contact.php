@@ -14,25 +14,25 @@ $page_features = [
 
 ?>
 
-<main class="main-content">
-    <div class="container">
-        <div class="page-header">
+<main class="cntct-main-content">
+    <div class="cntct-container">
+        <div class="cntct-page-header">
             <h1><?php echo htmlspecialchars($page_title); ?></h1>
-            <p class="page-subtitle"><?php echo htmlspecialchars($page_subtitle); ?></p>
+            <p class="cntct-page-subtitle"><?php echo htmlspecialchars($page_subtitle); ?></p>
         </div>
     </div>
     
-    <div class="container">
-        <div class="contact-content">
+    <div class="cntct-container">
+        <div class="cntct-contact-content">
             <!-- Contact Information Section -->
-            <div class="contact-info-section smooth-box">
-                <h2 class="contact-section-title">Get In Touch</h2>
-                <div class="contact-grid">
-                    <div class="contact-item">
-                        <div class="contact-icon">
+            <div class="cntct-contact-info-section cntct-smooth-box">
+                <h2 class="cntct-contact-section-title">Get In Touch</h2>
+                <div class="cntct-contact-grid">
+                    <div class="cntct-contact-item">
+                        <div class="cntct-contact-icon">
                             <i class="fas fa-map-marker-alt"></i>
                         </div>
-                        <div class="contact-details">
+                        <div class="cntct-contact-details">
                             <h3>Location</h3>
                             <p>Village East Executive Homes<br>
                             Barangay Sto. Domingo<br>
@@ -40,11 +40,11 @@ $page_features = [
                         </div>
                     </div>
                     
-                    <div class="contact-item">
-                        <div class="contact-icon">
+                    <div class="cntct-contact-item">
+                        <div class="cntct-contact-icon">
                             <i class="fas fa-clock"></i>
                         </div>
-                        <div class="contact-details">
+                        <div class="cntct-contact-details">
                             <h3>Office Hours</h3>
                             <p>Monday - Friday: 8:00 AM - 5:00 PM<br>
                             Saturday: 8:00 AM - 12:00 PM<br>
@@ -52,22 +52,22 @@ $page_features = [
                         </div>
                     </div>
                     
-                    <div class="contact-item">
-                        <div class="contact-icon">
+                    <div class="cntct-contact-item">
+                        <div class="cntct-contact-icon">
                             <i class="fas fa-phone"></i>
                         </div>
-                        <div class="contact-details">
+                        <div class="cntct-contact-details">
                             <h3>Phone</h3>
                             <p>Main: (012) 3456-7890<br>
                             Emergency: (02) 8-XXX-XXXX</p>
                         </div>
                     </div>
                     
-                    <div class="contact-item">
-                        <div class="contact-icon">
+                    <div class="cntct-contact-item">
+                        <div class="cntct-contact-icon">
                             <i class="fas fa-envelope"></i>
                         </div>
-                        <div class="contact-details">
+                        <div class="cntct-contact-details">
                             <h3>Email</h3>
                             <p style="min-height:3.5em;display:flex;flex-direction:column;justify-content:center;">
                                 ve@center.clinic<br>
@@ -79,27 +79,27 @@ $page_features = [
             </div>
 
             <!-- Contact Form Section -->
-            <div class="contact-form-section smooth-box">
-                <h2 class="contact-section-title">Send Us a Message</h2>
-                <form class="contact-form" action="../pages/submit-form.php" method="POST">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">Full Name <span class="required-asterisk">*</span></label>
+            <div class="cntct-contact-form-section cntct-smooth-box">
+                <h2 class="cntct-contact-section-title">Send Us a Message</h2>
+                <form class="cntct-contact-form" action="../pages/submit-form.php" method="POST">
+                    <div class="cntct-form-row">
+                        <div class="cntct-form-group">
+                            <label for="name">Full Name <span class="cntct-required-asterisk">*</span></label>
                             <input type="text" id="name" name="name" required>
                         </div>
-                        <div class="form-group">
-                            <label for="email">Email Address <span class="required-asterisk">*</span></label>
+                        <div class="cntct-form-group">
+                            <label for="email">Email Address <span class="cntct-required-asterisk">*</span></label>
                             <input type="email" id="email" name="email" required>
                         </div>
                     </div>
                     
-                    <div class="form-row">
-                        <div class="form-group">
+                    <div class="cntct-form-row">
+                        <div class="cntct-form-group">
                             <label for="phone">Phone Number</label>
                             <input type="tel" id="phone" name="phone">
                         </div>
-                        <div class="form-group">
-                            <label for="subject">Subject <span class="required-asterisk">*</span></label>
+                        <div class="cntct-form-group">
+                            <label for="subject">Subject <span class="cntct-required-asterisk">*</span></label>
                             <select id="subject" name="subject" required>
                                 <option value="">Select a subject</option>
                                 <option value="appointment">Appointment Inquiry</option>
@@ -111,18 +111,16 @@ $page_features = [
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="message">Message <span class="required-asterisk">*</span></label>
+                    <div class="cntct-form-group">
+                        <label for="message">Message <span class="cntct-required-asterisk">*</span></label>
                         <textarea id="message" name="message" rows="6" required placeholder="Please describe your inquiry or concern..."></textarea>
                     </div>
                     
-                    <div class="form-group">
-                        <button type="submit" class="submit-btn">Send Message</button>
+                    <div class="cntct-form-group">
+                        <button type="submit" class="cntct-submit-btn">Send Message</button>
                     </div>
                 </form>
             </div>
-
-            <!-- Map Section -->
         </div>
     </div>
 </main>
