@@ -405,3 +405,37 @@ function getActiveServices()
         return [];
     }
 }
+
+function getActiveProgramsAndSchedules()
+{
+    global $pdo;
+    $sql = "
+        SELECT s.id as service_id, s.name, s.description, s.duration, s.category,
+               ss.id as schedule_id, ss.schedule_date, ss.start_time, ss.end_time, ss.max_appointments,
+               (ss.max_appointments - COALESCE(booked.count, 0)) as available_slots
+        FROM services s
+        LEFT JOIN (
+            SELECT ss.*, 
+                   (SELECT COUNT(*) FROM appointments a WHERE a.service_schedule_id = ss.id AND a.status IN ('pending','confirmed')) as booked_count
+            FROM service_schedules ss
+            WHERE ss.is_active = 1 AND ss.schedule_date >= CURDATE()
+        ) ss ON ss.service_id = s.id
+        LEFT JOIN (
+            SELECT service_schedule_id, COUNT(*) as count 
+            FROM appointments 
+            WHERE status IN ('pending', 'confirmed')
+            GROUP BY service_schedule_id
+        ) booked ON ss.id = booked.service_schedule_id
+        WHERE s.is_active = 1 AND s.category = 'program'
+        ORDER BY ss.schedule_date ASC, s.name ASC
+    ";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $programs = $stmt->fetchAll();
+        return $programs;
+    } catch (PDOException $e) {
+        error_log("Error fetching programs: " . $e->getMessage());
+        return [];
+    }
+}
