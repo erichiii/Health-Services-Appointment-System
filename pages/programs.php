@@ -109,6 +109,12 @@ $category_titles = [
     align-items: center;
     gap: 6px;
 }
+.program-btn-wrapper {
+    width: 100%;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+}
 .program-enroll-btn {
     display: block;
     background: #55c7fa;
@@ -121,6 +127,7 @@ $category_titles = [
     text-align: center;
     width: 100%;
     margin-top: 18px;
+    margin-bottom: 18px;
     text-decoration: none;
     transition: background 0.18s, color 0.18s, opacity 0.18s;
     cursor: pointer;
@@ -179,7 +186,9 @@ $category_titles = [
                     <?php else: ?>
                         <div class="program-slot-unavailable"><i class="fa fa-times-circle-o"></i> No slots available</div>
                     <?php endif; ?>
-                    <a class="program-enroll-btn" href="reservation.php?service_id=<?php echo $p['service_id']; ?>" <?php if (!$is_available) echo 'disabled style="pointer-events:none;opacity:0.6;"'; ?>>Join Program</a>
+                    <div class="program-btn-wrapper">
+                        <a class="program-enroll-btn" href="reservation.php?service_id=<?php echo $p['service_id']; ?>" <?php if (!$is_available) echo 'disabled style="pointer-events:none;opacity:0.6;"'; ?>>Join Program</a>
+                    </div>
                 </div>
                 <?php endforeach; ?>
             </div>
