@@ -1,20 +1,30 @@
 <?php
 
-$programTypeMap = [
-    'senior-health' => 'Senior Citizen Health Plan',
-    'maternal-health' => 'Maternal Health Program',
-    'diabetes-management' => 'Diabetes Management',
-    'hypertension-monitoring' => 'Hypertension Monitoring'
+// Map service names to subcategory keys (should match programs.php)
+$programToSubcategory = [
+    'Senior Citizen Health Plan' => 'senior-health',
+    'Maternal Health Program' => 'maternal-health',
+    'Diabetes Management Program' => 'diabetes-management',
+    'Hypertension Monitoring Program' => 'hypertension-monitoring',
+    'Blood Pressure Monitoring Program' => 'blood-pressure-monitoring',
+    // Add more if needed
 ];
 
-
 $selectedSubcategory = $_SESSION['selected_subcategory'] ?? $_GET['subcategory'] ?? '';
-$preselectedProgramType = $programTypeMap[$selectedSubcategory] ?? '';
+$preselectedProgramType = $selectedSubcategory;
 
-$isSeniorPlan = ($preselectedProgramType === 'Senior Citizen Health Plan');
-$isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
+// Fetch active program services from the database
+include_once '../includes/db_functions.php';
+$program_services = [];
+try {
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT name FROM services WHERE category = 'program' AND is_active = 1 ORDER BY name");
+    $stmt->execute();
+    $program_services = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $program_services = [];
+}
 ?>
-
 
 <form method="POST" action="reservation.php" class="form">
     <fieldset>
@@ -63,12 +73,15 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         <div class="form-row">
             <div class="form-group">
                 <label>Program Type *</label>
-                <select name="vaccine_type" required>
+                <select name="program_type" required>
                     <option value="">Select</option>
-                    <option value="Senior Citizen Health Plan" <?= $preselectedProgramType === 'Senior Citizen Health Plan' ? 'selected' : '' ?>>Senior Citizen Health Plan</option>
-                    <option value="Maternal Health Program" <?= $preselectedProgramType === 'Maternal Health Program' ? 'selected' : '' ?>>Maternal Health Program</option>
-                    <option value="Diabetes Management" <?= $preselectedProgramType === 'Diabetes Management' ? 'selected' : '' ?>>Diabetes Management</option>
-                    <option value="Hypertension Monitoring" <?= $preselectedProgramType === 'Hypertension Monitoring' ? 'selected' : '' ?>>Hypertension Monitoring</option>
+                    <?php foreach ($program_services as $service):
+                        $name = $service['name'];
+                        $subcat = isset($programToSubcategory[$name]) ? $programToSubcategory[$name] : '';
+                        if (!$subcat) continue;
+                    ?>
+                        <option value="<?php echo htmlspecialchars($subcat); ?>" <?php if ($preselectedProgramType === $subcat) echo 'selected'; ?>><?php echo htmlspecialchars($name); ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
         </div>
