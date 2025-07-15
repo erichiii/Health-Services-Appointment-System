@@ -277,8 +277,11 @@ if ($selectedSubcategory) {
 
     .dropdown-arrow {
         font-size: 1.2rem;
-        color: #33b6ff;
+        color: #000;
         transition: transform 0.3s ease;
+        text-align: center;
+        display: block;
+        margin: 0 auto;
     }
 
     .category-card.active .dropdown-arrow {
