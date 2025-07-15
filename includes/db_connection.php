@@ -5,6 +5,9 @@ $db_config = [
     'username' => 'root',
     'password' => '',
     'database' => 'health_services',
+    'username' => 'u250652218_admin',
+    'password' => 'Healthservices123',
+    'database' => 'u250652218_health_service',
     'charset' => 'utf8mb4'
 ];
 
