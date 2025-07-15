@@ -2,9 +2,9 @@
 
 $db_config = [
     'host' => 'localhost',
-    'username' => 'u250652218_admin',
-    'password' => 'Healthservices123',
-    'database' => 'u250652218_health_service',
+    'username' => 'root',
+    'password' => '',
+    'database' => 'health_services',
     'charset' => 'utf8mb4'
 ];
 
