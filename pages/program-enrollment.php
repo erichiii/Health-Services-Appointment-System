@@ -1,4 +1,5 @@
 <?php
+include_once '../includes/db_functions.php';
 
 $programTypeMap = [
     'senior-health' => 'Senior Citizen Health Plan',
@@ -7,9 +8,14 @@ $programTypeMap = [
     'hypertension-monitoring' => 'Hypertension Monitoring'
 ];
 
-
 $selectedSubcategory = $_SESSION['selected_subcategory'] ?? $_GET['subcategory'] ?? '';
 $preselectedProgramType = $programTypeMap[$selectedSubcategory] ?? '';
+
+// Get available dates for the selected service
+$availableDates = [];
+if ($selectedSubcategory) {
+    $availableDates = getAvailableDatesForService('program', $selectedSubcategory);
+}
 
 $isSeniorPlan = ($preselectedProgramType === 'Senior Citizen Health Plan');
 $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
@@ -74,9 +80,19 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Preferred Date *</label> <!--should also be prefilled if clicked from homepage -->
-                <input type="date" name="preferred_date" required>
-                <small>Note: Subject to availability</small>
+                <label>Preferred Date *</label>
+                <select name="preferred_date" id="preferred_date" required>
+                    <option value="">Select an available date</option>
+                    <?php foreach ($availableDates as $dateOption): ?>
+                        <option value="<?php echo htmlspecialchars($dateOption['value']); ?>">
+                            <?php echo htmlspecialchars($dateOption['display']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                    <?php if (empty($availableDates)): ?>
+                        <option value="" disabled>No available dates for this service</option>
+                    <?php endif; ?>
+                </select>
+                <small>Available dates based on scheduled program services</small>
             </div>
             <div class="form-group">
                 <label>Preferred Time *</label>
@@ -367,3 +383,59 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         }
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const programTypeSelect = document.querySelector('select[name="vaccine_type"]');
+    const dateSelect = document.getElementById('preferred_date');
+    
+    if (programTypeSelect && dateSelect) {
+        programTypeSelect.addEventListener('change', function() {
+            const selectedType = this.value;
+            
+            // Map program type back to subcategory
+            const typeToSubcategory = {
+                'Senior Citizen Health Plan': 'senior-health',
+                'Maternal Health Program': 'maternal-health',
+                'Diabetes Management': 'diabetes-management',
+                'Hypertension Monitoring': 'hypertension-monitoring'
+            };
+            
+            const subcategory = typeToSubcategory[selectedType];
+            
+            if (subcategory) {
+                // Make AJAX request to get new available dates
+                fetch(`../includes/get_available_dates.php?category=program&subcategory=${subcategory}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Clear existing options
+                        dateSelect.innerHTML = '<option value="">Select an available date</option>';
+                        
+                        // Add new options
+                        if (data.length > 0) {
+                            data.forEach(dateOption => {
+                                const option = document.createElement('option');
+                                option.value = dateOption.value;
+                                option.textContent = dateOption.display;
+                                dateSelect.appendChild(option);
+                            });
+                        } else {
+                            const option = document.createElement('option');
+                            option.value = '';
+                            option.disabled = true;
+                            option.textContent = 'No available dates for this service';
+                            dateSelect.appendChild(option);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching available dates:', error);
+                        dateSelect.innerHTML = '<option value="">Error loading dates</option>';
+                    });
+            } else {
+                // Clear dates if no valid program type selected
+                dateSelect.innerHTML = '<option value="">Select an available date</option>';
+            }
+        });
+    }
+});
+</script>

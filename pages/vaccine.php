@@ -1,4 +1,5 @@
 <?php
+include_once '../includes/db_functions.php';
 
 $vaccineTypeMap = [
     'child-immunization' => 'Child',
@@ -7,9 +8,14 @@ $vaccineTypeMap = [
     'booster-shot' => 'Booster'
 ];
 
-
 $selectedSubcategory = $_GET['subcategory'] ?? '';
 $preselectedVaccineType = $vaccineTypeMap[$selectedSubcategory] ?? '';
+
+// Get available dates for the selected service
+$availableDates = [];
+if ($selectedSubcategory) {
+    $availableDates = getAvailableDatesForService('vaccine', $selectedSubcategory);
+}
 ?>
 
 
@@ -70,9 +76,19 @@ $preselectedVaccineType = $vaccineTypeMap[$selectedSubcategory] ?? '';
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Preferred Date *</label> <!--should also be prefilled if clicked from homepage -->
-                <input type="date" name="preferred_date" required>
-                <small>Note: Subject to availability</small>
+                <label>Preferred Date *</label>
+                <select name="preferred_date" id="preferred_date" required>
+                    <option value="">Select an available date</option>
+                    <?php foreach ($availableDates as $dateOption): ?>
+                        <option value="<?php echo htmlspecialchars($dateOption['value']); ?>">
+                            <?php echo htmlspecialchars($dateOption['display']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                    <?php if (empty($availableDates)): ?>
+                        <option value="" disabled>No available dates for this service</option>
+                    <?php endif; ?>
+                </select>
+                <small>Available dates based on scheduled vaccine services</small>
             </div>
             <div class="form-group">
                 <label>Preferred Time *</label>
@@ -248,3 +264,59 @@ $preselectedVaccineType = $vaccineTypeMap[$selectedSubcategory] ?? '';
         }
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const vaccineTypeSelect = document.querySelector('select[name="vaccine_type"]');
+    const dateSelect = document.getElementById('preferred_date');
+    
+    if (vaccineTypeSelect && dateSelect) {
+        vaccineTypeSelect.addEventListener('change', function() {
+            const selectedType = this.value;
+            
+            // Map vaccine type back to subcategory
+            const typeToSubcategory = {
+                'Child': 'child-immunization',
+                'Adult': 'adult-vaccine',
+                'Travel': 'travel-vaccine',
+                'Booster': 'booster-shot'
+            };
+            
+            const subcategory = typeToSubcategory[selectedType];
+            
+            if (subcategory) {
+                // Make AJAX request to get new available dates
+                fetch(`../includes/get_available_dates.php?category=vaccine&subcategory=${subcategory}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Clear existing options
+                        dateSelect.innerHTML = '<option value="">Select an available date</option>';
+                        
+                        // Add new options
+                        if (data.length > 0) {
+                            data.forEach(dateOption => {
+                                const option = document.createElement('option');
+                                option.value = dateOption.value;
+                                option.textContent = dateOption.display;
+                                dateSelect.appendChild(option);
+                            });
+                        } else {
+                            const option = document.createElement('option');
+                            option.value = '';
+                            option.disabled = true;
+                            option.textContent = 'No available dates for this service';
+                            dateSelect.appendChild(option);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching available dates:', error);
+                        dateSelect.innerHTML = '<option value="">Error loading dates</option>';
+                    });
+            } else {
+                // Clear dates if no valid vaccine type selected
+                dateSelect.innerHTML = '<option value="">Select an available date</option>';
+            }
+        });
+    }
+});
+</script>
