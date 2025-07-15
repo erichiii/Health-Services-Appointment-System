@@ -24,6 +24,10 @@ try {
 } catch (Exception $e) {
     $program_services = [];
 }
+
+// Set conditional flags based on selected subcategory
+$isSeniorPlan = ($selectedSubcategory === 'senior-health');
+$isMaternalHealth = ($selectedSubcategory === 'maternal-health');
 ?>
 
 <form method="POST" action="reservation.php" class="form">
@@ -63,7 +67,6 @@ try {
         </div>
     </fieldset>
 
-
     <!-- Hidden fields for form processing -->
     <input type="hidden" name="service_category" value="program">
     <input type="hidden" name="service_subcategory" value="<?php echo htmlspecialchars($selectedSubcategory ?? ''); ?>">
@@ -87,7 +90,7 @@ try {
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Preferred Date *</label> <!--should also be prefilled if clicked from homepage -->
+                <label>Preferred Date *</label>
                 <input type="date" name="preferred_date" required>
                 <small>Note: Subject to availability</small>
             </div>

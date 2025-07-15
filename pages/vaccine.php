@@ -1,10 +1,14 @@
 <?php
 
-$vaccineTypeMap = [
-    'child-immunization' => 'Child Immunization Campaign',
-    'adult-vaccine' => 'Adult Vaccine Drive',
-    'travel-vaccine' => 'Travel Vaccine Clinic',
-    'booster-shot' => 'COVID-19 Booster Campaign'
+// Map service names to subcategory keys (should match programs.php)
+$programToSubcategory = [
+    'Child Immunization Campaign' => 'child-immunization',
+    'Adult Vaccine Drive' => 'adult-vaccine',
+    'Travel Vaccine Clinic' => 'travel-vaccine',
+    'COVID-19 Booster Campaign' => 'booster-shot',
+    'Anti-Rabies Vaccination Campaign' => 'anti-rabies',
+    'Community Vaccination Drive' => 'community-vaccination',
+    // Add more if needed
 ];
 
 $selectedSubcategory = $_GET['subcategory'] ?? '';
@@ -21,16 +25,7 @@ try {
 } catch (Exception $e) {
     $vaccine_services = [];
 }
-// Map service names to subcategory keys (should match programs.php)
-$programToSubcategory = [
-    'Child Immunization Campaign' => 'child-immunization',
-    'Adult Vaccine Drive' => 'adult-vaccine',
-    'Travel Vaccine Clinic' => 'travel-vaccine',
-    'COVID-19 Booster Campaign' => 'booster-shot',
-    // Add more if needed
-];
 ?>
-
 
 <form method="POST" action="reservation.php" class="form">
     <fieldset>
@@ -92,7 +87,7 @@ $programToSubcategory = [
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Preferred Date *</label> <!--should also be prefilled if clicked from homepage -->
+                <label>Preferred Date *</label>
                 <input type="date" name="preferred_date" required>
                 <small>Note: Subject to availability</small>
             </div>
