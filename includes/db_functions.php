@@ -3,7 +3,21 @@ require_once 'db_connection.php';
 
 function getAnnouncements($limit = 10, $featured_only = false)
 {
-    return; // TODO: Implement function
+     global $pdo;
+    try {
+        $sql = "SELECT * FROM announcements WHERE is_active = 1";
+        if ($featured_only) {
+            $sql .= " AND is_featured = 1";
+        }
+        $sql .= " ORDER BY is_featured DESC, announcement_date DESC, created_at DESC LIMIT ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(1, (int)$limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        error_log("Error fetching announcements: " . $e->getMessage());
+        return [];
+    }
 }
 
 
@@ -230,94 +244,6 @@ function generateCalendar($year, $month, $events)
     $html .= '<div class="legend-item">';
 }
 
-/**
- * Get available dates for a specific service category/subcategory
- */
-function getAvailableDatesForService($category, $subcategory = null, $months_ahead = 3)
-{
-    global $pdo;
-
-    try {
-        $start_date = date('Y-m-d');
-        $end_date = date('Y-m-d', strtotime("+{$months_ahead} months"));
-
-        // Get the service mapping
-        $serviceMap = [
-            'child-immunization' => 'Child Immunization Campaign',
-            'adult-vaccine' => 'Adult Vaccine Drive',
-            'travel-vaccine' => 'Travel Vaccine Clinic',
-            'booster-shot' => 'COVID-19 Booster Campaign',
-            'senior-health' => 'Senior Citizen Health Plan',
-            'maternal-health' => 'Maternal Health Program',
-            'diabetes-management' => 'Diabetes Management Program',
-            'hypertension-monitoring' => 'Hypertension Monitoring Program',
-            'general-consultation' => 'Free Health Checkup Day',
-            'specialist-referral' => 'Specialist Consultation Day',
-            'lab-tests' => 'Health Screening Event',
-            'follow-up' => 'Free Health Checkup Day'
-        ];
-
-        $query_conditions = [];
-        $query_params = [$start_date, $end_date];
-
-        if ($subcategory && isset($serviceMap[$subcategory])) {
-            // Look for specific service
-            $query_conditions[] = "s.name = ?";
-            $query_params[] = $serviceMap[$subcategory];
-        } else {
-            // Look for any service in the category
-            $query_conditions[] = "s.category = ?";
-            $query_params[] = $category;
-        }
-
-        $where_clause = implode(' AND ', $query_conditions);
-
-        $stmt = $pdo->prepare("
-            SELECT 
-                ss.schedule_date,
-                s.name as service_name,
-                GROUP_CONCAT(CONCAT(TIME_FORMAT(ss.start_time, '%h:%i %p'), ' - ', TIME_FORMAT(ss.end_time, '%h:%i %p')) SEPARATOR ', ') as time_slots,
-                SUM(ss.max_appointments - COALESCE(booked.count, 0)) as available_slots
-            FROM service_schedules ss
-            JOIN services s ON ss.service_id = s.id
-            LEFT JOIN (
-                SELECT service_schedule_id, COUNT(*) as count 
-                FROM appointments 
-                WHERE status IN ('pending', 'confirmed')
-                GROUP BY service_schedule_id
-            ) booked ON ss.id = booked.service_schedule_id
-            WHERE ss.schedule_date BETWEEN ? AND ? 
-            AND ss.is_active = 1 
-            AND s.is_active = 1
-            AND {$where_clause}
-            GROUP BY ss.schedule_date, s.name
-            HAVING available_slots > 0
-            ORDER BY ss.schedule_date ASC
-        ");
-        
-        $stmt->execute($query_params);
-        
-        $available_dates = [];
-        while ($row = $stmt->fetch()) {
-            $date_key = $row['schedule_date'];
-            $formatted_date = date('l, F j, Y', strtotime($row['schedule_date']));
-            
-            $available_dates[] = [
-                'value' => $date_key,
-                'display' => $formatted_date . ' (' . $row['available_slots'] . ' slots available)',
-                'service_name' => $row['service_name'],
-                'time_slots' => $row['time_slots'],
-                'available_slots' => $row['available_slots']
-            ];
-        }
-
-        return $available_dates;
-    } catch (PDOException $e) {
-        error_log("Database error in getAvailableDatesForService: " . $e->getMessage());
-        return [];
-    }
-}
-
 // Function to submit a reservation from the frontend
 function submitReservation($data)
 {
@@ -384,7 +310,9 @@ function getServiceIdByCategory($category, $subcategory)
     global $pdo;
 
     try {
-        // Map subcategories to service names
+        // First, try to find the service by converting the subcategory key back to a service name
+        // The subcategory key is created by converting service names to lowercase with hyphens
+        $sql = "SELECT id, name FROM services WHERE category = ? AND is_active = 1";
         $serviceMap = [
             'child-immunization' => 'Child Immunization Campaign',
             'adult-vaccine' => 'Adult Vaccine Drive',
@@ -411,17 +339,19 @@ function getServiceIdByCategory($category, $subcategory)
             return $result ? $result['id'] : null;
         }
 
-        // Try to find the specific service
-        $sql = "SELECT id FROM services WHERE name = ? AND is_active = 1 LIMIT 1";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$service_name]);
-        $result = $stmt->fetch();
+        $stmt->execute([$category]);
+        $services = $stmt->fetchAll();
 
-        if ($result) {
-            return $result['id'];
+        foreach ($services as $service) {
+            // Create the subcategory key from the service name
+            $serviceKey = strtolower(str_replace([' ', '-'], ['-', '-'], $service['name']));
+            if ($serviceKey === $subcategory) {
+                return $service['id'];
+            }
         }
 
-        // Fallback: find any service matching the category
+        // If no exact match found, try to find a service by category
         $sql = "SELECT id FROM services WHERE category = ? AND is_active = 1 LIMIT 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$category]);
@@ -430,7 +360,41 @@ function getServiceIdByCategory($category, $subcategory)
         return $result ? $result['id'] : null;
     } catch (PDOException $e) {
         error_log("Error getting service ID: " . $e->getMessage());
-        return null;
+        return [];
+    }
+}
+
+function getActiveProgramsAndSchedules()
+{
+    global $pdo;
+    $sql = "
+        SELECT s.id as service_id, s.name, s.description, s.duration, s.category,
+               ss.id as schedule_id, ss.schedule_date, ss.start_time, ss.end_time, ss.max_appointments,
+               (ss.max_appointments - COALESCE(booked.count, 0)) as available_slots
+        FROM services s
+        LEFT JOIN (
+            SELECT ss.*, 
+                   (SELECT COUNT(*) FROM appointments a WHERE a.service_schedule_id = ss.id AND a.status IN ('pending','confirmed')) as booked_count
+            FROM service_schedules ss
+            WHERE ss.is_active = 1 AND ss.schedule_date >= CURDATE()
+        ) ss ON ss.service_id = s.id
+        LEFT JOIN (
+            SELECT service_schedule_id, COUNT(*) as count 
+            FROM appointments 
+            WHERE status IN ('pending', 'confirmed')
+            GROUP BY service_schedule_id
+        ) booked ON ss.id = booked.service_schedule_id
+        WHERE s.is_active = 1
+        ORDER BY ss.schedule_date ASC, s.name ASC
+    ";
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $programs = $stmt->fetchAll();
+        return $programs;
+    } catch (PDOException $e) {
+        error_log("Error fetching programs: " . $e->getMessage());
+        return [];
     }
 }
 
