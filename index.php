@@ -16,40 +16,11 @@
     <?php include 'includes/db_functions.php'; ?>
 
     <div class="hero-section">
-        <!-- Hero Carousel -->
-        <div class="hero-carousel">
-            <div class="hero-slide active" data-bg="hero1">
-                <div class="hero-overlay"></div>
-            </div>
-            <div class="hero-slide" data-bg="hero2">
-                <div class="hero-overlay"></div>
-            </div>
-            <div class="hero-slide" data-bg="hero3">
-                <div class="hero-overlay"></div>
-            </div>
-            <div class="hero-slide" data-bg="hero4">
-                <div class="hero-overlay"></div>
-            </div>
-        </div>
-        
-        <!-- Hero Content -->
         <div class="hero-section-content">
-            <h1>Bringing Health Services Closer to Home</h1>
-            <p>A centralized and user-friendly platform for efficient services, clear communication, and stronger community health.</p>
+            <h1>Welcome to Village East Clinic</h1>
+            <p>Your health is our top priority.</p>
             <a href="pages/about.php" class="about-us-btn">About Us</a>
         </div>
-        
-        <!-- Carousel Indicators -->
-        <div class="hero-indicators">
-            <span class="indicator active" data-slide="0"></span>
-            <span class="indicator" data-slide="1"></span>
-            <span class="indicator" data-slide="2"></span>
-            <span class="indicator" data-slide="3"></span>
-        </div>
-        
-        <!-- Carousel Navigation -->
-        <button class="hero-nav prev" onclick="changeSlide(-1)">&#8249;</button>
-        <button class="hero-nav next" onclick="changeSlide(1)">&#8250;</button>
     </div>
 
     <div class="first-section">
@@ -364,121 +335,6 @@
     </div>
 
     <?php include 'includes/footer.php'; ?>
-
-    <script>
-        // Hero Carousel JavaScript
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.hero-slide');
-        const indicators = document.querySelectorAll('.indicator');
-        const totalSlides = slides.length;
-        
-        // Auto-play interval (5 seconds)
-        let autoPlayInterval;
-        
-        function showSlide(index) {
-            // Remove active class from all slides and indicators
-            slides.forEach(slide => slide.classList.remove('active'));
-            indicators.forEach(indicator => indicator.classList.remove('active'));
-            
-            // Add active class to current slide and indicator
-            slides[index].classList.add('active');
-            indicators[index].classList.add('active');
-            
-            currentSlide = index;
-        }
-        
-        function nextSlide() {
-            const next = (currentSlide + 1) % totalSlides;
-            showSlide(next);
-        }
-        
-        function prevSlide() {
-            const prev = (currentSlide - 1 + totalSlides) % totalSlides;
-            showSlide(prev);
-        }
-        
-        function changeSlide(direction) {
-            if (direction === 1) {
-                nextSlide();
-            } else {
-                prevSlide();
-            }
-            resetAutoPlay();
-        }
-        
-        function goToSlide(index) {
-            showSlide(index);
-            resetAutoPlay();
-        }
-        
-        function startAutoPlay() {
-            autoPlayInterval = setInterval(nextSlide, 5000); // 5 seconds
-        }
-        
-        function stopAutoPlay() {
-            clearInterval(autoPlayInterval);
-        }
-        
-        function resetAutoPlay() {
-            stopAutoPlay();
-            startAutoPlay();
-        }
-        
-        // Initialize carousel
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add click handlers to indicators
-            indicators.forEach((indicator, index) => {
-                indicator.addEventListener('click', () => goToSlide(index));
-            });
-            
-            // Start auto-play
-            startAutoPlay();
-            
-            // Pause auto-play on hover
-            const heroSection = document.querySelector('.hero-section');
-            heroSection.addEventListener('mouseenter', stopAutoPlay);
-            heroSection.addEventListener('mouseleave', startAutoPlay);
-            
-            // Keyboard navigation
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'ArrowLeft') {
-                    changeSlide(-1);
-                } else if (e.key === 'ArrowRight') {
-                    changeSlide(1);
-                }
-            });
-        });
-        
-        // Touch/swipe support for mobile
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
-        const heroSection = document.querySelector('.hero-section');
-        
-        heroSection.addEventListener('touchstart', function(e) {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-        
-        heroSection.addEventListener('touchend', function(e) {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-        
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const diff = touchStartX - touchEndX;
-            
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
-                    // Swipe left - next slide
-                    changeSlide(1);
-                } else {
-                    // Swipe right - previous slide
-                    changeSlide(-1);
-                }
-            }
-        }
-    </script>
 
 </body>
 

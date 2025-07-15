@@ -70,7 +70,7 @@ $page_features = [
                         <div class="cntct-contact-details">
                             <h3>Email</h3>
                             <p style="min-height:3.5em;display:flex;flex-direction:column;justify-content:center;">
-                            villageeast@center.clinic<br>
+                                ve@center.clinic<br>
                                 appointments@center.clinic
                             </p>
                         </div>
