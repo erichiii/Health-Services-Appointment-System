@@ -11,8 +11,18 @@ $programToSubcategory = [
 ];
 
 
-$selectedSubcategory = $_SESSION['selected_subcategory'] ?? $_GET['subcategory'] ?? '';
-$preselectedProgramType = $selectedSubcategory;
+$selectedSubcategory = $_GET['subcategory'] ?? '';
+$preselectedProgramType = '';
+$programTypeMap = [
+    'senior-health' => 'Senior Citizen Health Plan',
+    'maternal-health' => 'Maternal Health Program',
+    'diabetes-management' => 'Diabetes Management Program',
+    'hypertension-monitoring' => 'Hypertension Monitoring Program',
+    'blood-pressure-monitoring' => 'Blood Pressure Monitoring Program',
+];
+if (isset($programTypeMap[$selectedSubcategory])) {
+    $preselectedProgramType = $programTypeMap[$selectedSubcategory];
+}
 
 $isSeniorPlan = ($preselectedProgramType === 'Senior Citizen Health Plan');
 $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');

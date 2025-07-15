@@ -4,7 +4,9 @@ $vaccineTypeMap = [
     'child-immunization' => 'Child',
     'adult-vaccine' => 'Adult',
     'travel-vaccine' => 'Travel',
-    'booster-shot' => 'Booster'
+    'booster-shot' => 'Booster',
+    'anti-rabies-vaccination' => 'Anti-Rabies',
+    'community-vaccination' => 'Community',
 ];
 
 
@@ -65,6 +67,8 @@ $preselectedVaccineType = $vaccineTypeMap[$selectedSubcategory] ?? '';
                     <option value="Adult" <?= $preselectedVaccineType === 'Adult' ? 'selected' : '' ?>>Adult Vaccine</option>
                     <option value="Travel" <?= $preselectedVaccineType === 'Travel' ? 'selected' : '' ?>>Travel Vaccine</option>
                     <option value="Booster" <?= $preselectedVaccineType === 'Booster' ? 'selected' : '' ?>>Booster Shot</option>
+                    <option value="Anti-Rabies" <?= $preselectedVaccineType === 'Anti-Rabies' ? 'selected' : '' ?>>Anti-Rabies Vaccination</option>
+                    <option value="Community" <?= $preselectedVaccineType === 'Community' ? 'selected' : '' ?>>Community Vaccination</option>
                 </select>
             </div>
         </div>

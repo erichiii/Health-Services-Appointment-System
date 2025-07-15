@@ -59,7 +59,9 @@ $serviceCategories = [
             'child-immunization' => 'Child Immunization',
             'adult-vaccine' => 'Adult Vaccine',
             'travel-vaccine' => 'Travel Vaccine',
-            'booster-shot' => 'Booster Shot'
+            'booster-shot' => 'Booster Shot',
+            'anti-rabies-vaccination' => 'Anti-Rabies Vaccination',
+            'community-vaccination' => 'Community Vaccination',
         ]
     ],
     'program' => [
@@ -69,7 +71,8 @@ $serviceCategories = [
             'senior-health' => 'Senior Citizen Health Plan',
             'maternal-health' => 'Maternal Health Program',
             'diabetes-management' => 'Diabetes Management',
-            'hypertension-monitoring' => 'Hypertension Monitoring'
+            'hypertension-monitoring' => 'Hypertension Monitoring',
+            'blood-pressure-monitoring' => 'Blood Pressure Monitoring',
         ],
     ],
     'general' => [
@@ -79,7 +82,8 @@ $serviceCategories = [
             'general-consultation' => 'General Consultation',
             'specialist-referral' => 'Specialist Referral',
             'lab-tests' => 'Lab Tests',
-            'follow-up' => 'Follow-up Visits'
+            'follow-up' => 'Follow-up Visits',
+            'dental-care' => 'Dental Care Clinic',
         ]
     ]
 ];
@@ -89,14 +93,18 @@ $subcategoryForms = [
     'adult-vaccine' => 'vaccine.php',
     'travel-vaccine' => 'vaccine.php',
     'booster-shot' => 'vaccine.php',
+    'anti-rabies-vaccination' => 'vaccine.php',
+    'community-vaccination' => 'vaccine.php',
     'senior-health' => 'program-enrollment.php',
     'maternal-health' => 'program-enrollment.php',
     'diabetes-management' => 'program-enrollment.php',
     'hypertension-monitoring' => 'program-enrollment.php',
+    'blood-pressure-monitoring' => 'program-enrollment.php',
     'general-consultation' => 'appointment.php',
     'specialist-referral' => 'appointment.php',
     'lab-tests' => 'appointment.php',
-    'follow-up' => 'appointment.php'
+    'follow-up' => 'appointment.php',
+    'dental-care' => 'appointment.php',
 ];
 
 

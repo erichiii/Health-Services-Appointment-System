@@ -10,7 +10,14 @@ $appointmentToSubcategory = [
 ];
 
 $selectedSubcategory = $_GET['subcategory'] ?? '';
-$preselectedAppointmentType = $selectedSubcategory;
+$appointmentTypeMap = [
+    'general-consultation' => 'General Consultation',
+    'specialist-referral' => 'Specialist Referral',
+    'lab-tests' => 'Lab Tests',
+    'follow-up' => 'Follow-up Visits',
+    'dental-care' => 'Dental Care Clinic',
+];
+$preselectedAppointmentType = $appointmentTypeMap[$selectedSubcategory] ?? '';
 
 // Get available dates for the selected service
 $availableDates = [];
