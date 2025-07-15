@@ -63,7 +63,7 @@ $programToSubcategory = [
     border-radius: 14px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: stretch;
     min-height: 170px;
     position: relative;
@@ -114,6 +114,12 @@ $programToSubcategory = [
     align-items: center;
     gap: 6px;
 }
+.program-btn-wrapper {
+    width: 100%;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+}
 .program-enroll-btn {
     display: inline-block;
     background: #f59e0b;
@@ -125,7 +131,7 @@ $programToSubcategory = [
     padding: 14px 0;
     text-align: center;
     width: 90%;
-    margin: 0 5% 18px 5%;
+    margin: 0 5% 0 5%;
     text-decoration: none;
     transition: background 0.18s, color 0.18s, opacity 0.18s;
     cursor: pointer;
@@ -236,8 +242,7 @@ $programToSubcategory = [
     padding: 15px 0;
     text-align: center;
     width: 100%;
-    margin-top: 18px;
-    margin-bottom: 18px;
+    margin: 0;
     text-decoration: none;
     transition: background 0.18s, color 0.18s, opacity 0.18s;
     cursor: pointer;
