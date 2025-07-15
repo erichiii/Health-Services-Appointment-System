@@ -133,30 +133,24 @@ if ($selectedSubcategory) {
         <h2>What is this reservation for?</h2>
     </div>
 
-    <div class="category-grid">
+    <div class="category-grid" id="categoryGrid">
         <?php foreach ($serviceCategories as $categoryKey => $categoryData): ?>
-            <!-- <?php echo ucfirst($categoryKey); ?> Card -->
             <div class="category-card <?php echo ($activeCategory === $categoryKey) ? 'active' : ''; ?> <?php echo $selectedSubcategory && in_array($selectedSubcategory, array_keys($categoryData['subcategories'])) ? 'has-selection' : ''; ?>" data-category="<?php echo $categoryKey; ?>">
-
                 <!-- Category Header (toggles dropdown) -->
-                <a href="?category=<?php echo ($activeCategory === $categoryKey) ? '' : $categoryKey; ?>"
-                    class="category-header" id="category-<?php echo $categoryKey; ?>">
+                <div class="category-header" id="category-<?php echo $categoryKey; ?>" tabindex="0" role="button" data-category="<?php echo $categoryKey; ?>">
                     <h3><?php echo $categoryData['title']; ?></h3>
                     <p><?php echo $categoryData['description']; ?></p>
-                    <div class="dropdown-arrow"><?php echo ($activeCategory === $categoryKey) ? '⌄' : '⌄'; ?></div>
-                </a>
-
+                    <div class="dropdown-arrow">⌄</div>
+                </div>
                 <!-- Subcategory Dropdown -->
-                <?php if ($activeCategory === $categoryKey): ?>
-                    <div class="subcategory-dropdown">
-                        <?php foreach ($categoryData['subcategories'] as $subKey => $subName): ?>
-                            <a href="?subcategory=<?php echo $subKey; ?>&confirmed=1#confirmation"
-                                class="subcategory-item <?php echo ($selectedSubcategory === $subKey) ? 'selected' : ''; ?>">
-                                <span><?php echo $subName; ?></span>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
+                <div class="subcategory-dropdown" style="display: none;">
+                    <?php foreach ($categoryData['subcategories'] as $subKey => $subName): ?>
+                        <a href="?subcategory=<?php echo $subKey; ?>&confirmed=1#confirmation"
+                            class="subcategory-item <?php echo ($selectedSubcategory === $subKey) ? 'selected' : ''; ?>">
+                            <span><?php echo $subName; ?></span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
             </div>
         <?php endforeach; ?>
     </div>
@@ -429,3 +423,50 @@ if ($selectedSubcategory) {
         scroll-behavior: smooth;
     }
 </style>
+
+<script>
+// JS for toggling category dropdowns without reload
+const categoryGrid = document.getElementById('categoryGrid');
+const cards = categoryGrid.querySelectorAll('.category-card');
+
+cards.forEach(card => {
+    const header = card.querySelector('.category-header');
+    const dropdown = card.querySelector('.subcategory-dropdown');
+    header.addEventListener('click', function(e) {
+        // Collapse all
+        cards.forEach(c => {
+            c.classList.remove('active');
+            c.querySelector('.subcategory-dropdown').style.display = 'none';
+        });
+        // Expand this one
+        card.classList.add('active');
+        dropdown.style.display = 'block';
+        // Optionally update URL
+        const cat = card.getAttribute('data-category');
+        const url = new URL(window.location);
+        url.searchParams.set('category', cat);
+        url.searchParams.delete('subcategory');
+        url.searchParams.delete('confirmed');
+        window.history.pushState({}, '', url);
+    });
+    // Keyboard accessibility
+    header.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            header.click();
+        }
+    });
+});
+// On page load, open the active category if set
+(function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeCat = urlParams.get('category');
+    if (activeCat) {
+        const card = categoryGrid.querySelector(`.category-card[data-category="${activeCat}"]`);
+        if (card) {
+            card.classList.add('active');
+            card.querySelector('.subcategory-dropdown').style.display = 'block';
+        }
+    }
+})();
+</script>
