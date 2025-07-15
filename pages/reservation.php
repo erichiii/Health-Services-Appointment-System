@@ -34,71 +34,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Set page-specific content
-/*$page_title = 'Book Appointment';
-$page_subtitle = 'Schedule your healthcare appointment with ease';
-$page_features = [
-    'Online appointment booking system',
-    'Real-time availability calendar',
-    'Service selection and scheduling',
-    'Appointment confirmation and reminders'
-];
+// Get active services from database
+$activeServices = getActiveServices();
 
-// Include the reusable progress page
-include '../includes/in_progress.php';*/
-
-
-$activeCategory = isset($_GET['category']) ? $_GET['category'] : 'null';
-$selectedSubcategory = isset($_GET['subcategory']) ? $_GET['subcategory'] : null;
-
+// Organize services by category
 $serviceCategories = [
     'vaccine' => [
         'title' => 'Vaccine Registration',
         'description' => 'Immunizations and vaccine services',
-        'subcategories' => [
-            'child-immunization' => 'Child Immunization',
-            'adult-vaccine' => 'Adult Vaccine',
-            'travel-vaccine' => 'Travel Vaccine',
-            'booster-shot' => 'Booster Shot'
-        ]
+        'subcategories' => []
     ],
     'program' => [
         'title' => 'Program Enrollment',
         'description' => 'Health programs and wellness plans',
-        'subcategories' => [
-            'senior-health' => 'Senior Citizen Health Plan',
-            'maternal-health' => 'Maternal Health Program',
-            'diabetes-management' => 'Diabetes Management',
-            'hypertension-monitoring' => 'Hypertension Monitoring'
-        ],
+        'subcategories' => []
     ],
-    'general' => [
+    'appointment' => [
         'title' => 'General Appointment',
         'description' => 'Regular consultations and checkups',
-        'subcategories' => [
-            'general-consultation' => 'General Consultation',
-            'specialist-referral' => 'Specialist Referral',
-            'lab-tests' => 'Lab Tests',
-            'follow-up' => 'Follow-up Visits'
-        ]
+        'subcategories' => []
     ]
 ];
 
+// Populate subcategories from database
+foreach ($activeServices as $service) {
+    $category = $service['category'];
+    if (isset($serviceCategories[$category])) {
+        // Create a subcategory key from the service name
+        $subcategoryKey = strtolower(str_replace([' ', '-'], ['-', '-'], $service['name']));
+        $serviceCategories[$category]['subcategories'][$subcategoryKey] = $service['name'];
+    }
+}
+
+// Map subcategories to form files
 $subcategoryForms = [
-    'child-immunization' => 'vaccine.php',
-    'adult-vaccine' => 'vaccine.php',
-    'travel-vaccine' => 'vaccine.php',
-    'booster-shot' => 'vaccine.php',
-    'senior-health' => 'program-enrollment.php',
-    'maternal-health' => 'program-enrollment.php',
-    'diabetes-management' => 'program-enrollment.php',
-    'hypertension-monitoring' => 'program-enrollment.php',
-    'general-consultation' => 'appointment.php',
-    'specialist-referral' => 'appointment.php',
-    'lab-tests' => 'appointment.php',
-    'follow-up' => 'appointment.php'
+    // Vaccine forms
+    'anti-rabies-vaccination-campaign' => 'vaccine.php',
+    'child-immunization-campaign' => 'vaccine.php',
+    'adult-vaccine-drive' => 'vaccine.php',
+    'travel-vaccine-clinic' => 'vaccine.php',
+    'covid-19-booster-campaign' => 'vaccine.php',
+    'community-vaccination-drive' => 'vaccine.php',
+    
+    // Program forms
+    'senior-citizen-health-plan' => 'program-enrollment.php',
+    'maternal-health-program' => 'program-enrollment.php',
+    'diabetes-management-program' => 'program-enrollment.php',
+    'hypertension-monitoring-program' => 'program-enrollment.php',
+    'blood-pressure-monitoring-program' => 'program-enrollment.php',
+    
+    // Appointment forms
+    'free-health-checkup-day' => 'appointment.php',
+    'specialist-consultation-day' => 'appointment.php',
+    'dental-care-clinic' => 'appointment.php',
+    'health-screening-event' => 'appointment.php'
 ];
 
+$activeCategory = isset($_GET['category']) ? $_GET['category'] : 'null';
+$selectedSubcategory = isset($_GET['subcategory']) ? $_GET['subcategory'] : null;
 
 $selectedCategoryName = "";
 $selectedSubcategoryName = "";
@@ -127,29 +120,31 @@ if ($selectedSubcategory) {
 
     <div class="category-grid">
         <?php foreach ($serviceCategories as $categoryKey => $categoryData): ?>
-            <!-- <?php echo ucfirst($categoryKey); ?> Card -->
-            <div class="category-card <?php echo ($activeCategory === $categoryKey) ? 'active' : ''; ?> <?php echo $selectedSubcategory && in_array($selectedSubcategory, array_keys($categoryData['subcategories'])) ? 'has-selection' : ''; ?>" data-category="<?php echo $categoryKey; ?>">
+            <?php if (!empty($categoryData['subcategories'])): ?>
+                <!-- <?php echo ucfirst($categoryKey); ?> Card -->
+                <div class="category-card <?php echo ($activeCategory === $categoryKey) ? 'active' : ''; ?> <?php echo $selectedSubcategory && in_array($selectedSubcategory, array_keys($categoryData['subcategories'])) ? 'has-selection' : ''; ?>" data-category="<?php echo $categoryKey; ?>">
 
-                <!-- Category Header (toggles dropdown) -->
-                <a href="?category=<?php echo ($activeCategory === $categoryKey) ? '' : $categoryKey; ?>"
-                    class="category-header" id="category-<?php echo $categoryKey; ?>">
-                    <h3><?php echo $categoryData['title']; ?></h3>
-                    <p><?php echo $categoryData['description']; ?></p>
-                    <div class="dropdown-arrow"><?php echo ($activeCategory === $categoryKey) ? '⌄' : '⌄'; ?></div>
-                </a>
+                    <!-- Category Header (toggles dropdown) -->
+                    <a href="?category=<?php echo ($activeCategory === $categoryKey) ? '' : $categoryKey; ?>"
+                        class="category-header" id="category-<?php echo $categoryKey; ?>">
+                        <h3><?php echo $categoryData['title']; ?></h3>
+                        <p><?php echo $categoryData['description']; ?></p>
+                        <div class="dropdown-arrow"><?php echo ($activeCategory === $categoryKey) ? '⌄' : '⌄'; ?></div>
+                    </a>
 
-                <!-- Subcategory Dropdown -->
-                <?php if ($activeCategory === $categoryKey): ?>
-                    <div class="subcategory-dropdown">
-                        <?php foreach ($categoryData['subcategories'] as $subKey => $subName): ?>
-                            <a href="?subcategory=<?php echo $subKey; ?>&confirmed=1#confirmation"
-                                class="subcategory-item <?php echo ($selectedSubcategory === $subKey) ? 'selected' : ''; ?>">
-                                <span><?php echo $subName; ?></span>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
+                    <!-- Subcategory Dropdown -->
+                    <?php if ($activeCategory === $categoryKey): ?>
+                        <div class="subcategory-dropdown">
+                            <?php foreach ($categoryData['subcategories'] as $subKey => $subName): ?>
+                                <a href="?subcategory=<?php echo $subKey; ?>&confirmed=1#confirmation"
+                                    class="subcategory-item <?php echo ($selectedSubcategory === $subKey) ? 'selected' : ''; ?>">
+                                    <span><?php echo $subName; ?></span>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
         <?php endforeach; ?>
     </div>
 

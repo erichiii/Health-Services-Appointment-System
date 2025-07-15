@@ -310,49 +310,26 @@ function getServiceIdByCategory($category, $subcategory)
     global $pdo;
 
     try {
-        // Map subcategories to service names
-        $serviceMap = [
-            'child-immunization' => 'Child Immunization Campaign',
-            'adult-vaccine' => 'Adult Vaccine Drive',
-            'travel-vaccine' => 'Travel Vaccine Clinic',
-            'booster-shot' => 'COVID-19 Booster Campaign',
-            'senior-health' => 'Senior Citizen Health Plan',
-            'maternal-health' => 'Maternal Health Program',
-            'diabetes-management' => 'Diabetes Management Program',
-            'hypertension-monitoring' => 'Hypertension Monitoring Program',
-            'general-consultation' => 'Free Health Checkup Day',
-            'specialist-referral' => 'Specialist Consultation Day',
-            'lab-tests' => 'Health Screening Event',
-            'follow-up' => 'Free Health Checkup Day'
-        ];
-
-        $service_name = $serviceMap[$subcategory] ?? null;
-
-        if (!$service_name) {
-            // If no exact match, try to find a service by category
-            $sql = "SELECT id FROM services WHERE category = ? AND is_active = 1 LIMIT 1";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$category]);
-            $result = $stmt->fetch();
-            return $result ? $result['id'] : null;
-        }
-
-        // Try to find the specific service
-        $sql = "SELECT id FROM services WHERE name = ? AND is_active = 1 LIMIT 1";
+        // First, try to find the service by converting the subcategory key back to a service name
+        // The subcategory key is created by converting service names to lowercase with hyphens
+        $sql = "SELECT id, name FROM services WHERE category = ? AND is_active = 1";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$service_name]);
-        $result = $stmt->fetch();
+        $stmt->execute([$category]);
+        $services = $stmt->fetchAll();
 
-        if ($result) {
-            return $result['id'];
+        foreach ($services as $service) {
+            // Create the subcategory key from the service name
+            $serviceKey = strtolower(str_replace([' ', '-'], ['-', '-'], $service['name']));
+            if ($serviceKey === $subcategory) {
+                return $service['id'];
+            }
         }
 
-        // Fallback: find any service matching the category
+        // If no exact match found, try to find a service by category
         $sql = "SELECT id FROM services WHERE category = ? AND is_active = 1 LIMIT 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$category]);
         $result = $stmt->fetch();
-
         return $result ? $result['id'] : null;
     } catch (PDOException $e) {
         error_log("Error getting service ID: " . $e->getMessage());
