@@ -2,10 +2,10 @@
 
 // Map service names to subcategory keys (should match programs.php)
 $appointmentToSubcategory = [
-    'Free Health Checkup Day' => 'general-consultation',
-    'Specialist Consultation Day' => 'specialist-referral',
-    'Health Screening Event' => 'lab-tests',
-    'Dental Care Clinic' => 'dental-care',
+    'Free Health Checkup Day' => 'free-health-checkup-day',
+    'Specialist Consultation Day' => 'specialist-consultation-day',
+    'Health Screening Event' => 'health-screening-event',
+    'Dental Care Clinic' => 'dental-care-clinic',
     // Add more if needed
 ];
 
@@ -25,10 +25,10 @@ try {
 }
 
 // Set conditional flags based on selected subcategory
-$isGeneralConsultation = ($selectedSubcategory === 'general-consultation');
-$isSpecialistReferral = ($selectedSubcategory === 'specialist-referral');
-$isLabTests = ($selectedSubcategory === 'lab-tests');
-$isFollowUp = ($selectedSubcategory === 'follow-up');
+$isGeneralConsultation = ($selectedSubcategory === 'free-health-checkup-day');
+$isSpecialistReferral = ($selectedSubcategory === 'specialist-consultation-day');
+$isLabTests = ($selectedSubcategory === 'health-screening-event');
+$isDentalCare = ($selectedSubcategory === 'dental-care-clinic');
 ?>
 
 <form method="POST" action="reservation.php" class="form">

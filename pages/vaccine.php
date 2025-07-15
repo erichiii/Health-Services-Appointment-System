@@ -2,12 +2,12 @@
 
 // Map service names to subcategory keys (should match programs.php)
 $programToSubcategory = [
-    'Child Immunization Campaign' => 'child-immunization',
-    'Adult Vaccine Drive' => 'adult-vaccine',
-    'Travel Vaccine Clinic' => 'travel-vaccine',
-    'COVID-19 Booster Campaign' => 'booster-shot',
-    'Anti-Rabies Vaccination Campaign' => 'anti-rabies',
-    'Community Vaccination Drive' => 'community-vaccination',
+    'Child Immunization Campaign' => 'child-immunization-campaign',
+    'Adult Vaccine Drive' => 'adult-vaccine-drive',
+    'Travel Vaccine Clinic' => 'travel-vaccine-clinic',
+    'COVID-19 Booster Campaign' => 'covid-19-booster-campaign',
+    'Anti-Rabies Vaccination Campaign' => 'anti-rabies-vaccination-campaign',
+    'Community Vaccination Drive' => 'community-vaccination-drive',
     // Add more if needed
 ];
 

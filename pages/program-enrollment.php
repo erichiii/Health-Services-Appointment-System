@@ -2,11 +2,11 @@
 
 // Map service names to subcategory keys (should match programs.php)
 $programToSubcategory = [
-    'Senior Citizen Health Plan' => 'senior-health',
-    'Maternal Health Program' => 'maternal-health',
-    'Diabetes Management Program' => 'diabetes-management',
-    'Hypertension Monitoring Program' => 'hypertension-monitoring',
-    'Blood Pressure Monitoring Program' => 'blood-pressure-monitoring',
+    'Senior Citizen Health Plan' => 'senior-citizen-health-plan',
+    'Maternal Health Program' => 'maternal-health-program',
+    'Diabetes Management Program' => 'diabetes-management-program',
+    'Hypertension Monitoring Program' => 'hypertension-monitoring-program',
+    'Blood Pressure Monitoring Program' => 'blood-pressure-monitoring-program',
     // Add more if needed
 ];
 
@@ -26,8 +26,8 @@ try {
 }
 
 // Set conditional flags based on selected subcategory
-$isSeniorPlan = ($selectedSubcategory === 'senior-health');
-$isMaternalHealth = ($selectedSubcategory === 'maternal-health');
+$isSeniorPlan = ($selectedSubcategory === 'senior-citizen-health-plan');
+$isMaternalHealth = ($selectedSubcategory === 'maternal-health-program');
 ?>
 
 <form method="POST" action="reservation.php" class="form">

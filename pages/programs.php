@@ -30,22 +30,23 @@ $category_titles = [
 // Add mapping from program name to subcategory key for all categories
 $programToSubcategory = [
     // Vaccine
-    'Child Immunization Campaign' => 'child-immunization',
-    'Adult Vaccine Drive' => 'adult-vaccine',
-    'Travel Vaccine Clinic' => 'travel-vaccine',
-    'COVID-19 Booster Campaign' => 'booster-shot',
-    // Add more if needed
+    'Child Immunization Campaign' => 'child-immunization-campaign',
+    'Adult Vaccine Drive' => 'adult-vaccine-drive',
+    'Travel Vaccine Clinic' => 'travel-vaccine-clinic',
+    'COVID-19 Booster Campaign' => 'covid-19-booster-campaign',
+    'Anti-Rabies Vaccination Campaign' => 'anti-rabies-vaccination-campaign',
+    'Community Vaccination Drive' => 'community-vaccination-drive',
     // Program Enrollment
-    'Senior Citizen Health Plan' => 'senior-health',
-    'Maternal Health Program' => 'maternal-health',
-    'Diabetes Management Program' => 'diabetes-management',
-    'Hypertension Monitoring Program' => 'hypertension-monitoring',
+    'Senior Citizen Health Plan' => 'senior-citizen-health-plan',
+    'Maternal Health Program' => 'maternal-health-program',
+    'Diabetes Management Program' => 'diabetes-management-program',
+    'Hypertension Monitoring Program' => 'hypertension-monitoring-program',
+    'Blood Pressure Monitoring Program' => 'blood-pressure-monitoring-program',
     // General Appointment
-    'Free Health Checkup Day' => 'general-consultation',
-    'Specialist Consultation Day' => 'specialist-referral',
-    'Lab Tests' => 'lab-tests',
-    'Follow-up Visits' => 'follow-up',
-    'Dental Care Clinic' => 'lab-tests', // If this is a lab test, otherwise map accordingly
+    'Free Health Checkup Day' => 'free-health-checkup-day',
+    'Specialist Consultation Day' => 'specialist-consultation-day',
+    'Dental Care Clinic' => 'dental-care-clinic',
+    'Health Screening Event' => 'health-screening-event',
     // Add more mappings as needed
 ];
 ?>
