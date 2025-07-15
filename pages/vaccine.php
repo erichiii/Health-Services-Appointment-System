@@ -1,29 +1,34 @@
 <?php
 
 $vaccineTypeMap = [
-    'child-immunization' => 'Child',
-    'adult-vaccine' => 'Adult',
-    'travel-vaccine' => 'Travel',
-    'booster-shot' => 'Booster'
+    'child-immunization' => 'Child Immunization Campaign',
+    'adult-vaccine' => 'Adult Vaccine Drive',
+    'travel-vaccine' => 'Travel Vaccine Clinic',
+    'booster-shot' => 'COVID-19 Booster Campaign'
 ];
 
-
 $selectedSubcategory = $_GET['subcategory'] ?? '';
-$preselectedVaccineType = $vaccineTypeMap[$selectedSubcategory] ?? '';
+$preselectedVaccineType = $selectedSubcategory;
 
-// Add: Preselect from 'type' URL param if present
-if (isset($_GET['type']) && $_GET['type']) {
-    $typeMap = [
-        'Child Immunization' => 'Child',
-        'Adult Vaccine' => 'Adult',
-        'Travel Vaccine' => 'Travel',
-        'Booster Shot' => 'Booster',
-    ];
-    $typeParam = $_GET['type'];
-    if (isset($typeMap[$typeParam])) {
-        $preselectedVaccineType = $typeMap[$typeParam];
-    }
+// Fetch active vaccine services from the database
+include_once '../includes/db_functions.php';
+$vaccine_services = [];
+try {
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT name FROM services WHERE category = 'vaccine' AND is_active = 1 ORDER BY name");
+    $stmt->execute();
+    $vaccine_services = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $vaccine_services = [];
 }
+// Map service names to subcategory keys (should match programs.php)
+$programToSubcategory = [
+    'Child Immunization Campaign' => 'child-immunization',
+    'Adult Vaccine Drive' => 'adult-vaccine',
+    'Travel Vaccine Clinic' => 'travel-vaccine',
+    'COVID-19 Booster Campaign' => 'booster-shot',
+    // Add more if needed
+];
 ?>
 
 
@@ -75,10 +80,13 @@ if (isset($_GET['type']) && $_GET['type']) {
                 <label>Vaccine Type *</label>
                 <select name="vaccine_type" required>
                     <option value="">Select</option>
-                    <option value="Child" <?= $preselectedVaccineType === 'Child' ? 'selected' : '' ?>>Child Immunization</option>
-                    <option value="Adult" <?= $preselectedVaccineType === 'Adult' ? 'selected' : '' ?>>Adult Vaccine</option>
-                    <option value="Travel" <?= $preselectedVaccineType === 'Travel' ? 'selected' : '' ?>>Travel Vaccine</option>
-                    <option value="Booster" <?= $preselectedVaccineType === 'Booster' ? 'selected' : '' ?>>Booster Shot</option>
+                    <?php foreach ($vaccine_services as $service):
+                        $name = $service['name'];
+                        $subcat = isset($programToSubcategory[$name]) ? $programToSubcategory[$name] : '';
+                        if (!$subcat) continue;
+                    ?>
+                        <option value="<?php echo htmlspecialchars($subcat); ?>" <?php if ($preselectedVaccineType === $subcat) echo 'selected'; ?>><?php echo htmlspecialchars($name); ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
         </div>

@@ -104,6 +104,26 @@ if ($selectedSubcategory) {
         }
     }
 }
+
+// Fetch active vaccine services for the dropdown
+include_once '../includes/db_functions.php';
+$vaccine_services = [];
+try {
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT name FROM services WHERE category = 'vaccine' AND is_active = 1 ORDER BY name");
+    $stmt->execute();
+    $vaccine_services = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $vaccine_services = [];
+}
+// Map service names to subcategory keys (should match programs.php)
+$programToSubcategory = [
+    'Child Immunization Campaign' => 'child-immunization',
+    'Adult Vaccine Drive' => 'adult-vaccine',
+    'Travel Vaccine Clinic' => 'travel-vaccine',
+    'COVID-19 Booster Campaign' => 'booster-shot',
+    // Add more if needed
+];
 ?>
 
 <div class="hero-section">
