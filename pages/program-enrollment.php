@@ -1,16 +1,20 @@
 <?php
 include_once '../includes/db_functions.php';
 
-$programTypeMap = [
-    'senior-health' => 'Senior Citizen Health Plan',
-    'maternal-health' => 'Maternal Health Program',
-    'diabetes-management' => 'Diabetes Management',
-    'hypertension-monitoring' => 'Hypertension Monitoring'
+// Map service names to subcategory keys (should match programs.php)
+$programToSubcategory = [
+    'Senior Citizen Health Plan' => 'senior-citizen-health-plan',
+    'Maternal Health Program' => 'maternal-health-program',
+    'Diabetes Management Program' => 'diabetes-management-program',
+    'Hypertension Monitoring Program' => 'hypertension-monitoring-program',
+    'Blood Pressure Monitoring Program' => 'blood-pressure-monitoring-program',
+    // Add more if needed
 ];
 
 $selectedSubcategory = $_SESSION['selected_subcategory'] ?? $_GET['subcategory'] ?? '';
-$preselectedProgramType = $programTypeMap[$selectedSubcategory] ?? '';
+$preselectedProgramType = $selectedSubcategory;
 
+<<<<<<< HEAD
 // Get available dates for the selected service
 $availableDates = [];
 if ($selectedSubcategory) {
@@ -19,8 +23,24 @@ if ($selectedSubcategory) {
 
 $isSeniorPlan = ($preselectedProgramType === 'Senior Citizen Health Plan');
 $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
-?>
+=======
+// Fetch active program services from the database
+include_once '../includes/db_functions.php';
+$program_services = [];
+try {
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT name FROM services WHERE category = 'program' AND is_active = 1 ORDER BY name");
+    $stmt->execute();
+    $program_services = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $program_services = [];
+}
 
+// Set conditional flags based on selected subcategory
+$isSeniorPlan = ($selectedSubcategory === 'senior-citizen-health-plan');
+$isMaternalHealth = ($selectedSubcategory === 'maternal-health-program');
+>>>>>>> 23662ff9704a53c7f7ab2e10d3ca7a6b2e73acb3
+?>
 
 <form method="POST" action="reservation.php" class="form">
     <fieldset>
@@ -59,7 +79,6 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         </div>
     </fieldset>
 
-
     <!-- Hidden fields for form processing -->
     <input type="hidden" name="service_category" value="program">
     <input type="hidden" name="service_subcategory" value="<?php echo htmlspecialchars($selectedSubcategory ?? ''); ?>">
@@ -69,18 +88,22 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
         <div class="form-row">
             <div class="form-group">
                 <label>Program Type *</label>
-                <select name="vaccine_type" required>
+                <select name="program_type" required>
                     <option value="">Select</option>
-                    <option value="Senior Citizen Health Plan" <?= $preselectedProgramType === 'Senior Citizen Health Plan' ? 'selected' : '' ?>>Senior Citizen Health Plan</option>
-                    <option value="Maternal Health Program" <?= $preselectedProgramType === 'Maternal Health Program' ? 'selected' : '' ?>>Maternal Health Program</option>
-                    <option value="Diabetes Management" <?= $preselectedProgramType === 'Diabetes Management' ? 'selected' : '' ?>>Diabetes Management</option>
-                    <option value="Hypertension Monitoring" <?= $preselectedProgramType === 'Hypertension Monitoring' ? 'selected' : '' ?>>Hypertension Monitoring</option>
+                    <?php foreach ($program_services as $service):
+                        $name = $service['name'];
+                        $subcat = isset($programToSubcategory[$name]) ? $programToSubcategory[$name] : '';
+                        if (!$subcat) continue;
+                    ?>
+                        <option value="<?php echo htmlspecialchars($subcat); ?>" <?php if ($preselectedProgramType === $subcat) echo 'selected'; ?>><?php echo htmlspecialchars($name); ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label>Preferred Date *</label>
+<<<<<<< HEAD
                 <select name="preferred_date" id="preferred_date" required>
                     <option value="">Select an available date</option>
                     <?php foreach ($availableDates as $dateOption): ?>
@@ -93,6 +116,10 @@ $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
                     <?php endif; ?>
                 </select>
                 <small>Available dates based on scheduled program services</small>
+=======
+                <input type="date" name="preferred_date" required>
+                <small>Note: Subject to availability</small>
+>>>>>>> 23662ff9704a53c7f7ab2e10d3ca7a6b2e73acb3
             </div>
             <div class="form-group">
                 <label>Preferred Time *</label>

@@ -34,71 +34,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Set page-specific content
-/*$page_title = 'Book Appointment';
-$page_subtitle = 'Schedule your healthcare appointment with ease';
-$page_features = [
-    'Online appointment booking system',
-    'Real-time availability calendar',
-    'Service selection and scheduling',
-    'Appointment confirmation and reminders'
-];
+// Get active services from database
+$activeServices = getActiveServices();
 
-// Include the reusable progress page
-include '../includes/in_progress.php';*/
-
-
-$activeCategory = isset($_GET['category']) ? $_GET['category'] : 'null';
-$selectedSubcategory = isset($_GET['subcategory']) ? $_GET['subcategory'] : null;
-
+// Organize services by category
 $serviceCategories = [
     'vaccine' => [
         'title' => 'Vaccine Registration',
         'description' => 'Immunizations and vaccine services',
-        'subcategories' => [
-            'child-immunization' => 'Child Immunization',
-            'adult-vaccine' => 'Adult Vaccine',
-            'travel-vaccine' => 'Travel Vaccine',
-            'booster-shot' => 'Booster Shot'
-        ]
+        'subcategories' => []
     ],
     'program' => [
         'title' => 'Program Enrollment',
         'description' => 'Health programs and wellness plans',
-        'subcategories' => [
-            'senior-health' => 'Senior Citizen Health Plan',
-            'maternal-health' => 'Maternal Health Program',
-            'diabetes-management' => 'Diabetes Management',
-            'hypertension-monitoring' => 'Hypertension Monitoring'
-        ],
+        'subcategories' => []
     ],
-    'general' => [
+    'appointment' => [
         'title' => 'General Appointment',
         'description' => 'Regular consultations and checkups',
-        'subcategories' => [
-            'general-consultation' => 'General Consultation',
-            'specialist-referral' => 'Specialist Referral',
-            'lab-tests' => 'Lab Tests',
-            'follow-up' => 'Follow-up Visits'
-        ]
+        'subcategories' => []
     ]
 ];
 
+// Populate subcategories from database
+foreach ($activeServices as $service) {
+    $category = $service['category'];
+    if (isset($serviceCategories[$category])) {
+        // Create a subcategory key from the service name
+        $subcategoryKey = strtolower(str_replace(' ', '-', $service['name']));
+        $serviceCategories[$category]['subcategories'][$subcategoryKey] = $service['name'];
+    }
+}
+
+// Map subcategories to form files
 $subcategoryForms = [
-    'child-immunization' => 'vaccine.php',
-    'adult-vaccine' => 'vaccine.php',
-    'travel-vaccine' => 'vaccine.php',
-    'booster-shot' => 'vaccine.php',
-    'senior-health' => 'program-enrollment.php',
-    'maternal-health' => 'program-enrollment.php',
-    'diabetes-management' => 'program-enrollment.php',
-    'hypertension-monitoring' => 'program-enrollment.php',
-    'general-consultation' => 'appointment.php',
-    'specialist-referral' => 'appointment.php',
-    'lab-tests' => 'appointment.php',
-    'follow-up' => 'appointment.php'
+    // Vaccine forms
+    'anti-rabies-vaccination-campaign' => 'vaccine.php',
+    'child-immunization-campaign' => 'vaccine.php',
+    'adult-vaccine-drive' => 'vaccine.php',
+    'travel-vaccine-clinic' => 'vaccine.php',
+    'covid-19-booster-campaign' => 'vaccine.php',
+    'community-vaccination-drive' => 'vaccine.php',
+    
+    // Program forms
+    'senior-citizen-health-plan' => 'program-enrollment.php',
+    'maternal-health-program' => 'program-enrollment.php',
+    'diabetes-management-program' => 'program-enrollment.php',
+    'hypertension-monitoring-program' => 'program-enrollment.php',
+    'blood-pressure-monitoring-program' => 'program-enrollment.php',
+    
+    // Appointment forms
+    'free-health-checkup-day' => 'appointment.php',
+    'specialist-consultation-day' => 'appointment.php',
+    'dental-care-clinic' => 'appointment.php',
+    'health-screening-event' => 'appointment.php'
 ];
 
+$activeCategory = isset($_GET['category']) ? $_GET['category'] : 'null';
+$selectedSubcategory = isset($_GET['subcategory']) ? $_GET['subcategory'] : null;
 
 $selectedCategoryName = "";
 $selectedSubcategoryName = "";
@@ -111,6 +104,28 @@ if ($selectedSubcategory) {
         }
     }
 }
+
+// Fetch active vaccine services for the dropdown
+include_once '../includes/db_functions.php';
+$vaccine_services = [];
+try {
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT name FROM services WHERE category = 'vaccine' AND is_active = 1 ORDER BY name");
+    $stmt->execute();
+    $vaccine_services = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $vaccine_services = [];
+}
+// Map service names to subcategory keys (should match programs.php)
+$programToSubcategory = [
+    'Child Immunization Campaign' => 'child-immunization-campaign',
+    'Adult Vaccine Drive' => 'adult-vaccine-drive',
+    'Travel Vaccine Clinic' => 'travel-vaccine-clinic',
+    'COVID-19 Booster Campaign' => 'covid-19-booster-campaign',
+    'Anti-Rabies Vaccination Campaign' => 'anti-rabies-vaccination-campaign',
+    'Community Vaccination Drive' => 'community-vaccination-drive',
+    // Add more if needed
+];
 ?>
 
 <div class="hero-section">
@@ -127,20 +142,22 @@ if ($selectedSubcategory) {
 
     <div class="category-grid">
         <?php foreach ($serviceCategories as $categoryKey => $categoryData): ?>
-            <!-- <?php echo ucfirst($categoryKey); ?> Card -->
-            <div class="category-card <?php echo ($activeCategory === $categoryKey) ? 'active' : ''; ?> <?php echo $selectedSubcategory && in_array($selectedSubcategory, array_keys($categoryData['subcategories'])) ? 'has-selection' : ''; ?>" data-category="<?php echo $categoryKey; ?>">
+            <?php if (!empty($categoryData['subcategories'])): ?>
+                <!-- <?php echo ucfirst($categoryKey); ?> Card -->
+                <div class="category-card <?php echo ($activeCategory === $categoryKey) ? 'active' : ''; ?> <?php echo $selectedSubcategory && in_array($selectedSubcategory, array_keys($categoryData['subcategories'])) ? 'has-selection' : ''; ?>" data-category="<?php echo $categoryKey; ?>">
 
-                <!-- Category Header (toggles dropdown) -->
-                <a href="?category=<?php echo ($activeCategory === $categoryKey) ? '' : $categoryKey; ?>"
-                    class="category-header" id="category-<?php echo $categoryKey; ?>">
-                    <h3><?php echo $categoryData['title']; ?></h3>
-                    <p><?php echo $categoryData['description']; ?></p>
-                    <div class="dropdown-arrow"><?php echo ($activeCategory === $categoryKey) ? '⌄' : '⌄'; ?></div>
-                </a>
+                    <!-- Category Header (toggles dropdown) Implemented via JavaScript -->
+                    <a href="#" 
+                        class="category-header" 
+                        id="category-<?php echo $categoryKey; ?>"
+                        data-category="<?php echo $categoryKey; ?>">
+                        <h3><?php echo $categoryData['title']; ?></h3>
+                        <p><?php echo $categoryData['description']; ?></p>
+                        <div class="dropdown-arrow"><?php echo ($activeCategory === $categoryKey) ? '⌄' : '⌄'; ?></div>
+                    </a>
 
-                <!-- Subcategory Dropdown -->
-                <?php if ($activeCategory === $categoryKey): ?>
-                    <div class="subcategory-dropdown">
+                    <!-- Subcategory Dropdown -->
+                    <div class="subcategory-dropdown <?php echo ($activeCategory === $categoryKey) ? 'active' : ''; ?>">
                         <?php foreach ($categoryData['subcategories'] as $subKey => $subName): ?>
                             <a href="?subcategory=<?php echo $subKey; ?>&confirmed=1#confirmation"
                                 class="subcategory-item <?php echo ($selectedSubcategory === $subKey) ? 'selected' : ''; ?>">
@@ -148,8 +165,8 @@ if ($selectedSubcategory) {
                             </a>
                         <?php endforeach; ?>
                     </div>
-                <?php endif; ?>
-            </div>
+                </div>
+            <?php endif; ?>
         <?php endforeach; ?>
     </div>
 
@@ -248,89 +265,70 @@ if ($selectedSubcategory) {
     }
 
     .category-card.active:hover {
-        border-color: #1b72a1;
+        transform: translateY(-5px);
+        border: 2px solid #33b6ff;
+        box-shadow: 0 8px 25px rgba(51, 182, 255, 0.2);
     }
 
     /* Category Header */
     .category-header {
-        text-align: center;
-        position: relative;
         display: block;
+        padding: 2rem;
         text-decoration: none;
-        color: #2c3e50;
-        border-bottom: 1px solid #e9ecef;
-        /* Fixed height to maintain consistency */
-        min-height: 150px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        color: inherit;
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
 
     .category-header:hover {
-        text-decoration: none;
-        color: #2c3e50;
+        background-color: #f8f9fa;
     }
 
     .category-header h3 {
-        font-family: 'Arimo', sans-serif;
-        font-weight: 600;
-        font-size: 1.3rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
         color: #2c3e50;
     }
 
     .category-header p {
-        margin: 0;
-        color: #6c757d;
-        font-size: 0.9rem;
-        line-height: 1.4;
+        font-size: 1rem;
+        color: #7f8c8d;
+        margin-bottom: 1rem;
     }
 
     .dropdown-arrow {
-        position: absolute;
-        bottom: 1rem;
-        left: 50%;
-        transform: translateX(-50%);
         font-size: 1.2rem;
-        color: #6c757d;
+        color: #000;
         transition: transform 0.3s ease;
+        text-align: center;
+        display: block;
+        margin: 0 auto;
     }
 
     .category-card.active .dropdown-arrow {
-        transform: translateX(-50%) rotate(180deg);
+        transform: rotate(180deg);
     }
 
     /* Subcategory Dropdown */
     .subcategory-dropdown {
-        background: white;
-        animation: slideDown 0.3s ease;
-        /* Ensure dropdown doesn't affect other cards */
-        position: relative;
-        z-index: 10;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        background-color: #f8f9fa;
     }
 
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-            max-height: 0;
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-            max-height: 300px;
-        }
+    .subcategory-dropdown.active {
+        max-height: 500px; /* Adjust based on content */
     }
 
     .subcategory-item {
-        padding: 1rem 2rem;
         display: block;
+        padding: 1rem 2rem;
         text-decoration: none;
-        color: #495057;
-        font-family: 'Arimo', sans-serif;
-        font-weight: 500;
+        color: #2c3e50;
+        border-bottom: 1px solid #e9ecef;
         transition: all 0.2s ease;
-        border-bottom: 1px solid #f1f5f9;
     }
 
     .subcategory-item:last-child {
@@ -338,86 +336,106 @@ if ($selectedSubcategory) {
     }
 
     .subcategory-item:hover {
-        background: #33b6ff;
-        color: white;
-        text-decoration: none;
+        background-color: #e9ecef;
+        color: #33b6ff;
     }
 
     .subcategory-item.selected {
-        background-color: #5bc0de;
+        background-color: #33b6ff;
         color: white;
-        font-weight: 600;
     }
 
     .subcategory-item.selected:hover {
-        background-color: #46b8da;
+        background-color: #1b72a1;
         color: white;
     }
 
-    /* Inactive cards maintain fixed size */
-    .category-card:not(.active) {
-        height: 150px;
-        overflow: hidden;
-    }
-
-    .category-card:not(.active) .category-header {
-        height: 100%;
-        border-bottom: none;
-    }
-
     /* Responsive Design */
-    @media (max-width: 992px) {
+    @media (max-width: 768px) {
         .category-grid {
             flex-direction: column;
             align-items: center;
-            gap: 1.5rem;
         }
 
         .category-card {
-            min-width: 280px;
-            max-width: 400px;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .category-grid {
-            padding: 0 1rem;
-        }
-
-        .category-card {
-            min-width: 250px;
+            min-width: 100%;
             max-width: 100%;
         }
-
-        .category-header {
-            padding: 1.5rem;
-        }
-
-        .our-services h2 {
-            font-size: 1.5rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .second-section {
-            padding: 2rem 0;
-        }
-
-        .category-header {
-            padding: 1.2rem;
-        }
-
-        .category-header h3 {
-            font-size: 1.1rem;
-        }
-
-        .subcategory-item {
-            padding: 0.8rem 1.5rem;
-        }
-    }
-
-    /* Smooth scroll for anchor links */
-    html {
-        scroll-behavior: smooth;
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all category headers
+    const categoryHeaders = document.querySelectorAll('.category-header');
+    
+    categoryHeaders.forEach(header => {
+        header.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const category = this.getAttribute('data-category');
+            const categoryCard = this.closest('.category-card');
+            const dropdown = categoryCard.querySelector('.subcategory-dropdown');
+            
+            // Close all other dropdowns
+            document.querySelectorAll('.subcategory-dropdown').forEach(dd => {
+                if (dd !== dropdown) {
+                    dd.classList.remove('active');
+                }
+            });
+            
+            document.querySelectorAll('.category-card').forEach(card => {
+                if (card !== categoryCard) {
+                    card.classList.remove('active');
+                }
+            });
+            
+            // Toggle current dropdown
+            if (dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+                categoryCard.classList.remove('active');
+            } else {
+                dropdown.classList.add('active');
+                categoryCard.classList.add('active');
+            }
+            
+            // Update URL without page reload
+            const url = new URL(window.location);
+            if (dropdown.classList.contains('active')) {
+                url.searchParams.set('category', category);
+            } else {
+                url.searchParams.delete('category');
+            }
+            url.searchParams.delete('subcategory');
+            url.searchParams.delete('confirmed');
+            
+            // Update browser history without reload
+            window.history.pushState({}, '', url);
+        });
+    });
+    
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category');
+        
+        // Reset all cards
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.classList.remove('active');
+        });
+        
+        document.querySelectorAll('.subcategory-dropdown').forEach(dropdown => {
+            dropdown.classList.remove('active');
+        });
+        
+        // Activate the correct category if specified
+        if (category) {
+            const targetCard = document.querySelector(`[data-category="${category}"]`).closest('.category-card');
+            const targetDropdown = targetCard.querySelector('.subcategory-dropdown');
+            
+            targetCard.classList.add('active');
+            targetDropdown.classList.add('active');
+        }
+    });
+});
+</script>

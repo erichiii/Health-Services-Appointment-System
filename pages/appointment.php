@@ -1,16 +1,19 @@
 <?php
 include_once '../includes/db_functions.php';
 
-$appointmentTypeMap = [
-    'general-consultation' => 'General Consultation',
-    'specialist-referral' => 'Specialist Referral',
-    'lab-tests' => 'Lab Tests',
-    'follow-up' => 'Follow-up Visits'
+// Map service names to subcategory keys (should match programs.php)
+$appointmentToSubcategory = [
+    'Free Health Checkup Day' => 'free-health-checkup-day',
+    'Specialist Consultation Day' => 'specialist-consultation-day',
+    'Health Screening Event' => 'health-screening-event',
+    'Dental Care Clinic' => 'dental-care-clinic',
+    // Add more if needed
 ];
 
 $selectedSubcategory = $_GET['subcategory'] ?? '';
-$preselectedAppointmentType = $appointmentTypeMap[$selectedSubcategory] ?? '';
+$preselectedAppointmentType = $selectedSubcategory;
 
+<<<<<<< HEAD
 // Get available dates for the selected service
 $availableDates = [];
 if ($selectedSubcategory) {
@@ -21,12 +24,30 @@ $isGeneralConsultation = ($preselectedAppointmentType === 'General Consultation'
 $isSpecialistReferral = ($preselectedAppointmentType === 'Specialist Referral');
 $isLabTests = ($preselectedAppointmentType === 'Lab Tests');
 $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
-?>
+=======
+// Fetch active appointment services from the database
+include_once '../includes/db_functions.php';
+$appointment_services = [];
+try {
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT name FROM services WHERE category = 'appointment' AND is_active = 1 ORDER BY name");
+    $stmt->execute();
+    $appointment_services = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $appointment_services = [];
+}
 
+// Set conditional flags based on selected subcategory
+$isGeneralConsultation = ($selectedSubcategory === 'free-health-checkup-day');
+$isSpecialistReferral = ($selectedSubcategory === 'specialist-consultation-day');
+$isLabTests = ($selectedSubcategory === 'health-screening-event');
+$isDentalCare = ($selectedSubcategory === 'dental-care-clinic');
+>>>>>>> 23662ff9704a53c7f7ab2e10d3ca7a6b2e73acb3
+?>
 
 <form method="POST" action="reservation.php" class="form">
     <!-- Hidden fields for form processing -->
-    <input type="hidden" name="service_category" value="general">
+    <input type="hidden" name="service_category" value="appointment">
     <input type="hidden" name="service_subcategory" value="<?php echo htmlspecialchars($selectedSubcategory ?? ''); ?>">
     <fieldset>
         <legend>Personal Information</legend>
@@ -71,16 +92,20 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
                 <label>Appointment Type *</label>
                 <select name="appointment_type" required>
                     <option value="">Select</option>
-                    <option value="General Consultation" <?= $preselectedAppointmentType === 'General Consultation' ? 'selected' : '' ?>>General Consultation</option>
-                    <option value="Specialist Referral" <?= $preselectedAppointmentType === 'Specialist Referral' ? 'selected' : '' ?>>Specialist Referral</option>
-                    <option value="Lab Tests" <?= $preselectedAppointmentType === 'Lab Tests' ? 'selected' : '' ?>>Lab Tests</option>
-                    <option value="Follow-up Visits" <?= $preselectedAppointmentType === 'Follow-up Visits' ? 'selected' : '' ?>>Follow-up Visits</option>
+                    <?php foreach ($appointment_services as $service):
+                        $name = $service['name'];
+                        $subcat = isset($appointmentToSubcategory[$name]) ? $appointmentToSubcategory[$name] : '';
+                        if (!$subcat) continue;
+                    ?>
+                        <option value="<?php echo htmlspecialchars($subcat); ?>" <?php if ($preselectedAppointmentType === $subcat) echo 'selected'; ?>><?php echo htmlspecialchars($name); ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label>Preferred Date *</label>
+<<<<<<< HEAD
                 <select name="preferred_date" id="preferred_date" required>
                     <option value="">Select an available date</option>
                     <?php foreach ($availableDates as $dateOption): ?>
@@ -93,6 +118,10 @@ $isFollowUp = ($preselectedAppointmentType === 'Follow-up Visits');
                     <?php endif; ?>
                 </select>
                 <small>Available dates based on scheduled appointment services</small>
+=======
+                <input type="date" name="preferred_date" required>
+                <small>Note: Subject to availability</small>
+>>>>>>> 23662ff9704a53c7f7ab2e10d3ca7a6b2e73acb3
             </div>
             <div class="form-group">
                 <label>Preferred Time *</label>

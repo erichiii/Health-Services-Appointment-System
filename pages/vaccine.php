@@ -1,14 +1,19 @@
 <?php
 include_once '../includes/db_functions.php';
 
-$vaccineTypeMap = [
-    'child-immunization' => 'Child',
-    'adult-vaccine' => 'Adult',
-    'travel-vaccine' => 'Travel',
-    'booster-shot' => 'Booster'
+// Map service names to subcategory keys (should match programs.php)
+$programToSubcategory = [
+    'Child Immunization Campaign' => 'child-immunization-campaign',
+    'Adult Vaccine Drive' => 'adult-vaccine-drive',
+    'Travel Vaccine Clinic' => 'travel-vaccine-clinic',
+    'COVID-19 Booster Campaign' => 'covid-19-booster-campaign',
+    'Anti-Rabies Vaccination Campaign' => 'anti-rabies-vaccination-campaign',
+    'Community Vaccination Drive' => 'community-vaccination-drive',
+    // Add more if needed
 ];
 
 $selectedSubcategory = $_GET['subcategory'] ?? '';
+<<<<<<< HEAD
 $preselectedVaccineType = $vaccineTypeMap[$selectedSubcategory] ?? '';
 
 // Get available dates for the selected service
@@ -17,7 +22,22 @@ if ($selectedSubcategory) {
     $availableDates = getAvailableDatesForService('vaccine', $selectedSubcategory);
 }
 ?>
+=======
+$preselectedVaccineType = $selectedSubcategory;
+>>>>>>> 23662ff9704a53c7f7ab2e10d3ca7a6b2e73acb3
 
+// Fetch active vaccine services from the database
+include_once '../includes/db_functions.php';
+$vaccine_services = [];
+try {
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT name FROM services WHERE category = 'vaccine' AND is_active = 1 ORDER BY name");
+    $stmt->execute();
+    $vaccine_services = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $vaccine_services = [];
+}
+?>
 
 <form method="POST" action="reservation.php" class="form">
     <fieldset>
@@ -67,16 +87,20 @@ if ($selectedSubcategory) {
                 <label>Vaccine Type *</label>
                 <select name="vaccine_type" required>
                     <option value="">Select</option>
-                    <option value="Child" <?= $preselectedVaccineType === 'Child' ? 'selected' : '' ?>>Child Immunization</option>
-                    <option value="Adult" <?= $preselectedVaccineType === 'Adult' ? 'selected' : '' ?>>Adult Vaccine</option>
-                    <option value="Travel" <?= $preselectedVaccineType === 'Travel' ? 'selected' : '' ?>>Travel Vaccine</option>
-                    <option value="Booster" <?= $preselectedVaccineType === 'Booster' ? 'selected' : '' ?>>Booster Shot</option>
+                    <?php foreach ($vaccine_services as $service):
+                        $name = $service['name'];
+                        $subcat = isset($programToSubcategory[$name]) ? $programToSubcategory[$name] : '';
+                        if (!$subcat) continue;
+                    ?>
+                        <option value="<?php echo htmlspecialchars($subcat); ?>" <?php if ($preselectedVaccineType === $subcat) echo 'selected'; ?>><?php echo htmlspecialchars($name); ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label>Preferred Date *</label>
+<<<<<<< HEAD
                 <select name="preferred_date" id="preferred_date" required>
                     <option value="">Select an available date</option>
                     <?php foreach ($availableDates as $dateOption): ?>
@@ -89,6 +113,10 @@ if ($selectedSubcategory) {
                     <?php endif; ?>
                 </select>
                 <small>Available dates based on scheduled vaccine services</small>
+=======
+                <input type="date" name="preferred_date" required>
+                <small>Note: Subject to availability</small>
+>>>>>>> 23662ff9704a53c7f7ab2e10d3ca7a6b2e73acb3
             </div>
             <div class="form-group">
                 <label>Preferred Time *</label>
