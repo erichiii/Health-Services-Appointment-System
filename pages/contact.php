@@ -36,10 +36,9 @@ $page_subtitle = 'We are here for you! How can we help?';
                 </form>
             </div>
 
-            <!-- Right: Illustration and Contact Info -->
-            <div class="cntct-info-side" style="flex: 1 1 0; min-width: 320px; max-width: 400px; display: flex; flex-direction: column; align-items: center; gap: 2em;">
-                <!-- Contact Info (no illustration) -->
-                <div class="cntct-contact-info-section" style="width: 100%; margin-top: 2em;">
+            <!-- Right: Contact Info (no illustration, no social links) -->
+            <div class="cntct-info-side" style="flex: 1 1 0; min-width: 320px; max-width: 400px; display: flex; flex-direction: column; align-items: flex-start; gap: 2em; justify-content: flex-start; margin-top: 3.2em;">
+                <div class="cntct-contact-info-section" style="width: 100%;">
                     <ul style="list-style: none; padding: 0; margin: 0;">
                         <li style="display: flex; align-items: center; margin-bottom: 1.2em;">
                             <span style="margin-right: 1em;"><i class="fas fa-map-marker-alt"></i></span>
@@ -55,13 +54,6 @@ $page_subtitle = 'We are here for you! How can we help?';
                         </li>
                     </ul>
                 </div>
-            </div>
-
-            <!-- Social Media Icons (vertical, far right) -->
-            <div class="cntct-social-side" style="display: flex; flex-direction: column; gap: 1em; align-items: center; position: relative; top: 2em;">
-                <a href="#" style="color: #4267B2;"><i class="fab fa-facebook-f fa-lg"></i></a>
-                <a href="#" style="color: #1DA1F2;"><i class="fab fa-twitter fa-lg"></i></a>
-                <a href="#" style="color: #0077b5;"><i class="fab fa-linkedin-in fa-lg"></i></a>
             </div>
         </div>
     </div>
