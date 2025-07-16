@@ -260,7 +260,9 @@
             // Get announcements from database
             try {
                 $db = getDbConnection();
-                $stmt = $db->prepare("SELECT * FROM announcements WHERE is_active = 1 ORDER BY announcement_date DESC LIMIT 3");
+                // Order by featured status first, then announcement_date (newest first), then created_at (newest first) as fallback
+                // This ensures featured announcements appear first, then new announcements always appear first
+                $stmt = $db->prepare("SELECT * FROM announcements WHERE is_active = 1 ORDER BY is_featured DESC, announcement_date DESC, created_at DESC LIMIT 3");
                 $stmt->execute();
                 $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 
