@@ -9,6 +9,20 @@ $page_subtitle = 'Stay updated with our latest news and health information';
 
 $announcements = getAnnouncements(20, false); // Fetch up to 20 announcements
 
+// Check if a specific announcement ID is requested
+$target_announcement_id = isset($_GET['id']) ? (int)$_GET['id'] : null;
+$target_announcement = null;
+
+// If an ID is specified, find that announcement
+if ($target_announcement_id) {
+    foreach ($announcements as $announcement) {
+        if ($announcement['id'] == $target_announcement_id) {
+            $target_announcement = $announcement;
+            break;
+        }
+    }
+}
+
 // Function to determine announcement type based on keywords
 function getAnnouncementType($title, $content) {
     $title_lower = strtolower($title);
@@ -165,6 +179,11 @@ foreach ($announcements as $a) {
 .announcement-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 20px rgba(51, 182, 255, 0.15);
+}
+
+.announcement-card:target {
+    border-left-color: #33b6ff;
+    box-shadow: 0 0 0 3px rgba(51, 182, 255, 0.2);
 }
 
 /* Type-based styling */
@@ -492,6 +511,7 @@ foreach ($announcements as $a) {
             $is_featured = $a['is_featured'] ? 'featured' : '';
             $date = $a['announcement_date'] ?? $a['created_at'];
             $type = $a['type'];
+            $announcement_id = $a['id'];
             
             // Get type display name
             $type_names = [
@@ -502,7 +522,7 @@ foreach ($announcements as $a) {
             ];
             $type_display = $type_names[$type] ?? 'Notice';
             
-            echo '<div class="announcement-card ' . $is_featured . ' ' . $type . '">';
+            echo '<div class="announcement-card ' . $is_featured . ' ' . $type . '" id="announcement-' . $announcement_id . '">';
             echo '<div class="announcement-card-content">';
             echo '<div class="announcement-main-content">';
             echo '<div class="announcement-type-badge ' . $type . '">' . $type_display . '</div>';
@@ -533,6 +553,7 @@ foreach ($announcements as $a) {
             $is_featured = $a['is_featured'] ? 'featured' : '';
             $date = $a['announcement_date'] ?? $a['created_at'];
             $type = $a['type'];
+            $announcement_id = $a['id'];
             
             // Get type display name
             $type_names = [
@@ -543,7 +564,7 @@ foreach ($announcements as $a) {
             ];
             $type_display = $type_names[$type] ?? 'Notice';
             
-            echo '<div class="announcement-card ' . $is_featured . ' ' . $type . '">';
+            echo '<div class="announcement-card ' . $is_featured . ' ' . $type . '" id="announcement-' . $announcement_id . '">';
             echo '<div class="announcement-card-content">';
             echo '<div class="announcement-main-content">';
             echo '<div class="announcement-type-badge ' . $type . '">' . $type_display . '</div>';
@@ -577,7 +598,7 @@ foreach ($announcements as $a) {
                     ];
                     $type_display = $type_names[$type] ?? 'Notice';
                     ?>
-                    <div class="announcement-card <?php echo $a['is_featured'] ? 'featured' : ''; ?> <?php echo $type; ?>">
+                    <div class="announcement-card <?php echo $a['is_featured'] ? 'featured' : ''; ?> <?php echo $type; ?>" id="announcement-<?php echo $a['id']; ?>">
                         <div class="announcement-card-content">
                             <div class="announcement-main-content">
                                 <div class="announcement-type-badge <?php echo $type; ?>"><?php echo $type_display; ?></div>
@@ -613,6 +634,28 @@ const modalContent = document.getElementById('modalContent');
 const modalDate = document.getElementById('modalDate');
 const modalTypeBadge = document.getElementById('modalTypeBadge');
 
+// Function to show announcement modal
+function showAnnouncementModal(title, content, date, type) {
+    modalTitle.textContent = title;
+    modalContent.textContent = content;
+    modalDate.textContent = date;
+    
+    // Set type badge
+    modalTypeBadge.textContent = type;
+    modalTypeBadge.className = 'announcement-modal-type-badge ' + type.toLowerCase();
+    
+    modal.classList.add('active');
+    modal.focus();
+}
+
+// Function to remove ID parameter from URL
+function removeIdFromUrl() {
+    const url = new URL(window.location);
+    url.searchParams.delete('id');
+    window.history.replaceState({}, document.title, url.pathname);
+}
+
+// Handle clicking on announcement arrows
 document.querySelectorAll('.announcement-arrow').forEach(arrow => {
     arrow.addEventListener('click', function(e) {
         const title = this.getAttribute('data-title');
@@ -620,16 +663,7 @@ document.querySelectorAll('.announcement-arrow').forEach(arrow => {
         const date = this.getAttribute('data-date');
         const type = this.getAttribute('data-type');
         
-        modalTitle.textContent = title;
-        modalContent.textContent = content;
-        modalDate.textContent = date;
-        
-        // Set type badge
-        modalTypeBadge.textContent = type;
-        modalTypeBadge.className = 'announcement-type-badge ' + type.toLowerCase();
-        
-        modal.classList.add('active');
-        modal.focus();
+        showAnnouncementModal(title, content, date, type);
     });
     
     arrow.addEventListener('keydown', function(e) {
@@ -640,21 +674,55 @@ document.querySelectorAll('.announcement-arrow').forEach(arrow => {
     });
 });
 
+// Handle modal close
 modalClose.addEventListener('click', function() {
     modal.classList.remove('active');
+    removeIdFromUrl();
 });
 
 modal.addEventListener('click', function(e) {
     if (e.target === modal) {
         modal.classList.remove('active');
+        removeIdFromUrl();
     }
 });
 
 document.addEventListener('keydown', function(e) {
     if (modal.classList.contains('active') && e.key === 'Escape') {
         modal.classList.remove('active');
+        removeIdFromUrl();
     }
 });
+
+// Check if we should auto-open a specific announcement
+<?php if ($target_announcement): ?>
+document.addEventListener('DOMContentLoaded', function() {
+    // Scroll to the announcement card
+    const targetCard = document.getElementById('announcement-<?php echo $target_announcement['id']; ?>');
+    if (targetCard) {
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Highlight the card briefly
+        targetCard.style.boxShadow = '0 0 0 3px rgba(51, 182, 255, 0.3)';
+        setTimeout(() => {
+            targetCard.style.boxShadow = '';
+        }, 2000);
+        
+        // Auto-open the modal after a short delay
+        setTimeout(() => {
+            const arrow = targetCard.querySelector('.announcement-arrow');
+            if (arrow) {
+                const title = arrow.getAttribute('data-title');
+                const content = arrow.getAttribute('data-content');
+                const date = arrow.getAttribute('data-date');
+                const type = arrow.getAttribute('data-type');
+                
+                showAnnouncementModal(title, content, date, type);
+            }
+        }, 500);
+    }
+});
+<?php endif; ?>
 </script>
 
 <?php include '../includes/footer.php'; ?>

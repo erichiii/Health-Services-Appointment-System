@@ -266,6 +266,8 @@
                 
                 if (!empty($announcements)) {
                     foreach ($announcements as $announcement) {
+                        $announcement_id = $announcement['id'];
+                        echo '<a href="pages/announcements.php?id=' . $announcement_id . '" class="announcement-item-link">';
                         echo '<div class="announcement-item">';
                         echo '<div class="item-content">';
                         echo '<div class="item-title">' . htmlspecialchars($announcement['title']) . '</div>';
@@ -273,6 +275,7 @@
                         echo '</div>';
                         echo '<div class="item-arrow">→</div>';
                         echo '</div>';
+                        echo '</a>';
                     }
                 } else {
                     // Fallback to placeholder if no announcements
