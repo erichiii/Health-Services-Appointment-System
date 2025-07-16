@@ -37,22 +37,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Set page-specific content
-/*$page_title = 'Book Appointment';
-$page_subtitle = 'Schedule your healthcare appointment with ease';
-$page_features = [
-    'Online appointment booking system',
-    'Real-time availability calendar',
-    'Service selection and scheduling',
-    'Appointment confirmation and reminders'
-];
+// Get parameters from URL for auto-selection
+$serviceType = isset($_GET['type']) ? $_GET['type'] : null;
+$serviceId = isset($_GET['service_id']) ? $_GET['service_id'] : null;
+$scheduleId = isset($_GET['schedule_id']) ? $_GET['schedule_id'] : null;
+$selectedDate = isset($_GET['date']) ? $_GET['date'] : null;
 
-// Include the reusable progress page
-include '../includes/in_progress.php';*/
-
-
-$activeCategory = isset($_GET['category']) ? $_GET['category'] : 'null';
+// Set active category based on URL parameter or user selection
+$activeCategory = isset($_GET['category']) ? $_GET['category'] : ($serviceType ?? 'null');
 $selectedSubcategory = isset($_GET['subcategory']) ? $_GET['subcategory'] : null;
+
+// If we have a service_id and schedule_id, get the service details
+$serviceDetails = null;
+if ($serviceId && $scheduleId) {
+    // Get service details from database
+    try {
+        $db = getDbConnection();
+        $stmt = $db->prepare("
+            SELECT 
+                s.id as service_id, 
+                s.name as service_name, 
+                s.category, 
+                ss.schedule_date, 
+                ss.start_time, 
+                ss.end_time
+            FROM services s
+            JOIN service_schedules ss ON s.id = ss.service_id
+            WHERE s.id = ? AND ss.id = ?
+        ");
+        $stmt->execute([$serviceId, $scheduleId]);
+        $serviceDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Map service name to subcategory code
+        if ($serviceDetails) {
+            // This is a simple mapping based on service name keywords
+            // You may need to adjust this based on your actual service names
+            $subcategoryMap = [
+                'Child' => 'child-immunization',
+                'Adult' => 'adult-vaccine',
+                'Travel' => 'travel-vaccine',
+                'Booster' => 'booster-shot',
+                'Anti-Rabies' => 'anti-rabies-vaccination',
+                'Community' => 'community-vaccination',
+                'Senior' => 'senior-health',
+                'Maternal' => 'maternal-health',
+                'Diabetes' => 'diabetes-management',
+                'Hypertension' => 'hypertension-monitoring',
+                'Blood Pressure' => 'blood-pressure-monitoring',
+                'General' => 'general-consultation',
+                'Specialist' => 'specialist-referral',
+                'Lab' => 'lab-tests',
+                'Follow-up' => 'follow-up',
+                'Dental' => 'dental-care'
+            ];
+
+            // Try to match service name to subcategory
+            foreach ($subcategoryMap as $keyword => $code) {
+                if (stripos($serviceDetails['service_name'], $keyword) !== false) {
+                    $selectedSubcategory = $code;
+                    break;
+                }
+            }
+        }
+    } catch (PDOException $e) {
+        error_log("Database error: " . $e->getMessage());
+    }
+}
 
 $serviceCategories = [
     'vaccine' => [
@@ -150,9 +200,9 @@ if ($selectedSubcategory) {
                     <div class="dropdown-arrow">⌄</div>
                 </div>
                 <!-- Subcategory Dropdown -->
-                <div class="subcategory-dropdown" style="display: none;">
+                <div class="subcategory-dropdown" style="display: <?php echo ($activeCategory === $categoryKey) ? 'block' : 'none'; ?>;">
                     <?php foreach ($categoryData['subcategories'] as $subKey => $subName): ?>
-                        <a href="?subcategory=<?php echo $subKey; ?>&confirmed=1#confirmation"
+                        <a href="?subcategory=<?php echo $subKey; ?>&confirmed=1<?php echo $selectedDate ? '&date=' . $selectedDate : ''; ?><?php echo $serviceId ? '&service_id=' . $serviceId : ''; ?><?php echo $scheduleId ? '&schedule_id=' . $scheduleId : ''; ?>#confirmation"
                             class="subcategory-item <?php echo ($selectedSubcategory === $subKey) ? 'selected' : ''; ?>">
                             <span><?php echo $subName; ?></span>
                         </a>
@@ -190,6 +240,8 @@ if ($selectedSubcategory) {
                         break;
                     }
                 }
+
+                // Include the form with additional parameters
                 include $formPath;
             } else {
                 echo "<p>Sorry, the form for this service is currently unavailable.</p>";
@@ -432,48 +484,49 @@ if ($selectedSubcategory) {
 </style>
 
 <script>
-// JS for toggling category dropdowns without reload
-const categoryGrid = document.getElementById('categoryGrid');
-const cards = categoryGrid.querySelectorAll('.category-card');
+    // JS for toggling category dropdowns without reload
+    const categoryGrid = document.getElementById('categoryGrid');
+    const cards = categoryGrid.querySelectorAll('.category-card');
 
-cards.forEach(card => {
-    const header = card.querySelector('.category-header');
-    const dropdown = card.querySelector('.subcategory-dropdown');
-    header.addEventListener('click', function(e) {
-        // Collapse all
-        cards.forEach(c => {
-            c.classList.remove('active');
-            c.querySelector('.subcategory-dropdown').style.display = 'none';
-        });
-        // Expand this one
-        card.classList.add('active');
-        dropdown.style.display = 'block';
-        // Optionally update URL
-        const cat = card.getAttribute('data-category');
-        const url = new URL(window.location);
-        url.searchParams.set('category', cat);
-        url.searchParams.delete('subcategory');
-        url.searchParams.delete('confirmed');
-        window.history.pushState({}, '', url);
-    });
-    // Keyboard accessibility
-    header.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            header.click();
-        }
-    });
-});
-// On page load, open the active category if set
-(function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const activeCat = urlParams.get('category');
-    if (activeCat) {
-        const card = categoryGrid.querySelector(`.category-card[data-category="${activeCat}"]`);
-        if (card) {
+    cards.forEach(card => {
+        const header = card.querySelector('.category-header');
+        const dropdown = card.querySelector('.subcategory-dropdown');
+        header.addEventListener('click', function(e) {
+            // Collapse all
+            cards.forEach(c => {
+                c.classList.remove('active');
+                c.querySelector('.subcategory-dropdown').style.display = 'none';
+            });
+            // Expand this one
             card.classList.add('active');
-            card.querySelector('.subcategory-dropdown').style.display = 'block';
-        }
-    }
-})();
+            dropdown.style.display = 'block';
+            // Optionally update URL
+            const cat = card.getAttribute('data-category');
+            const url = new URL(window.location);
+            url.searchParams.set('category', cat);
+            url.searchParams.delete('subcategory');
+            url.searchParams.delete('confirmed');
+            window.history.pushState({}, '', url);
+        });
+        // Keyboard accessibility
+        header.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                header.click();
+            }
+        });
+    });
+
+    // Auto-select subcategory if we have service details
+    <?php if ($selectedSubcategory && $serviceType): ?>
+        // Scroll to confirmation section
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmationSection = document.getElementById('confirmation');
+            if (confirmationSection) {
+                confirmationSection.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    <?php endif; ?>
 </script>
