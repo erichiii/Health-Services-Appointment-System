@@ -1,6 +1,44 @@
 <?php
 require_once '../includes/admin_layout.php';
 
+// Add service categories mapping for user-friendly subcategory names
+$serviceCategories = [
+    'vaccine' => [
+        'title' => 'Vaccine Registration',
+        'description' => 'Immunizations and vaccine services',
+        'subcategories' => [
+            'child-immunization' => 'Child Immunization',
+            'adult-vaccine' => 'Adult Vaccine',
+            'travel-vaccine' => 'Travel Vaccine',
+            'booster-shot' => 'Booster Shot',
+            'anti-rabies-vaccination' => 'Anti-Rabies Vaccination',
+            'community-vaccination' => 'Community Vaccination',
+        ]
+    ],
+    'program' => [
+        'title' => 'Program Enrollment',
+        'description' => 'Health programs and wellness plans',
+        'subcategories' => [
+            'senior-health' => 'Senior Citizen Health Plan',
+            'maternal-health' => 'Maternal Health Program',
+            'diabetes-management' => 'Diabetes Management',
+            'hypertension-monitoring' => 'Hypertension Monitoring',
+            'blood-pressure-monitoring' => 'Blood Pressure Monitoring',
+        ],
+    ],
+    'general' => [
+        'title' => 'General Appointment',
+        'description' => 'Regular consultations and checkups',
+        'subcategories' => [
+            'general-consultation' => 'General Consultation',
+            'specialist-referral' => 'Specialist Referral',
+            'lab-tests' => 'Lab Tests',
+            'follow-up' => 'Follow-up Visits',
+            'dental-care' => 'Dental Care Clinic',
+        ]
+    ]
+];
+
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verify CSRF token
@@ -186,7 +224,20 @@ renderAdminLayout('Reservations Management', function () use ($reservations, $ed
                                 <div>
                                     <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
                                         <strong style="color: #374151; font-weight: 600;">Service:</strong><br>
-                                        <span style="color: #111827; font-size: 1rem;"><?php echo htmlspecialchars($editing_reservation['service_name']); ?></span>
+                                        <span style="color: #111827; font-size: 1rem;">
+                                            <?php
+                                            $category = $editing_reservation['service_category'];
+                                            $subcategory = $editing_reservation['service_subcategory'];
+                                            $displayName = $subcategory;
+
+                                            // Use the mapping to get the user-friendly subcategory name
+                                            if (isset($serviceCategories[$category]['subcategories'][$subcategory])) {
+                                                $displayName = $serviceCategories[$category]['subcategories'][$subcategory];
+                                            }
+
+                                            echo htmlspecialchars($displayName);
+                                            ?>
+                                        </span>
                                     </p>
                                     <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #6b7280;">
                                         <strong style="color: #374151; font-weight: 600;">Category:</strong><br>
@@ -397,10 +448,18 @@ renderAdminLayout('Reservations Management', function () use ($reservations, $ed
                                     <td style="padding: 1rem;">
                                         <div>
                                             <div style="font-weight: 600; color: #333; margin-bottom: 0.25rem;">
-                                                <?php echo htmlspecialchars($reservation['service_name']); ?>
-                                            </div>
-                                            <div style="font-size: 0.85rem; color: #6b7280; line-height: 1.4;">
-                                                <?php echo htmlspecialchars($reservation['service_subcategory']); ?>
+                                                <?php
+                                                $category = $reservation['service_category'];
+                                                $subcategory = $reservation['service_subcategory'];
+                                                $displayName = $subcategory;
+
+                                                // Use the mapping to get the user-friendly subcategory name
+                                                if (isset($serviceCategories[$category]['subcategories'][$subcategory])) {
+                                                    $displayName = $serviceCategories[$category]['subcategories'][$subcategory];
+                                                }
+
+                                                echo htmlspecialchars($displayName);
+                                                ?>
                                             </div>
                                         </div>
                                     </td>
