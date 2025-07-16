@@ -42,6 +42,27 @@ if ($serviceId && $scheduleId) {
         ");
         $stmt->execute([$serviceId, $scheduleId]);
         $scheduleDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // If we have service details, try to determine the appointment type from the service name
+        if ($scheduleDetails && isset($scheduleDetails['service_name'])) {
+            $serviceName = $scheduleDetails['service_name'];
+
+            // Map service name to appointment type
+            if (stripos($serviceName, 'health checkup') !== false || stripos($serviceName, 'general') !== false) {
+                $preselectedAppointmentType = 'General Consultation';
+            } elseif (stripos($serviceName, 'specialist') !== false || stripos($serviceName, 'referral') !== false) {
+                $preselectedAppointmentType = 'Specialist Referral';
+            } elseif (
+                stripos($serviceName, 'lab') !== false || stripos($serviceName, 'test') !== false ||
+                stripos($serviceName, 'screening') !== false
+            ) {
+                $preselectedAppointmentType = 'Lab Tests';
+            } elseif (stripos($serviceName, 'follow') !== false || stripos($serviceName, 'follow-up') !== false) {
+                $preselectedAppointmentType = 'Follow-up Visits';
+            } elseif (stripos($serviceName, 'dental') !== false || stripos($serviceName, 'teeth') !== false) {
+                $preselectedAppointmentType = 'Dental Care Clinic';
+            }
+        }
     } catch (PDOException $e) {
         error_log("Database error: " . $e->getMessage());
     }
@@ -135,12 +156,14 @@ if ($selectedSubcategory) {
                     <option value="">Select</option>
                     <?php foreach ($appointment_services as $service):
                         $name = $service['name'];
-                        $subcat = isset($appointmentToSubcategory[$name]) ? $appointmentToSubcategory[$name] : '';
-                        if (!$subcat) continue;
+                        $selected = ($preselectedAppointmentType === $name) ? 'selected' : '';
                     ?>
-                        <option value="<?php echo htmlspecialchars($subcat); ?>" <?php if ($preselectedAppointmentType === $subcat) echo 'selected'; ?>><?php echo htmlspecialchars($name); ?></option>
+                        <option value="<?php echo htmlspecialchars($name); ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($name); ?></option>
                     <?php endforeach; ?>
                 </select>
+                <?php if ($scheduleDetails && $preselectedAppointmentType): ?>
+                    <small>Pre-selected based on the event from the calendar</small>
+                <?php endif; ?>
             </div>
         </div>
         <div class="form-row">

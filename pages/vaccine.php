@@ -35,6 +35,26 @@ if ($serviceId && $scheduleId) {
         ");
         $stmt->execute([$serviceId, $scheduleId]);
         $scheduleDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // If we have service details, try to determine the vaccine type from the service name
+        if ($scheduleDetails && isset($scheduleDetails['service_name'])) {
+            $serviceName = $scheduleDetails['service_name'];
+
+            // Map service name to vaccine type
+            if (stripos($serviceName, 'child') !== false) {
+                $preselectedVaccineType = 'Child';
+            } elseif (stripos($serviceName, 'adult') !== false) {
+                $preselectedVaccineType = 'Adult';
+            } elseif (stripos($serviceName, 'travel') !== false) {
+                $preselectedVaccineType = 'Travel';
+            } elseif (stripos($serviceName, 'booster') !== false || stripos($serviceName, 'covid') !== false) {
+                $preselectedVaccineType = 'Booster';
+            } elseif (stripos($serviceName, 'rabies') !== false) {
+                $preselectedVaccineType = 'Anti-Rabies';
+            } elseif (stripos($serviceName, 'community') !== false) {
+                $preselectedVaccineType = 'Community';
+            }
+        }
     } catch (PDOException $e) {
         error_log("Database error: " . $e->getMessage());
     }
@@ -108,6 +128,9 @@ $preferredDate = isset($scheduleDetails['schedule_date']) ? $scheduleDetails['sc
                     <option value="Anti-Rabies" <?= $preselectedVaccineType === 'Anti-Rabies' ? 'selected' : '' ?>>Anti-Rabies Vaccination</option>
                     <option value="Community" <?= $preselectedVaccineType === 'Community' ? 'selected' : '' ?>>Community Vaccination</option>
                 </select>
+                <?php if ($scheduleDetails && $preselectedVaccineType): ?>
+                    <small>Pre-selected based on the event from the calendar</small>
+                <?php endif; ?>
             </div>
         </div>
         <div class="form-row">
