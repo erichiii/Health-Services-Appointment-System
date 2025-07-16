@@ -10,7 +10,7 @@ $page_subtitle = 'We are here for you! How can we help?';
 
 <main class="cntct-main-content">
     <div class="cntct-container">
-        <div class="cntct-flex-layout" style="display: flex; gap: 2.5rem; align-items: flex-start; justify-content: center; min-height: 600px;">
+        <div class="cntct-flex-layout" style="display: flex; gap: 2.5rem; align-items: stretch; justify-content: center; min-height: 80vh;">
             <!-- Left: Form Section -->
             <div class="cntct-form-side" style="flex: 1 1 0; max-width: 480px;">
                 <h1 style="margin-bottom: 0.25em;"><?php echo htmlspecialchars($page_title); ?></h1>
@@ -37,7 +37,7 @@ $page_subtitle = 'We are here for you! How can we help?';
             </div>
 
             <!-- Right: Contact Info (aligned at the bottom) -->
-            <div class="cntct-info-side" style="flex: 1 1 0; min-width: 320px; max-width: 400px; display: flex; flex-direction: column; align-items: flex-start; gap: 2em; justify-content: flex-end; min-height: 100%;">
+            <div class="cntct-info-side" style="flex: 1 1 0; min-width: 320px; max-width: 400px; display: flex; flex-direction: column; justify-content: flex-end; height: 100%;">
                 <div class="cntct-contact-info-section" style="width: 100%;">
                     <ul style="list-style: none; padding: 0; margin: 0;">
                         <li style="display: flex; align-items: center; margin-bottom: 1.2em;">
