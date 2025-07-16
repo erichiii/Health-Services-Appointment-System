@@ -7,9 +7,10 @@
     <?php 
     // Determine if we're in a subdirectory by checking if includes directory exists
     $base_path = file_exists('includes') ? '' : '../';
+    $cache_version = '?v=' . time(); // Cache busting parameter
     ?>
-    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/layout.css">
-    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/main.css">
+    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/layout.css<?php echo $cache_version; ?>">
+    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/main.css<?php echo $cache_version; ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

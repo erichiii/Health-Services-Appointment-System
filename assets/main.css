@@ -2,4 +2,5 @@
 main.css is used for calling all other .css files
 */
 
-@import url('layout.css')
+@import url('layout.css');
+@import url('variables.css');

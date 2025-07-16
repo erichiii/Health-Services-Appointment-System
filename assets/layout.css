@@ -203,23 +203,6 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
 }
 
-/* Placeholder backgrounds (will be replaced with actual images) */
-.hero-slide[data-bg="hero1"] {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.hero-slide[data-bg="hero2"] {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-}
-
-.hero-slide[data-bg="hero3"] {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-}
-
-.hero-slide[data-bg="hero4"] {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-}
-
 /* Hero Overlay */
 .hero-overlay {
   position: absolute;
@@ -411,27 +394,84 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero-slide[data-bg="hero1"] {
-  background-image: url('../assets/images/image1.png');
+  background-image: url('images/image1.png') !important;
+  background: url('images/image1.png') no-repeat center center !important;
+  background-size: cover !important;
 }
 
 .hero-slide[data-bg="hero2"] {
-  background-image: url('../assets/images/hero2.jpg');
+  background-image: url('images/image2.png') !important;
+  background: url('images/image2.png') no-repeat center center !important;
+  background-size: cover !important;
 }
 
 .hero-slide[data-bg="hero3"] {
-  background-image: url('../assets/images/hero3.jpg');
+  background-image: url('images/image3.png') !important;
+  background: url('images/image3.png') no-repeat center center !important;
+  background-size: cover !important;
 }
 
 .hero-slide[data-bg="hero4"] {
-  background-image: url('../assets/images/hero4.jpg');
+  background-image: url('images/image4.png') !important;
+  background: url('images/image4.png') no-repeat center center !important;
+  background-size: cover !important;
 }
 
 /* Contact Page Styles */
 
+/* Contact Banner Section */
+.cntct-banner {
+    height: 50vh;
+    min-height: 300px;
+    background: linear-gradient(135deg, #f8fafb 0%, #e9f4fd 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cntct-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(51, 182, 255, 0.05);
+    z-index: 1;
+}
+
+.cntct-banner-overlay {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    padding: 0 2rem;
+}
+
+.cntct-banner-content h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-family: 'Nunito', sans-serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cntct-banner-content p {
+    font-size: 1.2rem;
+    color: #5a6c7d;
+    margin: 0;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* Main Content */
 .cntct-main-content {
+    background: #f8f9fa;
+    padding: 4rem 0;
     min-height: 70vh;
-    padding: 2rem 0;
-    background-color: #f8f9fa;
 }
 
 .cntct-container {
@@ -440,140 +480,184 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0 2rem;
 }
 
-.cntct-page-header {
-    text-align: center;
-    margin-bottom: 3rem;
+/* Contact Card */
+.cntct-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-top: -2rem;
+    position: relative;
+    z-index: 3;
 }
 
-.cntct-page-header h1 {
-    font-size: 2.5rem;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
+.cntct-card-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 600px;
 }
 
-.cntct-page-subtitle {
-    font-size: 1.1rem;
-    color: #7f8c8d;
-    margin-bottom: 0;
-}
-
-.cntct-contact-content {
+/* Contact Information Column */
+.cntct-info-column {
+    background: linear-gradient(135deg, #33b6ff 0%, #2196f3 100%);
+    color: #ffffff;
+    padding: 3rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
 }
 
-.cntct-smooth-box {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(51,182,255,0.08);
-    padding: 2.5rem;
-    font-family: 'Nunito', 'Arimo', Arial, sans-serif;
+.cntct-info-column h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-family: 'Nunito', sans-serif;
 }
 
-.cntct-contact-section-title {
-    color: #33b6ff;
-    font-family: 'Nunito', 'Arimo', Arial, sans-serif;
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 1.5rem;
-    text-align: center;
+.cntct-info-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+    line-height: 1.6;
 }
 
-/* Contact Information Grid */
-.cntct-contact-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
+.cntct-info-items {
+    flex: 1;
+    margin-bottom: 2rem;
 }
 
-.cntct-contact-item {
+.cntct-info-item {
     display: flex;
     align-items: flex-start;
+    margin-bottom: 2rem;
     gap: 1rem;
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border-radius: 8px;
-    transition: transform 0.2s ease;
-    min-height: 160px;
 }
 
-.cntct-contact-item:hover {
-    transform: translateY(-2px);
-}
-
-.cntct-contact-icon {
-    background: #33b6ff;
-    color: white;
+.cntct-info-icon {
+    background: rgba(255, 255, 255, 0.2);
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
     flex-shrink: 0;
+    backdrop-filter: blur(10px);
 }
 
-.cntct-contact-details h3 {
-    color: #2c3e50;
+.cntct-info-icon i {
+    font-size: 1.2rem;
+    color: #ffffff;
+}
+
+.cntct-info-details h4 {
     font-size: 1.1rem;
-    margin-bottom: 0.5rem;
     font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-family: 'Nunito', sans-serif;
 }
 
-.cntct-contact-details p {
-    color: #5a6c7d;
-    line-height: 1.6;
+.cntct-info-details p {
+    font-size: 0.95rem;
     margin: 0;
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+/* Social Media Section */
+.cntct-social-media {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 2rem;
+    margin-top: auto;
+}
+
+.cntct-social-media h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-family: 'Nunito', sans-serif;
+}
+
+.cntct-social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.cntct-social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.cntct-social-icons a:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Contact Form Column */
+.cntct-form-column {
+    padding: 3rem;
+    background: #ffffff;
+}
+
+.cntct-form-column h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-family: 'Nunito', sans-serif;
+}
+
+.cntct-form-subtitle {
+    font-size: 1rem;
+    color: #5a6c7d;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
 }
 
 /* Contact Form */
 .cntct-contact-form {
-    max-width: 800px;
-    margin: 0 auto;
+    width: 100%;
 }
 
 .cntct-form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
     margin-bottom: 1.5rem;
 }
 
 .cntct-form-group {
-    margin-bottom: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
 }
-.cntct-form-group:last-child {
-    text-align: left;
-    display: block;
+
+.cntct-form-group label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    font-family: 'Nunito', sans-serif;
 }
 
 .cntct-form-group input,
 .cntct-form-group select,
 .cntct-form-group textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0.75rem;
+    padding: 0.875rem 1rem;
     border: 2px solid #e1e8ed;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 1rem;
-    font-family: 'Nunito', 'Arimo', Arial, sans-serif;
-    transition: border-color 0.2s ease;
-}
-
-.cntct-form-group select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background: #fff;
-    min-width: 0;
+    font-family: 'Arimo', sans-serif;
+    transition: all 0.3s ease;
+    background: #ffffff;
+    color: #2c3e50;
 }
 
 .cntct-form-group input:focus,
@@ -581,59 +665,85 @@ h1, h2, h3, h4, h5, h6 {
 .cntct-form-group textarea:focus {
     outline: none;
     border-color: #33b6ff;
+    box-shadow: 0 0 0 3px rgba(51, 182, 255, 0.1);
+}
+
+.cntct-form-group input::placeholder,
+.cntct-form-group textarea::placeholder {
+    color: #a0aec0;
+    font-style: italic;
+}
+
+.cntct-form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
 }
 
 .cntct-form-group textarea {
     resize: vertical;
     min-height: 120px;
+    line-height: 1.6;
 }
 
 .cntct-required-asterisk {
     color: #e74c3c;
-    font-size: 1.1em;
-    margin-left: 2px;
+    font-weight: bold;
 }
 
+/* Submit Button */
 .cntct-submit-btn {
-    background: #33b6ff;
-    color: white;
+    background: linear-gradient(135deg, #33b6ff 0%, #2196f3 100%);
+    color: #ffffff;
     border: none;
-    padding: 0.7rem 1.5rem;
-    border-radius: 8px;
-    font-size: 1rem;
+    padding: 1rem 2.5rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    display: inline-block;
-    font-family: 'Nunito', 'Arimo', Arial, sans-serif;
-    box-shadow: none;
-    gap: 0;
-    margin-top: 1.5rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Nunito', sans-serif;
+    box-shadow: 0 4px 15px rgba(51, 182, 255, 0.3);
+    margin-top: 1rem;
 }
 
 .cntct-submit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(51,182,255,0.15);
-    background: #2196f3;
+    box-shadow: 0 6px 20px rgba(51, 182, 255, 0.4);
+    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
 }
 
-/* Responsive Design for Contact Page */
+.cntct-submit-btn:active {
+    transform: translateY(0);
+}
+
+.cntct-submit-btn i {
+    font-size: 1rem;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-    .cntct-container {
-        padding: 0 1rem;
+    .cntct-banner-content h1 {
+        font-size: 2.5rem;
     }
     
-    .cntct-page-header h1 {
-        font-size: 2rem;
+    .cntct-banner-content p {
+        font-size: 1.1rem;
     }
     
-    .cntct-smooth-box {
-        padding: 1.5rem;
-    }
-    
-    .cntct-contact-grid {
+    .cntct-card-content {
         grid-template-columns: 1fr;
-        gap: 1rem;
+    }
+    
+    .cntct-info-column,
+    .cntct-form-column {
+        padding: 2rem;
     }
     
     .cntct-form-row {
@@ -641,19 +751,47 @@ h1, h2, h3, h4, h5, h6 {
         gap: 1rem;
     }
     
-    .cntct-contact-item {
-        padding: 1rem;
+    .cntct-container {
+        padding: 0 1rem;
+    }
+    
+    .cntct-main-content {
+        padding: 2rem 0;
     }
 }
 
 @media (max-width: 480px) {
-    .cntct-contact-item {
-        flex-direction: column;
-        text-align: center;
+    .cntct-banner {
+        height: 40vh;
+        min-height: 250px;
     }
     
-    .cntct-contact-icon {
-        align-self: center;
+    .cntct-banner-content h1 {
+        font-size: 2rem;
+    }
+    
+    .cntct-banner-content p {
+        font-size: 1rem;
+    }
+    
+    .cntct-info-column,
+    .cntct-form-column {
+        padding: 1.5rem;
+    }
+    
+    .cntct-info-column h2,
+    .cntct-form-column h2 {
+        font-size: 1.5rem;
+    }
+    
+    .cntct-submit-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 1rem;
+    }
+    
+    .cntct-social-icons {
+        justify-content: flex-start;
     }
 }
 
