@@ -6,6 +6,9 @@ include '../includes/db_functions.php';
 $success_message = '';
 $error_message = '';
 
+$page_title = 'Book Your Appointment';
+$page_subtitle = 'Schedule your healthcare appointment with ease.';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Prepare data for reservation submission
     $reservation_data = [
@@ -121,12 +124,16 @@ if ($selectedSubcategory) {
 }
 ?>
 
-<div class="hero-section">
-    <div class="hero-section-content">
-        <h1>Book Your Appointment</h1>
-        <p>Schedule your healthcare appointment with ease.</p>
+<!--Reservation Banner Section-->
+
+<section class="cntct-banner">
+    <div class="cntct-banner-overlay">
+        <div class="cntct-banner-content">
+            <h1><?php echo htmlspecialchars($page_title); ?></h1>
+            <p><?php echo htmlspecialchars($page_subtitle); ?></p>
+        </div>
     </div>
-</div>
+</section>
 
 <div class="second-section">
     <div class="our-services">

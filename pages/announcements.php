@@ -29,6 +29,16 @@ foreach ($announcements as $a) {
 }
 ?>
 
+<!-- Announcements Banner Section -->
+<section class="cntct-banner">
+    <div class="cntct-banner-overlay">
+        <div class="cntct-banner-content">
+            <h1><?php echo htmlspecialchars($page_title); ?></h1>
+            <p><?php echo htmlspecialchars($page_subtitle); ?></p>
+        </div>
+    </div>
+</section>
+
 <style>
 /* Announcements Page Styles */
 .announcement-card {
@@ -153,23 +163,24 @@ foreach ($announcements as $a) {
     white-space: pre-line;
 }
 .main-content {
+    background: #f8f9fa;
+    padding: 4rem 0 8rem 0;
+    min-height: 70vh;
+}
+.announcements-container {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding-left: 32px;
     padding-right: 32px;
-    padding-top: 30px;
-    padding-bottom: 60px;
 }
 @media (max-width: 600px) {
     .announcement-card { flex-direction: column; align-items: flex-start; padding: 16px; }
     .announcement-card .arrow { margin-left: 0; margin-top: 10px; }
     .announcement-modal-content { padding: 18px 8px 12px 8px; }
-    .main-content {
+    .announcements-container {
         padding-left: 8px;
         padding-right: 8px;
-        padding-top: 18px;
-        padding-bottom: 24px;
     }
 }
 @media (max-width: 900px) {
@@ -177,7 +188,9 @@ foreach ($announcements as $a) {
 }
 </style>
 
-<div class="main-content">
+<!-- Main Announcements Section -->
+<main class="main-content">
+    <div class="announcements-container">
     <div class="announcement-date-group">
         <div class="announcement-date-label">Today</div>
         <div class="announcement-date-sub"><?php echo date('F j, Y'); ?></div>
@@ -240,7 +253,8 @@ foreach ($announcements as $a) {
             <?php endforeach; ?>
         <?php endforeach; ?>
     <?php endif; ?>
-</div>
+    </div>
+</main>
 
 <!-- Modal/Screen Popup for Announcement Details -->
 <!-- Utilizes JavaScript for an easier implementation -->
