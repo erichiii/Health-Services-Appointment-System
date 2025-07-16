@@ -3,7 +3,7 @@ require_once 'db_connection.php';
 
 function getAnnouncements($limit = 10, $featured_only = false)
 {
-     global $pdo;
+    global $pdo;
     try {
         $sql = "SELECT * FROM announcements WHERE is_active = 1";
         if ($featured_only) {
@@ -310,48 +310,42 @@ function getServiceIdByCategory($category, $subcategory)
     global $pdo;
 
     try {
-        // First, try to find the service by converting the subcategory key back to a service name
-        // The subcategory key is created by converting service names to lowercase with hyphens
-        $sql = "SELECT id, name FROM services WHERE category = ? AND is_active = 1";
+        // Map subcategory codes to service names
         $serviceMap = [
             'child-immunization' => 'Child Immunization Campaign',
             'adult-vaccine' => 'Adult Vaccine Drive',
             'travel-vaccine' => 'Travel Vaccine Clinic',
             'booster-shot' => 'COVID-19 Booster Campaign',
+            'anti-rabies-vaccination' => 'Anti-Rabies Vaccination Campaign',
+            'community-vaccination' => 'Community Vaccination Drive',
             'senior-health' => 'Senior Citizen Health Plan',
             'maternal-health' => 'Maternal Health Program',
             'diabetes-management' => 'Diabetes Management Program',
             'hypertension-monitoring' => 'Hypertension Monitoring Program',
+            'blood-pressure-monitoring' => 'Blood Pressure Monitoring Program',
             'general-consultation' => 'Free Health Checkup Day',
             'specialist-referral' => 'Specialist Consultation Day',
             'lab-tests' => 'Health Screening Event',
-            'follow-up' => 'Free Health Checkup Day'
+            'follow-up' => 'Free Health Checkup Day',
+            'dental-care' => 'Dental Care Clinic'
         ];
 
+        // Get the service name from the map
         $service_name = $serviceMap[$subcategory] ?? null;
 
-        if (!$service_name) {
-            // If no exact match, try to find a service by category
-            $sql = "SELECT id FROM services WHERE category = ? AND is_active = 1 LIMIT 1";
+        if ($service_name) {
+            // If we have a service name, look for an exact match by name and category
+            $sql = "SELECT id FROM services WHERE name = ? AND category = ? AND is_active = 1";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([$category]);
+            $stmt->execute([$service_name, $category]);
             $result = $stmt->fetch();
-            return $result ? $result['id'] : null;
-        }
 
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$category]);
-        $services = $stmt->fetchAll();
-
-        foreach ($services as $service) {
-            // Create the subcategory key from the service name
-            $serviceKey = strtolower(str_replace([' ', '-'], ['-', '-'], $service['name']));
-            if ($serviceKey === $subcategory) {
-                return $service['id'];
+            if ($result) {
+                return $result['id'];
             }
         }
 
-        // If no exact match found, try to find a service by category
+        // Fallback: try to find a service by category
         $sql = "SELECT id FROM services WHERE category = ? AND is_active = 1 LIMIT 1";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$category]);
@@ -360,7 +354,7 @@ function getServiceIdByCategory($category, $subcategory)
         return $result ? $result['id'] : null;
     } catch (PDOException $e) {
         error_log("Error getting service ID: " . $e->getMessage());
-        return [];
+        return null;
     }
 }
 
