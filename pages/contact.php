@@ -36,9 +36,9 @@ $page_subtitle = 'We are here for you! How can we help?';
                 </form>
             </div>
 
-            <!-- Right: Contact Info (aligned at the bottom) -->
+            <!-- Right: Contact Info (aligned at the bottom, with extra space) -->
             <div class="cntct-info-side" style="flex: 1 1 0; min-width: 320px; max-width: 400px; display: flex; flex-direction: column; justify-content: flex-end; height: 100%;">
-                <div class="cntct-contact-info-section" style="width: 100%;">
+                <div class="cntct-contact-info-section" style="width: 100%; margin-top: auto; margin-bottom: 2.5em;">
                     <ul style="list-style: none; padding: 0; margin: 0;">
                         <li style="display: flex; align-items: center; margin-bottom: 1.2em;">
                             <span style="margin-right: 1em;"><i class="fas fa-map-marker-alt"></i></span>
