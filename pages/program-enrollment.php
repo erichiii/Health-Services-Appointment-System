@@ -24,6 +24,45 @@ if (isset($programTypeMap[$selectedSubcategory])) {
     $preselectedProgramType = $programTypeMap[$selectedSubcategory];
 }
 
+// Get parameters passed from reservation.php
+$selectedDate = $_GET['date'] ?? '';
+$serviceId = $_GET['service_id'] ?? '';
+$scheduleId = $_GET['schedule_id'] ?? '';
+
+// Get service schedule details if we have IDs
+$scheduleDetails = null;
+if ($serviceId && $scheduleId) {
+    try {
+        include_once '../includes/db_connection.php';
+        $db = getDbConnection();
+        $stmt = $db->prepare("
+            SELECT 
+                ss.schedule_date, 
+                ss.start_time, 
+                ss.end_time,
+                s.name as service_name
+            FROM service_schedules ss
+            JOIN services s ON ss.service_id = s.id
+            WHERE s.id = ? AND ss.id = ?
+        ");
+        $stmt->execute([$serviceId, $scheduleId]);
+        $scheduleDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Database error: " . $e->getMessage());
+    }
+}
+
+// Format the time for display in the dropdown
+$formattedTime = '';
+if (isset($scheduleDetails['start_time'])) {
+    // Convert 24-hour format to AM/PM format
+    $timestamp = strtotime($scheduleDetails['start_time']);
+    $formattedTime = date('g:i A', $timestamp);
+}
+
+// Use schedule date if available, otherwise use the date from URL
+$preferredDate = isset($scheduleDetails['schedule_date']) ? $scheduleDetails['schedule_date'] : $selectedDate;
+
 $isSeniorPlan = ($preselectedProgramType === 'Senior Citizen Health Plan');
 $isMaternalHealth = ($preselectedProgramType === 'Maternal Health Program');
 
@@ -105,22 +144,32 @@ $isMaternalHealth = ($selectedSubcategory === 'maternal-health-program');
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Preferred Date *</label> <!--should also be prefilled if clicked from homepage -->
-                <input type="date" name="preferred_date" required>
-                <small>Note: Subject to availability</small>
+                <label>Preferred Date *</label>
+                <input type="date" name="preferred_date" value="<?php echo htmlspecialchars($preferredDate ?? ''); ?>" required>
+                <?php if ($scheduleDetails): ?>
+                    <small>Pre-filled with the selected event date from the calendar</small>
+                <?php else: ?>
+                    <small>Note: Subject to availability</small>
+                <?php endif; ?>
             </div>
             <div class="form-group">
                 <label>Preferred Time *</label>
                 <select name="preferred_time" required>
                     <option value="">Select Time</option>
-                    <option value="8:00 AM">8:00 AM</option>
-                    <option value="9:00 AM">9:00 AM</option>
-                    <option value="10:00 AM">10:00 AM</option>
-                    <option value="11:00 AM">11:00 AM</option>
-                    <option value="1:00 PM">1:00 PM</option>
-                    <option value="2:00 PM">2:00 PM</option>
-                    <option value="3:00 PM">3:00 PM</option>
+                    <option value="8:00 AM" <?= $formattedTime === '8:00 AM' ? 'selected' : '' ?>>8:00 AM</option>
+                    <option value="9:00 AM" <?= $formattedTime === '9:00 AM' ? 'selected' : '' ?>>9:00 AM</option>
+                    <option value="10:00 AM" <?= $formattedTime === '10:00 AM' ? 'selected' : '' ?>>10:00 AM</option>
+                    <option value="11:00 AM" <?= $formattedTime === '11:00 AM' ? 'selected' : '' ?>>11:00 AM</option>
+                    <option value="1:00 PM" <?= $formattedTime === '1:00 PM' ? 'selected' : '' ?>>1:00 PM</option>
+                    <option value="2:00 PM" <?= $formattedTime === '2:00 PM' ? 'selected' : '' ?>>2:00 PM</option>
+                    <option value="3:00 PM" <?= $formattedTime === '3:00 PM' ? 'selected' : '' ?>>3:00 PM</option>
+                    <?php if ($formattedTime && !in_array($formattedTime, ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM'])): ?>
+                        <option value="<?= htmlspecialchars($formattedTime) ?>" selected><?= htmlspecialchars($formattedTime) ?></option>
+                    <?php endif; ?>
                 </select>
+                <?php if ($scheduleDetails): ?>
+                    <small>Pre-filled with the selected event time from the calendar</small>
+                <?php endif; ?>
             </div>
         </div>
     </fieldset>
