@@ -47,6 +47,24 @@ if ($serviceId && $scheduleId) {
         ");
         $stmt->execute([$serviceId, $scheduleId]);
         $scheduleDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // If we have service details, try to determine the program type from the service name
+        if ($scheduleDetails && isset($scheduleDetails['service_name'])) {
+            $serviceName = $scheduleDetails['service_name'];
+
+            // Map service name to program type
+            if (stripos($serviceName, 'senior') !== false) {
+                $preselectedProgramType = 'Senior Citizen Health Plan';
+            } elseif (stripos($serviceName, 'maternal') !== false || stripos($serviceName, 'pregnan') !== false) {
+                $preselectedProgramType = 'Maternal Health Program';
+            } elseif (stripos($serviceName, 'diabetes') !== false) {
+                $preselectedProgramType = 'Diabetes Management Program';
+            } elseif (stripos($serviceName, 'hypertension') !== false) {
+                $preselectedProgramType = 'Hypertension Monitoring Program';
+            } elseif (stripos($serviceName, 'blood pressure') !== false) {
+                $preselectedProgramType = 'Blood Pressure Monitoring Program';
+            }
+        }
     } catch (PDOException $e) {
         error_log("Database error: " . $e->getMessage());
     }
@@ -134,12 +152,14 @@ $isMaternalHealth = ($selectedSubcategory === 'maternal-health-program');
                     <option value="">Select</option>
                     <?php foreach ($program_services as $service):
                         $name = $service['name'];
-                        $subcat = isset($programToSubcategory[$name]) ? $programToSubcategory[$name] : '';
-                        if (!$subcat) continue;
+                        $selected = ($preselectedProgramType === $name) ? 'selected' : '';
                     ?>
-                        <option value="<?php echo htmlspecialchars($subcat); ?>" <?php if ($preselectedProgramType === $subcat) echo 'selected'; ?>><?php echo htmlspecialchars($name); ?></option>
+                        <option value="<?php echo htmlspecialchars($name); ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($name); ?></option>
                     <?php endforeach; ?>
                 </select>
+                <?php if ($scheduleDetails && $preselectedProgramType): ?>
+                    <small>Pre-selected based on the event from the calendar</small>
+                <?php endif; ?>
             </div>
         </div>
         <div class="form-row">
