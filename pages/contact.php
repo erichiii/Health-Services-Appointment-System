@@ -38,24 +38,20 @@ $page_subtitle = 'We are here for you! How can we help?';
 
             <!-- Right: Illustration and Contact Info -->
             <div class="cntct-info-side" style="flex: 1 1 0; min-width: 320px; max-width: 400px; display: flex; flex-direction: column; align-items: center; gap: 2em;">
-                <!-- Illustration Placeholder -->
-                <div class="cntct-illustration" style="width: 100%; max-width: 320px; height: 180px; background: #f3f6ff; border-radius: 1em; display: flex; align-items: center; justify-content: center; margin-bottom: 1em;">
-                    <span style="color: #b0b8e0; font-size: 2em;">[ Illustration ]</span>
-                </div>
-                <!-- Contact Info -->
-                <div class="cntct-contact-info-section" style="width: 100%;">
+                <!-- Contact Info (no illustration) -->
+                <div class="cntct-contact-info-section" style="width: 100%; margin-top: 2em;">
                     <ul style="list-style: none; padding: 0; margin: 0;">
                         <li style="display: flex; align-items: center; margin-bottom: 1.2em;">
                             <span style="margin-right: 1em;"><i class="fas fa-map-marker-alt"></i></span>
-                            <span>123 Street, New York, USA</span>
+                            <span>Brgy. Sto Domingo, Village East Executive<br>Homes, Cainta, Rizal, Philippines</span>
                         </li>
                         <li style="display: flex; align-items: center; margin-bottom: 1.2em;">
                             <span style="margin-right: 1em;"><i class="fas fa-phone"></i></span>
-                            <span>+123-456-789</span>
+                            <span>(012) 3456-7890</span>
                         </li>
                         <li style="display: flex; align-items: center; margin-bottom: 1.2em;">
                             <span style="margin-right: 1em;"><i class="fas fa-envelope"></i></span>
-                            <span>example@gmail.com</span>
+                            <span>villageeast@center.clinic</span>
                         </li>
                     </ul>
                 </div>
