@@ -250,18 +250,30 @@ function submitReservation($data)
     global $pdo;
 
     try {
+        // Log the incoming data
+        error_log("submitReservation received data: " . print_r($data, true));
+
         // Validate required fields
         $required_fields = ['client_name', 'date_of_birth', 'contact_number', 'home_address', 'service_category', 'service_subcategory', 'preferred_date', 'preferred_time'];
 
+        // Check if all required fields are filled
+        $missing_fields = [];
         foreach ($required_fields as $field) {
             if (empty($data[$field])) {
-                return ['success' => false, 'message' => 'Please fill in all required fields.'];
+                $missing_fields[] = $field;
             }
+        }
+
+        // If there are missing fields, return error
+        if (!empty($missing_fields)) {
+            error_log("Missing required fields: " . implode(', ', $missing_fields));
+            return ['success' => false, 'message' => 'Please fill in all required fields: ' . implode(', ', $missing_fields)];
         }
 
         // Get service ID based on category and subcategory
         $service_id = getServiceIdByCategory($data['service_category'], $data['service_subcategory']);
         if (!$service_id) {
+            error_log("Invalid service selection: category={$data['service_category']}, subcategory={$data['service_subcategory']}");
             return ['success' => false, 'message' => 'Invalid service selection.'];
         }
 
@@ -292,6 +304,7 @@ function submitReservation($data)
         ]);
 
         $reservation_id = $pdo->lastInsertId();
+        error_log("Reservation created successfully with ID: $reservation_id");
 
         return [
             'success' => true,

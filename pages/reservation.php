@@ -25,6 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'notes' => $_POST['notes'] ?? null
     ];
 
+    // Log the submitted data for debugging
+    error_log("Form submission data: " . print_r($reservation_data, true));
+
     // Submit reservation
     $result = submitReservation($reservation_data);
 
@@ -240,6 +243,28 @@ if ($selectedSubcategory) {
                         break;
                     }
                 }
+
+                // Add the subcategory to the URL to ensure it's preserved
+                echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Add event listener to all forms to ensure subcategory is preserved
+                        var forms = document.querySelectorAll('.form');
+                        forms.forEach(function(form) {
+                            form.addEventListener('submit', function(e) {
+                                // Check if the subcategory field exists and has a value
+                                var subcategoryField = form.querySelector('input[name=\"service_subcategory\"]');
+                                if (!subcategoryField || !subcategoryField.value) {
+                                    // If not, add the subcategory from URL
+                                    var hiddenField = document.createElement('input');
+                                    hiddenField.type = 'hidden';
+                                    hiddenField.name = 'service_subcategory';
+                                    hiddenField.value = '" . htmlspecialchars($selectedSubcategory) . "';
+                                    form.appendChild(hiddenField);
+                                }
+                            });
+                        });
+                    });
+                </script>";
 
                 // Include the form with additional parameters
                 include $formPath;

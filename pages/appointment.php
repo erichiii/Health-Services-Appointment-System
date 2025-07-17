@@ -110,7 +110,7 @@ if ($selectedSubcategory) {
 <form method="POST" action="reservation.php" class="form">
     <!-- Hidden fields for form processing -->
     <input type="hidden" name="service_category" value="appointment">
-    <input type="hidden" name="service_subcategory" value="<?php echo htmlspecialchars($selectedSubcategory ?? ''); ?>">
+    <input type="hidden" name="service_subcategory" value="<?php echo htmlspecialchars($selectedSubcategory); ?>">
     <fieldset>
         <legend>Personal Information</legend>
         <div class="form-row-vehai">

@@ -141,7 +141,7 @@ $isMaternalHealth = ($selectedSubcategory === 'maternal-health-program');
 
     <!-- Hidden fields for form processing -->
     <input type="hidden" name="service_category" value="program">
-    <input type="hidden" name="service_subcategory" value="<?php echo htmlspecialchars($selectedSubcategory ?? ''); ?>">
+    <input type="hidden" name="service_subcategory" value="<?php echo htmlspecialchars($selectedSubcategory); ?>">
 
     <fieldset>
         <legend>Program Information</legend>

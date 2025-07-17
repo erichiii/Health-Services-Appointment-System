@@ -112,7 +112,7 @@ $preferredDate = isset($scheduleDetails['schedule_date']) ? $scheduleDetails['sc
 
     <!-- Hidden fields for form processing -->
     <input type="hidden" name="service_category" value="vaccine">
-    <input type="hidden" name="service_subcategory" value="<?php echo htmlspecialchars($selectedSubcategory ?? ''); ?>">
+    <input type="hidden" name="service_subcategory" value="<?php echo htmlspecialchars($selectedSubcategory); ?>">
 
     <fieldset>
         <legend>Vaccine Information</legend>
