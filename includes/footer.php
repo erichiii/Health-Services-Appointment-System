@@ -4,7 +4,7 @@
     <!-- Contact Div -->
         <div class = "contact-info">
             <div class = "logo">
-                <img src = "<?php echo isset($base_path) ? $base_path : ''; ?>images/logo.png" alt = "Clinic Logo" class = "clinic-logo">
+                <img src = "<?php echo isset($base_path) ? $base_path : ''; ?>assets/images/logo.png" alt = "Clinic Logo" class = "clinic-logo">
             </div>
             <p><i class = "fa fa-map-marker-alt" style = "color: white;"></i><strong>&emsp;Brgy. Sto Domingo, Village East Executive</strong></p> 
             <p><strong>&emsp;&emsp;Homes, Cainta, Rizal, Philippines</strong></p>
