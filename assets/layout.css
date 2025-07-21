@@ -1728,3 +1728,57 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 2.2rem;
   transition: all 0.3s ease;
 }
+
+.contact-hero-section {
+    position: relative;
+    height: 40vh;
+    min-height: 220px;
+    max-width: 700px;
+    margin: 2.5rem auto 2rem auto;
+    border-radius: 18px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #33b6ff 0%, #2196f3 100%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    box-shadow: 0 6px 32px rgba(51, 182, 255, 0.10);
+}
+
+.contact-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(44, 62, 80, 0.10);
+    z-index: 1;
+}
+
+.contact-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: left;
+    color: #fff;
+    max-width: 600px;
+    padding: 0 2.5rem;
+    margin-left: 1.5rem;
+}
+
+.contact-hero-content h1 {
+    font-size: 2.1rem;
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+    margin-left: 0;
+    text-shadow: 2px 2px 6px rgba(44, 62, 80, 0.10);
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
+.contact-hero-content p {
+    font-size: 1.05rem;
+    margin-bottom: 0;
+    margin-left: 0;
+    text-shadow: 1px 1px 2px rgba(44, 62, 80, 0.10);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+}

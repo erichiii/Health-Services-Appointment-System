@@ -8,13 +8,12 @@ $page_subtitle = 'We are here for you! How can we help?';
 
 ?>
 
-<!-- Contact Banner Section -->
-<section class="cntct-banner">
-    <div class="cntct-banner-overlay">
-        <div class="cntct-banner-content">
-            <h1><?php echo htmlspecialchars($page_title); ?></h1>
-            <p><?php echo htmlspecialchars($page_subtitle); ?></p>
-        </div>
+<!-- Contact Hero Section (smaller, styled like index.php) -->
+<section class="contact-hero-section">
+    <div class="contact-hero-overlay"></div>
+    <div class="contact-hero-content">
+        <h1><?php echo htmlspecialchars($page_title); ?></h1>
+        <p><?php echo htmlspecialchars($page_subtitle); ?></p>
     </div>
 </section>
 
