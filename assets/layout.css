@@ -637,6 +637,8 @@ h1, h2, h3, h4, h5, h6 {
 .cntct-form-group {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .cntct-form-group label {
@@ -658,6 +660,8 @@ h1, h2, h3, h4, h5, h6 {
     transition: all 0.3s ease;
     background: #ffffff;
     color: #2c3e50;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .cntct-form-group input:focus,
