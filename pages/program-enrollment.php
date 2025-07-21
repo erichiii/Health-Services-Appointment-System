@@ -232,9 +232,9 @@ $isMaternalHealth = ($selectedSubcategory === 'maternal-health-program');
     .form {
         background-color: #fff;
         padding: 2rem;
-        width: 208%;
+        max-width: 700px;
+        width: 100%;
         margin: 2rem auto;
-        transform: translateX(-27%);
         border-radius: 12px;
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
         font-family: 'Nunito', sans-serif;
@@ -262,7 +262,7 @@ $isMaternalHealth = ($selectedSubcategory === 'maternal-health-program');
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 285%;
+        width: 100%;
         height: 2px;
         background-color: #e9ecef;
     }
