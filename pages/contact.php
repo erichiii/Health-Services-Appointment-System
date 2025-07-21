@@ -86,6 +86,13 @@ $page_subtitle = 'We are here for you! How can we help?';
                     <h2>Send us a Message</h2>
                     <p class="cntct-form-subtitle">Fill out the form below and we'll get back to you as soon as possible.</p>
                     
+                    <?php if (isset($_GET['inquiry']) && $_GET['inquiry'] === 'success'): ?>
+                        <div style="max-width:480px;margin:0.5rem auto 1.2rem auto;padding:0.7rem 1.2rem;background:#d1f5e0;color:#14532d;border:1px solid #a7e6c1;border-radius:8px;text-align:left;font-size:1rem;display:flex;align-items:center;gap:0.5rem;box-shadow:0 2px 8px rgba(40,167,69,0.08);">
+                            <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#b6ecc7;border-radius:50%;"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#22c55e"/><path d="M6 10.5L9 13.5L14 8.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                            Thank you for reaching out! Your inquiry has been received. We will get back to you soon.
+                        </div>
+                    <?php endif; ?>
+
                     <form class="cntct-contact-form" action="../pages/submit-form.php" method="POST">
                         <div class="cntct-form-row">
                             <div class="cntct-form-group">

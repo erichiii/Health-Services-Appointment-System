@@ -26,6 +26,7 @@ $nav_items = [
     ['url' => 'services.php', 'title' => 'Services', 'icon' => 'fas fa-stethoscope'],
     ['url' => 'schedules.php', 'title' => 'Schedules', 'icon' => 'fas fa-calendar'],
     ['url' => 'announcements.php', 'title' => 'Announcements', 'icon' => 'fas fa-bullhorn'],
+    ['url' => 'inquiries.php', 'title' => 'Inquiries', 'icon' => 'fas fa-envelope'],
     ['url' => 'users.php', 'title' => 'Admin Users', 'icon' => 'fas fa-users'],
     ['url' => 'settings.php', 'title' => 'Settings', 'icon' => 'fas fa-cog'],
 ];

@@ -6,6 +6,11 @@ include '../includes/db_functions.php';
 $success_message = '';
 $error_message = '';
 
+// Check for success parameter (after redirect)
+if (isset($_GET['success']) && $_GET['success'] == '1') {
+    $success_message = 'Your reservation has been submitted successfully! We will contact you soon to confirm your appointment.';
+}
+
 $page_title = 'Book Your Appointment';
 $page_subtitle = 'Schedule your healthcare appointment with ease.';
 
@@ -35,6 +40,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $success_message = $result['message'];
         // Clear form data after successful submission
         $_POST = [];
+        // Redirect to prevent form resubmission on refresh
+        $current_url = $_SERVER['REQUEST_URI'];
+        // Remove any existing success parameter and add new one
+        $redirect_url = strtok($current_url, '?') . '?success=1';
+        if (isset($_GET['subcategory'])) {
+            $redirect_url .= '&subcategory=' . urlencode($_GET['subcategory']) . '&confirmed=1#confirmation';
+        }
+        header("Location: $redirect_url");
+        exit;
     } else {
         $error_message = $result['message'];
     }
@@ -217,14 +231,14 @@ if ($selectedSubcategory) {
 
     <!-- Success/Error Messages -->
     <?php if (!empty($success_message)): ?>
-        <div class="alert alert-success" style="margin: 2rem auto; max-width: 800px; padding: 1rem; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; color: #155724;">
-            <i class="fas fa-check-circle"></i> <?php echo htmlspecialchars($success_message); ?>
+        <div class="success-message-box" style="margin: 2rem auto; max-width: 800px; padding: 1rem 1.5rem; background: #d1e7dd; border: 1px solid #badbcc; border-radius: 8px; color: #0a3622; font-size: 1rem; box-shadow: none;">
+            <i class="fas fa-check-circle" style="color: #0a3622; margin-right: 8px;"></i><?php echo htmlspecialchars($success_message); ?>
         </div>
     <?php endif; ?>
 
     <?php if (!empty($error_message)): ?>
-        <div class="alert alert-error" style="margin: 2rem auto; max-width: 800px; padding: 1rem; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 8px; color: #721c24;">
-            <i class="fas fa-exclamation-circle"></i> <?php echo htmlspecialchars($error_message); ?>
+        <div class="error-message-box" style="margin: 2rem auto; max-width: 800px; padding: 1rem 1.5rem; background: #f8d7da; border: 1px solid #f1aeb5; border-radius: 8px; color: #58151c; font-size: 1rem; box-shadow: none;">
+            <i class="fas fa-exclamation-circle" style="color: #58151c; margin-right: 8px;"></i><?php echo htmlspecialchars($error_message); ?>
         </div>
     <?php endif; ?>
 

@@ -1136,3 +1136,92 @@ function createReservation($service_id, $service_category, $service_subcategory,
         return ['success' => false, 'message' => 'Failed to create reservation.'];
     }
 }
+
+/**
+ * Get contact inquiries for admin panel
+ */
+function getContactInquiriesAdmin($limit = 50, $offset = 0, $status = null, $search = null)
+{
+    global $pdo;
+    try {
+        $sql = "SELECT * FROM contact_inquiries";
+        $params = [];
+        $where = [];
+        if ($status) {
+            $where[] = "status = ?";
+            $params[] = $status;
+        }
+        if ($search) {
+            $where[] = "(name LIKE ? OR email LIKE ? OR phone LIKE ? OR subject LIKE ? OR message LIKE ?)";
+            for ($i = 0; $i < 5; $i++) {
+                $params[] = "%$search%";
+            }
+        }
+        if ($where) {
+            $sql .= " WHERE " . implode(" AND ", $where);
+        }
+        $sql .= " ORDER BY created_at DESC";
+        if ($limit) {
+            $sql .= " LIMIT ? OFFSET ?";
+            $params[] = $limit;
+            $params[] = $offset;
+        }
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        error_log("Error fetching contact inquiries: " . $e->getMessage());
+        return [];
+    }
+}
+
+/**
+ * Get contact inquiry by ID
+ */
+function getContactInquiryById($id)
+{
+    global $pdo;
+    try {
+        $sql = "SELECT * FROM contact_inquiries WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch();
+    } catch (PDOException $e) {
+        error_log("Error fetching contact inquiry: " . $e->getMessage());
+        return null;
+    }
+}
+
+/**
+ * Reply to a contact inquiry (sets reply, status, replied_at)
+ */
+function replyToContactInquiry($id, $reply)
+{
+    global $pdo;
+    try {
+        $sql = "UPDATE contact_inquiries SET reply = ?, status = 'replied', replied_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$reply, $id]);
+        return ['success' => true, 'message' => 'Reply sent and inquiry marked as replied.'];
+    } catch (PDOException $e) {
+        error_log("Error replying to contact inquiry: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to send reply.'];
+    }
+}
+
+/**
+ * Delete contact inquiry
+ */
+function deleteContactInquiry($id)
+{
+    global $pdo;
+    try {
+        $sql = "DELETE FROM contact_inquiries WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+        return ['success' => true, 'message' => 'Inquiry deleted successfully!'];
+    } catch (PDOException $e) {
+        error_log("Error deleting contact inquiry: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to delete inquiry.'];
+    }
+}

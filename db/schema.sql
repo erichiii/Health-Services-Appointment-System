@@ -178,3 +178,21 @@ CREATE TABLE admin_action_audit_log (
     INDEX idx_target_table (target_table),
     INDEX idx_action_time (action_time)
 );
+
+-- Table for storing contact inquiries from the Contact Us page
+CREATE TABLE contact_inquiries (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    subject VARCHAR(100) NOT NULL,
+    message TEXT NOT NULL,
+    status ENUM('pending', 'replied') DEFAULT 'pending',
+    reply TEXT NULL,
+    replied_at TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_status (status),
+    INDEX idx_email (email),
+    INDEX idx_subject (subject)
+);
