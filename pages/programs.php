@@ -52,12 +52,10 @@ $programToSubcategory = [
 ?>
 
 <!--Programs Banner Section-->
-<section class="cntct-banner">
-    <div class="cntct-banner-overlay">
-        <div class="cntct-banner-content">
-            <h1><?php echo htmlspecialchars($page_title); ?></h1>
-            <p><?php echo htmlspecialchars($page_subtitle); ?></p>
-        </div>
+<section class="programs-banner">
+    <div class="programs-banner-content">
+        <h1><?php echo htmlspecialchars($page_title); ?></h1>
+        <p><?php echo htmlspecialchars($page_subtitle); ?></p>
     </div>
 </section>
 

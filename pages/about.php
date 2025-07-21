@@ -14,12 +14,10 @@
     
 ?>
 
-<section class="cntct-banner">
-    <div class="cntct-banner-overlay">
-        <div class="cntct-banner-content">
-            <h1><?php echo htmlspecialchars($page_title); ?></h1>
-            <p><?php echo htmlspecialchars($page_subtitle); ?></p>
-        </div>
+<section class="about-banner">
+    <div class="about-banner-content">
+        <h1><?php echo htmlspecialchars($page_title); ?></h1>
+        <p><?php echo htmlspecialchars($page_subtitle); ?></p>
     </div>
 </section>
 
