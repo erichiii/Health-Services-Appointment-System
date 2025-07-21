@@ -435,7 +435,7 @@ h1, h2, h3, h4, h5, h6 {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.07);
+    background: rgba(255,255,255,0.07); /* Very subtle white overlay */
     z-index: 1;
 }
 .cntct-banner-content {
@@ -815,12 +815,11 @@ h1, h2, h3, h4, h5, h6 {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.07);
+    background: rgba(255,255,255,0.07); /* Very subtle white overlay */
     z-index: 1;
 }
 .programs-banner-content {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
     padding-left: 2.5rem;
     padding-right: 2.5rem;
     color: white;
@@ -828,9 +827,18 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     z-index: 2;
 }
-.programs-banner-content h1,
+.programs-banner-content h1 {
+    font-size: 2.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: 'Poppins', Arial, sans-serif;
+}
 .programs-banner-content p {
-    margin-left: 0;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-family: 'Poppins', Arial, sans-serif;
 }
 
 .first-section {
@@ -1873,7 +1881,7 @@ h1, h2, h3, h4, h5, h6 {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.07);
+    background: rgba(255,255,255,0.07); /* Very subtle white overlay */
     z-index: 1;
 }
 .about-banner-content {
