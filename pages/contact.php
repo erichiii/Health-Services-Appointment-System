@@ -141,3 +141,69 @@ $page_subtitle = 'We are here for you! How can we help?';
 </main>
 
 <?php include '../includes/footer.php'; ?>
+
+<style>
+    .cntct-banner {
+    height: 50vh;
+    min-height: 300px;
+    background: url('../assets/images/contact-us.jpg') no-repeat center 30%;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cntct-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5); /* Dimmed overlay */
+    z-index: 1;
+}
+
+.cntct-banner-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.cntct-banner-content {
+    max-width: 1200px;
+    width: 100%;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    color: white;
+    text-align: center;
+    position: relative;
+}
+
+.cntct-banner-content h1,
+.cntct-banner-content p {
+    margin-left: 0;
+}
+
+.cntct-banner-content h1 {
+    font-size: 2.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    margin-left: 0;
+    color: white !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
+.cntct-banner-content p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    margin-left: 0;
+    color: white !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    font-family: 'Poppins', Arial, sans-serif;
+}
+</style>
