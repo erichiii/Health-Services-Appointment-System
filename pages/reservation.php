@@ -248,6 +248,7 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         <?php endif; ?>
 
         <div id="confirmation" class="form-section">
+            <div class="form-container">
             <?php
             if ($selectedSubcategory && isset($subcategoryForms[$selectedSubcategory])) {
                 $formFile = $subcategoryForms[$selectedSubcategory];
@@ -294,6 +295,7 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
                 echo "<p style='text-align: center; padding: 2rem;'>Please select a valid subcategory.</p>";
             }
             ?>
+            </div>
         </div>
     </div>
 </div>
@@ -540,19 +542,94 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         width: 100%;
         max-width: 1200px; /* Match the category grid max-width */
         margin: 3rem auto 0; /* Center the container with auto margins */
-        padding: 2.5rem;
+        padding: 0; /* Remove padding to let form handle its own spacing */
         background: #fff;
         border-radius: 15px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow to match cards */
         position: relative;
         transform: none; /* Remove the transform that was causing issues */
         left: auto; /* Reset left positioning */
+        overflow: hidden; /* Ensure rounded corners work with content */
     }
+
+    .form-container {
+        max-width: 100%;
+        width: 100%;
+        margin: 0 auto;
+        padding: 2.5rem; /* Move padding to inner container */
+        box-sizing: border-box;
+    }
+
+    /* Override form CSS from included files */
+    .form-section .form {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+    }
+
     .form-section input,
     .form-section select,
     .form-section textarea {
         width: 100%;
         max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Ensure form rows and columns use full width */
+    .form-section .form-row {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+        width: 100%;
+    }
+
+    .form-section .form-row-vehai {
+        display: flex;
+        width: 48.5% !important; /* Keep the original vehai width */
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-section .form-group {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-section .form-group.full-width {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .form-section fieldset {
+        border: none;
+        padding: 0;
+        margin-bottom: 2rem;
+    }
+
+    .form-section legend {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #33b6ff;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        width: 100%;
+        position: relative;
+    }
+
+    .form-section legend::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #e9ecef;
     }
 
     /* Responsive Design */
@@ -624,17 +701,35 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
             margin-right: 2rem;
             max-width: none;
         }
+        
+        .category-grid {
+            margin: 0 auto;
+            max-width: none;
+        }
     }
 
     @media (max-width: 768px) {
         .form-section {
             margin-left: 1rem;
             margin-right: 1rem;
+        }
+
+        .form-container {
             padding: 1.5rem;
         }
         
         .aligned-container {
             padding: 0 1rem;
+        }
+
+        .form-section .form-row {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-section .form-row-vehai {
+            width: 100% !important;
+            flex-direction: column;
         }
     }
 </style>
