@@ -203,16 +203,17 @@ if ($selectedSubcategory) {
 </section>
 
 <!--
-REVERT POINT: Layout refactor starts here. To revert, restore to this point.
+REVERT: Restoring layout to previous structure before main-aligned-container refactor.
 -->
 
-<div class="main-aligned-container">
+<div class="second-section">
     <div class="our-services">
         <h2>What is this reservation for?</h2>
     </div>
 
     <div class="category-grid" id="categoryGrid">
-        <?php foreach ($serviceCategories as $categoryKey => $categoryData): ?>
+        <?php foreach (
+            $serviceCategories as $categoryKey => $categoryData): ?>
             <div class="category-card <?php echo ($activeCategory === $categoryKey) ? 'active' : ''; ?> <?php echo $selectedSubcategory && in_array($selectedSubcategory, array_keys($categoryData['subcategories'])) ? 'has-selection' : ''; ?>" data-category="<?php echo $categoryKey; ?>">
                 <!-- Category Header (toggles dropdown) -->
                 <div class="category-header" id="category-<?php echo $categoryKey; ?>" tabindex="0" role="button" data-category="<?php echo $categoryKey; ?>">
@@ -606,12 +607,6 @@ REVERT POINT: Layout refactor starts here. To revert, restore to this point.
     /* Smooth scroll for anchor links */
     html {
         scroll-behavior: smooth;
-    }
-
-    .main-aligned-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 2rem;
     }
 
     .form-section {
