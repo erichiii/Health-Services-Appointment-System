@@ -541,7 +541,7 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         margin-left: auto;
         margin-right: auto;
         margin-top: 3rem;
-        padding: 2.5rem 0; /* Reduce side padding */
+        padding: 1.5rem 0; /* Reduce side padding */
         background: #fff;
         border-radius: 15px;
         box-shadow: none;
