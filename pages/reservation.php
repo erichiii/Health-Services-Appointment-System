@@ -213,8 +213,7 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
 
     <div class="aligned-container">
         <div class="category-grid" id="categoryGrid">
-            <?php foreach (
-                $serviceCategories as $categoryKey => $categoryData): ?>
+            <?php foreach ($serviceCategories as $categoryKey => $categoryData): ?>
                 <div class="category-card <?php echo ($activeCategory === $categoryKey) ? 'active' : ''; ?> <?php echo $selectedSubcategory && in_array($selectedSubcategory, array_keys($categoryData['subcategories'])) ? 'has-selection' : ''; ?>" data-category="<?php echo $categoryKey; ?>">
                     <!-- Category Header (toggles dropdown) -->
                     <div class="category-header" id="category-<?php echo $categoryKey; ?>" tabindex="0" role="button" data-category="<?php echo $categoryKey; ?>">
