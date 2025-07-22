@@ -616,12 +616,14 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         font-size: 1.3rem;
         font-weight: 600;
         color: #33b6ff;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        width: 100%;
+        margin: -2.5rem -2.5rem 1.5rem -2.5rem; /* Extend to container edges */
+        padding: 2rem 2.5rem 1rem 2.5rem; /* Add padding back */
+        width: calc(100% + 5rem); /* Compensate for negative margins */
         position: relative;
         display: block;
-        border-bottom: 2px solid #33b6ff;
+        background: linear-gradient(to bottom, #33b6ff 0%, #33b6ff 4px, transparent 4px);
+        border-radius: 15px 15px 0 0; /* Rounded top corners */
+        box-sizing: border-box;
     }
 
     .form-section legend::after {
