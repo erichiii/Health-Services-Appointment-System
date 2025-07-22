@@ -537,16 +537,16 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
 
     /* Personal Information Form Section */
     .form-section {
-        width: 100vw;
-        max-width: none;
-        left: 50%;
-        transform: translateX(-50%);
-        position: relative;
-        margin-top: 3rem;
-        padding: 2.5rem 0;
+        width: 100%;
+        max-width: 1200px; /* Match the category grid max-width */
+        margin: 3rem auto 0; /* Center the container with auto margins */
+        padding: 2.5rem;
         background: #fff;
         border-radius: 15px;
-        box-shadow: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow to match cards */
+        position: relative;
+        transform: none; /* Remove the transform that was causing issues */
+        left: auto; /* Reset left positioning */
     }
     .form-section input,
     .form-section select,
@@ -616,19 +616,26 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         margin: 0 auto;
         padding: 0 2rem;
     }
-    .form-section {
-        width: 100%;
-        margin-top: 3rem;
-        padding: 2.5rem 0;
-        background: #fff;
-        border-radius: 15px;
-        box-shadow: none;
+    
+    /* For mobile responsiveness */
+    @media (max-width: 1240px) {
+        .form-section {
+            margin-left: 2rem;
+            margin-right: 2rem;
+            max-width: none;
+        }
     }
-    .form-section input,
-    .form-section select,
-    .form-section textarea {
-        width: 100%;
-        max-width: 100%;
+
+    @media (max-width: 768px) {
+        .form-section {
+            margin-left: 1rem;
+            margin-right: 1rem;
+            padding: 1.5rem;
+        }
+        
+        .aligned-container {
+            padding: 0 1rem;
+        }
     }
 </style>
 
