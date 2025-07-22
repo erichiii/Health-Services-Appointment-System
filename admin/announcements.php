@@ -142,7 +142,7 @@ renderAdminLayout('Announcements Management', function () use ($announcements, $
 ?>
 
     <!-- Header with Add Button -->
-    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
         <div>
             <h2 style="margin: 0; color: #333;">Announcements Management</h2>
             <p style="margin: 0.5rem 0 0 0; color: #6b7280;">Manage clinic announcements and notifications</p>
