@@ -536,7 +536,7 @@ if ($selectedSubcategory) {
         margin-left: auto;
         margin-right: auto;
         margin-top: 3rem;
-        padding: 2.5rem;
+        padding: 2.5rem 2rem;
         background: #fff;
         border-radius: 15px;
         box-shadow: none;
