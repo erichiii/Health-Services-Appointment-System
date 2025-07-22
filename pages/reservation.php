@@ -211,89 +211,91 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         <h2>What is this reservation for?</h2>
     </div>
 
-    <div class="category-grid" id="categoryGrid">
-        <?php foreach (
-            $serviceCategories as $categoryKey => $categoryData): ?>
-            <div class="category-card <?php echo ($activeCategory === $categoryKey) ? 'active' : ''; ?> <?php echo $selectedSubcategory && in_array($selectedSubcategory, array_keys($categoryData['subcategories'])) ? 'has-selection' : ''; ?>" data-category="<?php echo $categoryKey; ?>">
-                <!-- Category Header (toggles dropdown) -->
-                <div class="category-header" id="category-<?php echo $categoryKey; ?>" tabindex="0" role="button" data-category="<?php echo $categoryKey; ?>">
-                    <h3><?php echo $categoryData['title']; ?></h3>
-                    <p><?php echo $categoryData['description']; ?></p>
-                    <div class="dropdown-arrow">⌄</div>
+    <div class="aligned-container">
+        <div class="category-grid" id="categoryGrid">
+            <?php foreach (
+                $serviceCategories as $categoryKey => $categoryData): ?>
+                <div class="category-card <?php echo ($activeCategory === $categoryKey) ? 'active' : ''; ?> <?php echo $selectedSubcategory && in_array($selectedSubcategory, array_keys($categoryData['subcategories'])) ? 'has-selection' : ''; ?>" data-category="<?php echo $categoryKey; ?>">
+                    <!-- Category Header (toggles dropdown) -->
+                    <div class="category-header" id="category-<?php echo $categoryKey; ?>" tabindex="0" role="button" data-category="<?php echo $categoryKey; ?>">
+                        <h3><?php echo $categoryData['title']; ?></h3>
+                        <p><?php echo $categoryData['description']; ?></p>
+                        <div class="dropdown-arrow">⌄</div>
+                    </div>
+                    <!-- Subcategory Dropdown -->
+                    <div class="subcategory-dropdown" style="display: <?php echo ($activeCategory === $categoryKey) ? 'block' : 'none'; ?>;">
+                        <?php foreach ($categoryData['subcategories'] as $subKey => $subName): ?>
+                            <a href="?subcategory=<?php echo $subKey; ?>&confirmed=1<?php echo $selectedDate ? '&date=' . $selectedDate : ''; ?><?php echo $serviceId ? '&service_id=' . $serviceId : ''; ?><?php echo $scheduleId ? '&schedule_id=' . $scheduleId : ''; ?>#confirmation"
+                                class="subcategory-item <?php echo ($selectedSubcategory === $subKey) ? 'selected' : ''; ?>">
+                                <span><?php echo $subName; ?></span>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-                <!-- Subcategory Dropdown -->
-                <div class="subcategory-dropdown" style="display: <?php echo ($activeCategory === $categoryKey) ? 'block' : 'none'; ?>;">
-                    <?php foreach ($categoryData['subcategories'] as $subKey => $subName): ?>
-                        <a href="?subcategory=<?php echo $subKey; ?>&confirmed=1<?php echo $selectedDate ? '&date=' . $selectedDate : ''; ?><?php echo $serviceId ? '&service_id=' . $serviceId : ''; ?><?php echo $scheduleId ? '&schedule_id=' . $scheduleId : ''; ?>#confirmation"
-                            class="subcategory-item <?php echo ($selectedSubcategory === $subKey) ? 'selected' : ''; ?>">
-                            <span><?php echo $subName; ?></span>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <?php if (!empty($success_message)): ?>
+            <div class="success-message-box" style="margin: 2rem auto; max-width: 800px; padding: 1rem 1.5rem; background: #d1e7dd; border: 1px solid #badbcc; border-radius: 8px; color: #0a3622; font-size: 1rem; box-shadow: none;">
+                <i class="fas fa-check-circle" style="color: #0a3622; margin-right: 8px;"></i><?php echo htmlspecialchars($success_message); ?>
             </div>
-        <?php endforeach; ?>
-    </div>
+        <?php endif; ?>
 
-    <!-- Success/Error Messages -->
-    <?php if (!empty($success_message)): ?>
-        <div class="success-message-box" style="margin: 2rem auto; max-width: 800px; padding: 1rem 1.5rem; background: #d1e7dd; border: 1px solid #badbcc; border-radius: 8px; color: #0a3622; font-size: 1rem; box-shadow: none;">
-            <i class="fas fa-check-circle" style="color: #0a3622; margin-right: 8px;"></i><?php echo htmlspecialchars($success_message); ?>
-        </div>
-    <?php endif; ?>
+        <?php if (!empty($error_message)): ?>
+            <div class="error-message-box" style="margin: 2rem auto; max-width: 800px; padding: 1rem 1.5rem; background: #f8d7da; border: 1px solid #f1aeb5; border-radius: 8px; color: #58151c; font-size: 1rem; box-shadow: none;">
+                <i class="fas fa-exclamation-circle" style="color: #58151c; margin-right: 8px;"></i><?php echo htmlspecialchars($error_message); ?>
+            </div>
+        <?php endif; ?>
 
-    <?php if (!empty($error_message)): ?>
-        <div class="error-message-box" style="margin: 2rem auto; max-width: 800px; padding: 1rem 1.5rem; background: #f8d7da; border: 1px solid #f1aeb5; border-radius: 8px; color: #58151c; font-size: 1rem; box-shadow: none;">
-            <i class="fas fa-exclamation-circle" style="color: #58151c; margin-right: 8px;"></i><?php echo htmlspecialchars($error_message); ?>
-        </div>
-    <?php endif; ?>
+        <div id="confirmation" class="form-section">
+            <?php
+            if ($selectedSubcategory && isset($subcategoryForms[$selectedSubcategory])) {
+                $formFile = $subcategoryForms[$selectedSubcategory];
+                $formPath = __DIR__ . '/' . $formFile;
 
-    <div id="confirmation" class="form-section">
-        <?php
-        if ($selectedSubcategory && isset($subcategoryForms[$selectedSubcategory])) {
-            $formFile = $subcategoryForms[$selectedSubcategory];
-            $formPath = __DIR__ . '/' . $formFile;
-
-            if (file_exists($formPath)) {
-                // Pass the selected subcategory and category to the form
-                $current_category = '';
-                foreach ($serviceCategories as $catKey => $catData) {
-                    if (isset($catData['subcategories'][$selectedSubcategory])) {
-                        $current_category = $catKey;
-                        break;
+                if (file_exists($formPath)) {
+                    // Pass the selected subcategory and category to the form
+                    $current_category = '';
+                    foreach ($serviceCategories as $catKey => $catData) {
+                        if (isset($catData['subcategories'][$selectedSubcategory])) {
+                            $current_category = $catKey;
+                            break;
+                        }
                     }
-                }
 
-                // Add the subcategory to the URL to ensure it's preserved
-                echo "<script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        // Add event listener to all forms to ensure subcategory is preserved
-                        var forms = document.querySelectorAll('.form');
-                        forms.forEach(function(form) {
-                            form.addEventListener('submit', function(e) {
-                                // Check if the subcategory field exists and has a value
-                                var subcategoryField = form.querySelector('input[name=\"service_subcategory\"]');
-                                if (!subcategoryField || !subcategoryField.value) {
-                                    // If not, add the subcategory from URL
-                                    var hiddenField = document.createElement('input');
-                                    hiddenField.type = 'hidden';
-                                    hiddenField.name = 'service_subcategory';
-                                    hiddenField.value = '" . htmlspecialchars($selectedSubcategory) . "';
-                                    form.appendChild(hiddenField);
-                                }
+                    // Add the subcategory to the URL to ensure it's preserved
+                    echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            // Add event listener to all forms to ensure subcategory is preserved
+                            var forms = document.querySelectorAll('.form');
+                            forms.forEach(function(form) {
+                                form.addEventListener('submit', function(e) {
+                                    // Check if the subcategory field exists and has a value
+                                    var subcategoryField = form.querySelector('input[name=\"service_subcategory\"]');
+                                    if (!subcategoryField || !subcategoryField.value) {
+                                        // If not, add the subcategory from URL
+                                        var hiddenField = document.createElement('input');
+                                        hiddenField.type = 'hidden';
+                                        hiddenField.name = 'service_subcategory';
+                                        hiddenField.value = '" . htmlspecialchars($selectedSubcategory) . "';
+                                        form.appendChild(hiddenField);
+                                    }
+                                });
                             });
                         });
-                    });
-                </script>";
+                    </script>";
 
-                // Include the form with additional parameters
-                include $formPath;
-            } else {
-                echo "<p>Sorry, the form for this service is currently unavailable.</p>";
+                    // Include the form with additional parameters
+                    include $formPath;
+                } else {
+                    echo "<p>Sorry, the form for this service is currently unavailable.</p>";
+                }
+            } elseif (isset($_GET['confirmed'])) {
+                echo "<p style='text-align: center; padding: 2rem;'>Please select a valid subcategory.</p>";
             }
-        } elseif (isset($_GET['confirmed'])) {
-            echo "<p style='text-align: center; padding: 2rem;'>Please select a valid subcategory.</p>";
-        }
-        ?>
+            ?>
+        </div>
     </div>
 </div>
 
@@ -537,11 +539,8 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
     /* Personal Information Form Section */
     .form-section {
         width: 100%;
-        max-width: 1200px;
-        margin-left: auto;
-        margin-right: auto;
         margin-top: 3rem;
-        padding: 1.5rem 0; /* Reduce side padding */
+        padding: 2.5rem 0;
         background: #fff;
         border-radius: 15px;
         box-shadow: none;
@@ -609,6 +608,11 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         scroll-behavior: smooth;
     }
 
+    .aligned-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
     .form-section {
         width: 100%;
         margin-top: 3rem;
@@ -617,7 +621,6 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         border-radius: 15px;
         box-shadow: none;
     }
-
     .form-section input,
     .form-section select,
     .form-section textarea {
