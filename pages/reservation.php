@@ -531,15 +531,24 @@ if ($selectedSubcategory) {
 
     /* Personal Information Form Section */
     .form-section {
-        width: 100%;
-        max-width: none;
-        margin-left: auto;
-        margin-right: auto;
+        width: 100vw;
+        max-width: 100vw;
+        margin: 0;
         margin-top: 3rem;
-        padding: 2.5rem 0;
+        padding: 0;
         background: #fff;
         border-radius: 0;
         box-shadow: none;
+    }
+    .form-section form {
+        width: 100%;
+        max-width: 100%;
+    }
+    .form-section input,
+    .form-section select,
+    .form-section textarea {
+        width: 100%;
+        max-width: 100%;
     }
 
     /* Responsive Design */
