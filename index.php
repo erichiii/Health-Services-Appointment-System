@@ -241,7 +241,7 @@
                                 <p><strong>Need a regular appointment?</strong></p>
                                 <p>General consultations, health checkups, and routine services are available daily.</p>
                                 <div class="appointment-buttons">
-                                    <a href="pages/appointment.php?date=<?php echo $selected_date; ?>" class="contact-btn">Book General Appointment</a>
+                                    <a href="pages/reservation.php?date=<?php echo $selected_date; ?>" class="contact-btn">Book General Appointment</a>
                                     <a href="pages/contact.php" class="contact-btn secondary">Contact Us</a>
                                 </div>
                             </div>
