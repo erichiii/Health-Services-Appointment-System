@@ -401,6 +401,7 @@ document.addEventListener('DOMContentLoaded', function() {
     font-weight: 600;
     margin-bottom: 1rem;
     margin-left: 0;
+    color: white !important;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     font-family: 'Poppins', Arial, sans-serif;
 }
@@ -409,6 +410,7 @@ document.addEventListener('DOMContentLoaded', function() {
     font-size: 1.1rem;
     margin-bottom: 2rem;
     margin-left: 0;
+    color: white !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
     font-family: 'Poppins', Arial, sans-serif;
 }
