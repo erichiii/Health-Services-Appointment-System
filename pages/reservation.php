@@ -541,10 +541,6 @@ if ($selectedSubcategory) {
         border-radius: 15px;
         box-shadow: none;
     }
-    .form-section form {
-        width: 100%;
-        max-width: 100%;
-    }
     .form-section input,
     .form-section select,
     .form-section textarea {
