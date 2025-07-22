@@ -550,6 +550,7 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         transform: none; 
         left: auto; 
         overflow: hidden;
+        border-top: 4px solid #33b6ff;
     }
 
     .form-container {
