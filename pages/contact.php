@@ -143,7 +143,7 @@ $page_subtitle = 'We are here for you! How can we help?';
 <?php include '../includes/footer.php'; ?>
 
 <style>
-    .cntct-banner {
+.cntct-banner {
     height: 50vh;
     min-height: 300px;
     background: url('../assets/images/contact-us.jpg') no-repeat center 30%;
