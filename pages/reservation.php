@@ -531,14 +531,15 @@ if ($selectedSubcategory) {
 
     /* Personal Information Form Section */
     .form-section {
-        max-width: 1200px;
+        width: 100%;
+        max-width: none;
         margin-left: auto;
         margin-right: auto;
         margin-top: 3rem;
-        padding: 2.5rem;
+        padding: 2.5rem 0;
         background: #fff;
-        border-radius: 15px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+        border-radius: 0;
+        box-shadow: none;
     }
 
     /* Responsive Design */
