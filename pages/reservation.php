@@ -540,24 +540,23 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
     /* Personal Information Form Section */
     .form-section {
         width: 100%;
-        max-width: 1200px; /* Match the category grid max-width */
-        margin: 3rem auto 0; /* Center the container with auto margins */
-        padding: 0; /* Remove padding to let form handle its own spacing */
+        max-width: 1200px; 
+        margin: 3rem auto 0;
+        padding: 0; 
         background: #fff;
         border-radius: 15px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow to match cards */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
         position: relative;
-        transform: none; /* Remove the transform that was causing issues */
-        left: auto; /* Reset left positioning */
-        overflow: hidden; /* Ensure rounded corners work with content */
-        border-top: 4px solid #33b6ff; /* Add blue top border */
+        transform: none; 
+        left: auto; 
+        overflow: hidden;
     }
 
     .form-container {
         max-width: 100%;
         width: 100%;
         margin: 0 auto;
-        padding: 2.5rem; /* Move padding to inner container */
+        padding: 2.5rem; 
         box-sizing: border-box;
     }
 
@@ -580,7 +579,6 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         box-sizing: border-box;
     }
 
-    /* Ensure form rows and columns use full width */
     .form-section .form-row {
         display: flex;
         gap: 1.5rem;
@@ -590,7 +588,7 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
 
     .form-section .form-row-vehai {
         display: flex;
-        width: 48.5% !important; /* Keep the original vehai width */
+        width: 48.5% !important; 
         gap: 1.5rem;
         margin-bottom: 1.5rem;
     }
