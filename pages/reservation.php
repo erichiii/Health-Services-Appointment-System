@@ -539,7 +539,9 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
     .form-section {
         width: 100vw;
         max-width: none;
-        margin-left: calc(-1 * ((100vw - 100%) / 2));
+        left: 50%;
+        transform: translateX(-50%);
+        position: relative;
         margin-top: 3rem;
         padding: 2.5rem 0;
         background: #fff;
