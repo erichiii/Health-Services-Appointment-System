@@ -247,10 +247,11 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
             </div>
         <?php endif; ?>
 
-        <div id="confirmation" class="form-section">
+        <div id="confirmation" class="form-section" style="display: none;">
             <div class="form-container">
             <?php
             if ($selectedSubcategory && isset($subcategoryForms[$selectedSubcategory])) {
+                echo "<script>document.addEventListener('DOMContentLoaded', function() { document.getElementById('confirmation').style.display = 'block'; });</script>";
                 $formFile = $subcategoryForms[$selectedSubcategory];
                 $formPath = __DIR__ . '/' . $formFile;
 
@@ -742,6 +743,16 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
     cards.forEach(card => {
         const header = card.querySelector('.category-header');
         const dropdown = card.querySelector('.subcategory-dropdown');
+        
+        // Add click event to subcategory items to show form container
+        const subcategoryItems = card.querySelectorAll('.subcategory-item');
+        subcategoryItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Show the form container when any subcategory is clicked
+                document.getElementById('confirmation').style.display = 'block';
+            });
+        });
+        
         header.addEventListener('click', function(e) {
             // Collapse all
             cards.forEach(c => {
