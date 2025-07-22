@@ -537,7 +537,9 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
 
     /* Personal Information Form Section */
     .form-section {
-        width: 100%;
+        width: 100vw;
+        max-width: none;
+        margin-left: calc(-1 * ((100vw - 100%) / 2));
         margin-top: 3rem;
         padding: 2.5rem 0;
         background: #fff;
