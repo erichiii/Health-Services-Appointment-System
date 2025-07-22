@@ -550,6 +550,7 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         transform: none; /* Remove the transform that was causing issues */
         left: auto; /* Reset left positioning */
         overflow: hidden; /* Ensure rounded corners work with content */
+        border-top: 4px solid #33b6ff; /* Add blue top border */
     }
 
     .form-container {
@@ -616,14 +617,13 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         font-size: 1.3rem;
         font-weight: 600;
         color: #33b6ff;
-        margin: -2.5rem -2.5rem 1.5rem -2.5rem; /* Extend to container edges */
-        padding: 2rem 2.5rem 1rem 2.5rem; /* Add padding back */
-        width: calc(100% + 5rem); /* Compensate for negative margins */
+        margin: 0 0 1.5rem 0;
+        padding: 1rem 0;
+        width: 100%;
         position: relative;
         display: block;
-        background: linear-gradient(to bottom, #33b6ff 0%, #33b6ff 4px, transparent 4px);
-        border-radius: 15px 15px 0 0; /* Rounded top corners */
-        box-sizing: border-box;
+        border: none;
+        background: transparent;
     }
 
     .form-section legend::after {
