@@ -620,16 +620,12 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         padding-bottom: 1rem;
         width: 100%;
         position: relative;
+        display: block;
+        border-bottom: 2px solid #33b6ff;
     }
 
     .form-section legend::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: #e9ecef;
+        display: none; /* Remove the old pseudo-element */
     }
 
     /* Responsive Design */
