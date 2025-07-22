@@ -1,12 +1,3 @@
-<!-- Contact Hero Section with Image (styled like homepage, but shorter) -->
-<section class="contact-hero-section contact-hero-img">
-    <div class="contact-hero-overlay"></div>
-    <div class="contact-hero-content">
-        <h1><?php echo htmlspecialchars($page_title); ?></h1>
-        <p><?php echo htmlspecialchars($page_subtitle); ?></p>
-    </div>
-</section>
-
 <?php
 
 include '../includes/header.php';
@@ -16,6 +7,15 @@ $page_title = 'Contact Us';
 $page_subtitle = 'We are here for you! How can we help?';
 
 ?>
+
+<section class="cntct-banner">
+    <div class="cntct-banner-overlay">
+        <div class="cntct-banner-content">
+            <h1><?php echo htmlspecialchars($page_title); ?></h1>
+            <p><?php echo htmlspecialchars($page_subtitle); ?></p>
+        </div>
+    </div>
+</section>
 
 <!-- Main Contact Section -->
 <main class="cntct-main-content">
