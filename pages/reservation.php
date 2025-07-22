@@ -531,11 +531,11 @@ if ($selectedSubcategory) {
 
     /* Personal Information Form Section */
     .form-section {
-        max-width: 400px;
+        max-width: 1200px;
         margin-left: auto;
         margin-right: auto;
         margin-top: 3rem;
-        padding: 2rem 1.5rem;
+        padding: 2.5rem;
         background: #fff;
         border-radius: 15px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.08);
