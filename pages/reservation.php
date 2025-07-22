@@ -570,6 +570,8 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         box-shadow: none !important;
         border-radius: 0 !important;
         background: transparent !important;
+        border-top: none !important;
+        border: none !important;
     }
 
     .form-section input,
