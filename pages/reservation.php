@@ -202,7 +202,11 @@ if ($selectedSubcategory) {
     </div>
 </section>
 
-<div class="second-section">
+<!--
+REVERT POINT: Layout refactor starts here. To revert, restore to this point.
+-->
+
+<div class="main-aligned-container">
     <div class="our-services">
         <h2>What is this reservation for?</h2>
     </div>
@@ -602,6 +606,28 @@ if ($selectedSubcategory) {
     /* Smooth scroll for anchor links */
     html {
         scroll-behavior: smooth;
+    }
+
+    .main-aligned-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .form-section {
+        width: 100%;
+        margin-top: 3rem;
+        padding: 2.5rem 0;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: none;
+    }
+
+    .form-section input,
+    .form-section select,
+    .form-section textarea {
+        width: 100%;
+        max-width: 100%;
     }
 </style>
 
