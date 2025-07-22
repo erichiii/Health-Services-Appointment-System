@@ -242,7 +242,7 @@ if ($selectedSubcategory) {
         </div>
     <?php endif; ?>
 
-    <div id="confirmation" class="form-section" style="margin-top: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+    <div id="confirmation" class="form-section">
         <?php
         if ($selectedSubcategory && isset($subcategoryForms[$selectedSubcategory])) {
             $formFile = $subcategoryForms[$selectedSubcategory];
@@ -463,6 +463,18 @@ if ($selectedSubcategory) {
     .category-card:not(.active) .category-header {
         height: 100%;
         border-bottom: none;
+    }
+
+    /* Personal Information Form Section */
+    .form-section {
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 3rem;
+        padding: 2rem 1.5rem;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.08);
     }
 
     /* Responsive Design */
