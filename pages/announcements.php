@@ -119,7 +119,300 @@ foreach ($announcements as $a) {
     </div>
 </section>
 
+<!-- Main Announcements Section -->
+<main class="main-content">
+    <div class="announcements-container">
+        <div class="announcement-date-group">
+            <div class="announcement-date-label">Today</div>
+            <div class="announcement-date-sub"><?php echo date('F j, Y'); ?></div>
+        </div>
+        
+        <?php
+        $has_today = false;
+        foreach ($grouped['today'] as $a) {
+            $has_today = true;
+            $is_featured = $a['is_featured'] ? 'featured' : '';
+            $date = $a['announcement_date'] ?? $a['created_at'];
+            $type = $a['type'];
+            $announcement_id = $a['id'];
+            
+            // Get type display name
+            $type_names = [
+                'urgent' => 'Urgent',
+                'reminder' => 'Reminder', 
+                'event' => 'Event',
+                'notice' => 'Notice'
+            ];
+            $type_display = $type_names[$type] ?? 'Notice';
+            
+            echo '<div class="announcement-card ' . $is_featured . ' ' . $type . '" id="announcement-' . $announcement_id . '">';
+            echo '<div class="announcement-card-content">';
+            echo '<div class="announcement-main-content">';
+            echo '<div class="announcement-type-badge ' . $type . '">' . $type_display . '</div>';
+            echo '<div class="announcement-title">' . htmlspecialchars($a['title']) . '</div>';
+            echo '<div class="announcement-content">' . htmlspecialchars($a['content']) . '</div>';
+            echo '</div>';
+            echo '<div class="announcement-arrow" tabindex="0" role="button" aria-label="View details" data-title="' . htmlspecialchars($a['title'], ENT_QUOTES) . '" data-content="' . htmlspecialchars($a['content'], ENT_QUOTES) . '" data-date="' . htmlspecialchars(date('F j, Y', strtotime($date)), ENT_QUOTES) . '" data-type="' . htmlspecialchars($type_display, ENT_QUOTES) . '">→</div>';
+            echo '</div>';
+            echo '</div>';
+        }
+        
+        if (!$has_today) {
+            echo '<div class="announcement-empty">No announcements for today.</div>';
+        }
+        ?>
+        
+        <hr class="announcement-divider" />
+        
+        <div class="announcement-date-group">
+            <div class="announcement-date-label">Yesterday</div>
+            <div class="announcement-date-sub"><?php echo date('F j, Y', strtotime('-1 day')); ?></div>
+        </div>
+        
+        <?php
+        $has_yesterday = false;
+        foreach ($grouped['yesterday'] as $a) {
+            $has_yesterday = true;
+            $is_featured = $a['is_featured'] ? 'featured' : '';
+            $date = $a['announcement_date'] ?? $a['created_at'];
+            $type = $a['type'];
+            $announcement_id = $a['id'];
+            
+            // Get type display name
+            $type_names = [
+                'urgent' => 'Urgent',
+                'reminder' => 'Reminder', 
+                'event' => 'Event',
+                'notice' => 'Notice'
+            ];
+            $type_display = $type_names[$type] ?? 'Notice';
+            
+            echo '<div class="announcement-card ' . $is_featured . ' ' . $type . '" id="announcement-' . $announcement_id . '">';
+            echo '<div class="announcement-card-content">';
+            echo '<div class="announcement-main-content">';
+            echo '<div class="announcement-type-badge ' . $type . '">' . $type_display . '</div>';
+            echo '<div class="announcement-title">' . htmlspecialchars($a['title']) . '</div>';
+            echo '<div class="announcement-content">' . htmlspecialchars($a['content']) . '</div>';
+            echo '</div>';
+            echo '<div class="announcement-arrow" tabindex="0" role="button" aria-label="View details" data-title="' . htmlspecialchars($a['title'], ENT_QUOTES) . '" data-content="' . htmlspecialchars($a['content'], ENT_QUOTES) . '" data-date="' . htmlspecialchars(date('F j, Y', strtotime($date)), ENT_QUOTES) . '" data-type="' . htmlspecialchars($type_display, ENT_QUOTES) . '">→</div>';
+            echo '</div>';
+            echo '</div>';
+        }
+        
+        if (!$has_yesterday) {
+            echo '<div class="announcement-empty">No announcements for yesterday.</div>';
+        }
+        ?>
+        
+        <?php if (!empty($grouped['other'])): ?>
+            <hr class="announcement-divider" />
+            <?php foreach ($grouped['other'] as $date => $list): ?>
+                <div class="announcement-date-group">
+                    <div class="announcement-date-label"><?php echo date('F j, Y', strtotime($date)); ?></div>
+                </div>
+                <?php foreach ($list as $a): ?>
+                    <?php
+                    $type = $a['type'];
+                    $type_names = [
+                        'urgent' => 'Urgent',
+                        'reminder' => 'Reminder', 
+                        'event' => 'Event',
+                        'notice' => 'Notice'
+                    ];
+                    $type_display = $type_names[$type] ?? 'Notice';
+                    ?>
+                    <div class="announcement-card <?php echo $a['is_featured'] ? 'featured' : ''; ?> <?php echo $type; ?>" id="announcement-<?php echo $a['id']; ?>">
+                        <div class="announcement-card-content">
+                            <div class="announcement-main-content">
+                                <div class="announcement-type-badge <?php echo $type; ?>"><?php echo $type_display; ?></div>
+                                <div class="announcement-title"><?php echo htmlspecialchars($a['title']); ?></div>
+                                <div class="announcement-content"><?php echo htmlspecialchars($a['content']); ?></div>
+                            </div>
+                            <div class="announcement-arrow" tabindex="0" role="button" aria-label="View details" data-title="<?php echo htmlspecialchars($a['title'], ENT_QUOTES); ?>" data-content="<?php echo htmlspecialchars($a['content'], ENT_QUOTES); ?>" data-date="<?php echo htmlspecialchars(date('F j, Y', strtotime($a['announcement_date'] ?? $a['created_at'])), ENT_QUOTES); ?>" data-type="<?php echo htmlspecialchars($type_display, ENT_QUOTES); ?>">→</div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+</main>
+
+<!-- Modal/Screen Popup for Announcement Details -->
+<div class="announcement-modal" id="announcementModal" aria-modal="true" role="dialog" tabindex="-1">
+    <div class="announcement-modal-content">
+        <button class="announcement-modal-close" id="announcementModalClose" aria-label="Close">&times;</button>
+        <div class="announcement-modal-type-badge" id="modalTypeBadge"></div>
+        <div class="announcement-modal-title" id="modalTitle"></div>
+        <div class="announcement-modal-date" id="modalDate"></div>
+        <div class="announcement-modal-body" id="modalContent"></div>
+    </div>
+</div>
+
+<script>
+// Modal logic
+const modal = document.getElementById('announcementModal');
+const modalClose = document.getElementById('announcementModalClose');
+const modalTitle = document.getElementById('modalTitle');
+const modalContent = document.getElementById('modalContent');
+const modalDate = document.getElementById('modalDate');
+const modalTypeBadge = document.getElementById('modalTypeBadge');
+
+// Function to show announcement modal
+function showAnnouncementModal(title, content, date, type) {
+    modalTitle.textContent = title;
+    modalContent.textContent = content;
+    modalDate.textContent = date;
+    
+    // Set type badge
+    modalTypeBadge.textContent = type;
+    modalTypeBadge.className = 'announcement-modal-type-badge ' + type.toLowerCase();
+    
+    modal.classList.add('active');
+    modal.focus();
+}
+
+// Function to remove ID parameter from URL
+function removeIdFromUrl() {
+    const url = new URL(window.location);
+    url.searchParams.delete('id');
+    window.history.replaceState({}, document.title, url.pathname);
+}
+
+// Handle clicking on announcement arrows
+document.querySelectorAll('.announcement-arrow').forEach(arrow => {
+    arrow.addEventListener('click', function(e) {
+        const title = this.getAttribute('data-title');
+        const content = this.getAttribute('data-content');
+        const date = this.getAttribute('data-date');
+        const type = this.getAttribute('data-type');
+        
+        showAnnouncementModal(title, content, date, type);
+    });
+    
+    arrow.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.click();
+        }
+    });
+});
+
+// Handle modal close
+modalClose.addEventListener('click', function() {
+    modal.classList.remove('active');
+    removeIdFromUrl();
+});
+
+modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+        modal.classList.remove('active');
+        removeIdFromUrl();
+    }
+});
+
+document.addEventListener('keydown', function(e) {
+    if (modal.classList.contains('active') && e.key === 'Escape') {
+        modal.classList.remove('active');
+        removeIdFromUrl();
+    }
+});
+
+// Check if we should auto-open a specific announcement
+<?php if ($target_announcement): ?>
+document.addEventListener('DOMContentLoaded', function() {
+    // Scroll to the announcement card
+    const targetCard = document.getElementById('announcement-<?php echo $target_announcement['id']; ?>');
+    if (targetCard) {
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Highlight the card briefly
+        targetCard.style.boxShadow = '0 0 0 3px rgba(51, 182, 255, 0.3)';
+        setTimeout(() => {
+            targetCard.style.boxShadow = '';
+        }, 2000);
+        
+        // Auto-open the modal after a short delay
+        setTimeout(() => {
+            const arrow = targetCard.querySelector('.announcement-arrow');
+            if (arrow) {
+                const title = arrow.getAttribute('data-title');
+                const content = arrow.getAttribute('data-content');
+                const date = arrow.getAttribute('data-date');
+                const type = arrow.getAttribute('data-type');
+                
+                showAnnouncementModal(title, content, date, type);
+            }
+        }, 500);
+    }
+});
+<?php endif; ?>
+</script>
+
+<?php include '../includes/footer.php'; ?>
+
 <style>
+.cntct-banner {
+    height: 50vh;
+    min-height: 300px;
+    background: url('../assets/images/announcements.jpg') no-repeat center 30%;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cntct-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5); /* Dimmed overlay */
+    z-index: 1;
+}
+
+.cntct-banner-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.cntct-banner-content {
+    max-width: 1200px;
+    width: 100%;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    color: white;
+    text-align: center;
+    position: relative;
+}
+
+.cntct-banner-content h1,
+.cntct-banner-content p {
+    margin-left: 0;
+}
+
+.cntct-banner-content h1 {
+    font-size: 2.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    margin-left: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
+.cntct-banner-content p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    margin-left: 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
 /* Announcements Page Styles */
 .main-content {
     background: #f8f9fa;
@@ -475,6 +768,14 @@ foreach ($announcements as $a) {
     .main-content {
         padding: 2rem 0 4rem 0;
     }
+    
+    .cntct-banner-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .cntct-banner-content p {
+        font-size: 1.1rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -493,236 +794,18 @@ foreach ($announcements as $a) {
     .announcement-content {
         font-size: 0.9rem;
     }
+    
+    .cntct-banner {
+        height: 40vh;
+        min-height: 250px;
+    }
+    
+    .cntct-banner-content h1 {
+        font-size: 2rem;
+    }
+    
+    .cntct-banner-content p {
+        font-size: 1rem;
+    }
 }
 </style>
-
-<!-- Main Announcements Section -->
-<main class="main-content">
-    <div class="announcements-container">
-        <div class="announcement-date-group">
-            <div class="announcement-date-label">Today</div>
-            <div class="announcement-date-sub"><?php echo date('F j, Y'); ?></div>
-        </div>
-        
-        <?php
-        $has_today = false;
-        foreach ($grouped['today'] as $a) {
-            $has_today = true;
-            $is_featured = $a['is_featured'] ? 'featured' : '';
-            $date = $a['announcement_date'] ?? $a['created_at'];
-            $type = $a['type'];
-            $announcement_id = $a['id'];
-            
-            // Get type display name
-            $type_names = [
-                'urgent' => 'Urgent',
-                'reminder' => 'Reminder', 
-                'event' => 'Event',
-                'notice' => 'Notice'
-            ];
-            $type_display = $type_names[$type] ?? 'Notice';
-            
-            echo '<div class="announcement-card ' . $is_featured . ' ' . $type . '" id="announcement-' . $announcement_id . '">';
-            echo '<div class="announcement-card-content">';
-            echo '<div class="announcement-main-content">';
-            echo '<div class="announcement-type-badge ' . $type . '">' . $type_display . '</div>';
-            echo '<div class="announcement-title">' . htmlspecialchars($a['title']) . '</div>';
-            echo '<div class="announcement-content">' . htmlspecialchars($a['content']) . '</div>';
-            echo '</div>';
-            echo '<div class="announcement-arrow" tabindex="0" role="button" aria-label="View details" data-title="' . htmlspecialchars($a['title'], ENT_QUOTES) . '" data-content="' . htmlspecialchars($a['content'], ENT_QUOTES) . '" data-date="' . htmlspecialchars(date('F j, Y', strtotime($date)), ENT_QUOTES) . '" data-type="' . htmlspecialchars($type_display, ENT_QUOTES) . '">→</div>';
-            echo '</div>';
-            echo '</div>';
-        }
-        
-        if (!$has_today) {
-            echo '<div class="announcement-empty">No announcements for today.</div>';
-        }
-        ?>
-        
-        <hr class="announcement-divider" />
-        
-        <div class="announcement-date-group">
-            <div class="announcement-date-label">Yesterday</div>
-            <div class="announcement-date-sub"><?php echo date('F j, Y', strtotime('-1 day')); ?></div>
-        </div>
-        
-        <?php
-        $has_yesterday = false;
-        foreach ($grouped['yesterday'] as $a) {
-            $has_yesterday = true;
-            $is_featured = $a['is_featured'] ? 'featured' : '';
-            $date = $a['announcement_date'] ?? $a['created_at'];
-            $type = $a['type'];
-            $announcement_id = $a['id'];
-            
-            // Get type display name
-            $type_names = [
-                'urgent' => 'Urgent',
-                'reminder' => 'Reminder', 
-                'event' => 'Event',
-                'notice' => 'Notice'
-            ];
-            $type_display = $type_names[$type] ?? 'Notice';
-            
-            echo '<div class="announcement-card ' . $is_featured . ' ' . $type . '" id="announcement-' . $announcement_id . '">';
-            echo '<div class="announcement-card-content">';
-            echo '<div class="announcement-main-content">';
-            echo '<div class="announcement-type-badge ' . $type . '">' . $type_display . '</div>';
-            echo '<div class="announcement-title">' . htmlspecialchars($a['title']) . '</div>';
-            echo '<div class="announcement-content">' . htmlspecialchars($a['content']) . '</div>';
-            echo '</div>';
-            echo '<div class="announcement-arrow" tabindex="0" role="button" aria-label="View details" data-title="' . htmlspecialchars($a['title'], ENT_QUOTES) . '" data-content="' . htmlspecialchars($a['content'], ENT_QUOTES) . '" data-date="' . htmlspecialchars(date('F j, Y', strtotime($date)), ENT_QUOTES) . '" data-type="' . htmlspecialchars($type_display, ENT_QUOTES) . '">→</div>';
-            echo '</div>';
-            echo '</div>';
-        }
-        
-        if (!$has_yesterday) {
-            echo '<div class="announcement-empty">No announcements for yesterday.</div>';
-        }
-        ?>
-        
-        <?php if (!empty($grouped['other'])): ?>
-            <hr class="announcement-divider" />
-            <?php foreach ($grouped['other'] as $date => $list): ?>
-                <div class="announcement-date-group">
-                    <div class="announcement-date-label"><?php echo date('F j, Y', strtotime($date)); ?></div>
-                </div>
-                <?php foreach ($list as $a): ?>
-                    <?php
-                    $type = $a['type'];
-                    $type_names = [
-                        'urgent' => 'Urgent',
-                        'reminder' => 'Reminder', 
-                        'event' => 'Event',
-                        'notice' => 'Notice'
-                    ];
-                    $type_display = $type_names[$type] ?? 'Notice';
-                    ?>
-                    <div class="announcement-card <?php echo $a['is_featured'] ? 'featured' : ''; ?> <?php echo $type; ?>" id="announcement-<?php echo $a['id']; ?>">
-                        <div class="announcement-card-content">
-                            <div class="announcement-main-content">
-                                <div class="announcement-type-badge <?php echo $type; ?>"><?php echo $type_display; ?></div>
-                                <div class="announcement-title"><?php echo htmlspecialchars($a['title']); ?></div>
-                                <div class="announcement-content"><?php echo htmlspecialchars($a['content']); ?></div>
-                            </div>
-                            <div class="announcement-arrow" tabindex="0" role="button" aria-label="View details" data-title="<?php echo htmlspecialchars($a['title'], ENT_QUOTES); ?>" data-content="<?php echo htmlspecialchars($a['content'], ENT_QUOTES); ?>" data-date="<?php echo htmlspecialchars(date('F j, Y', strtotime($a['announcement_date'] ?? $a['created_at'])), ENT_QUOTES); ?>" data-type="<?php echo htmlspecialchars($type_display, ENT_QUOTES); ?>">→</div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
-</main>
-
-<!-- Modal/Screen Popup for Announcement Details -->
-<div class="announcement-modal" id="announcementModal" aria-modal="true" role="dialog" tabindex="-1">
-    <div class="announcement-modal-content">
-        <button class="announcement-modal-close" id="announcementModalClose" aria-label="Close">&times;</button>
-        <div class="announcement-modal-type-badge" id="modalTypeBadge"></div>
-        <div class="announcement-modal-title" id="modalTitle"></div>
-        <div class="announcement-modal-date" id="modalDate"></div>
-        <div class="announcement-modal-body" id="modalContent"></div>
-    </div>
-</div>
-
-<script>
-// Modal logic
-const modal = document.getElementById('announcementModal');
-const modalClose = document.getElementById('announcementModalClose');
-const modalTitle = document.getElementById('modalTitle');
-const modalContent = document.getElementById('modalContent');
-const modalDate = document.getElementById('modalDate');
-const modalTypeBadge = document.getElementById('modalTypeBadge');
-
-// Function to show announcement modal
-function showAnnouncementModal(title, content, date, type) {
-    modalTitle.textContent = title;
-    modalContent.textContent = content;
-    modalDate.textContent = date;
-    
-    // Set type badge
-    modalTypeBadge.textContent = type;
-    modalTypeBadge.className = 'announcement-modal-type-badge ' + type.toLowerCase();
-    
-    modal.classList.add('active');
-    modal.focus();
-}
-
-// Function to remove ID parameter from URL
-function removeIdFromUrl() {
-    const url = new URL(window.location);
-    url.searchParams.delete('id');
-    window.history.replaceState({}, document.title, url.pathname);
-}
-
-// Handle clicking on announcement arrows
-document.querySelectorAll('.announcement-arrow').forEach(arrow => {
-    arrow.addEventListener('click', function(e) {
-        const title = this.getAttribute('data-title');
-        const content = this.getAttribute('data-content');
-        const date = this.getAttribute('data-date');
-        const type = this.getAttribute('data-type');
-        
-        showAnnouncementModal(title, content, date, type);
-    });
-    
-    arrow.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            this.click();
-        }
-    });
-});
-
-// Handle modal close
-modalClose.addEventListener('click', function() {
-    modal.classList.remove('active');
-    removeIdFromUrl();
-});
-
-modal.addEventListener('click', function(e) {
-    if (e.target === modal) {
-        modal.classList.remove('active');
-        removeIdFromUrl();
-    }
-});
-
-document.addEventListener('keydown', function(e) {
-    if (modal.classList.contains('active') && e.key === 'Escape') {
-        modal.classList.remove('active');
-        removeIdFromUrl();
-    }
-});
-
-// Check if we should auto-open a specific announcement
-<?php if ($target_announcement): ?>
-document.addEventListener('DOMContentLoaded', function() {
-    // Scroll to the announcement card
-    const targetCard = document.getElementById('announcement-<?php echo $target_announcement['id']; ?>');
-    if (targetCard) {
-        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // Highlight the card briefly
-        targetCard.style.boxShadow = '0 0 0 3px rgba(51, 182, 255, 0.3)';
-        setTimeout(() => {
-            targetCard.style.boxShadow = '';
-        }, 2000);
-        
-        // Auto-open the modal after a short delay
-        setTimeout(() => {
-            const arrow = targetCard.querySelector('.announcement-arrow');
-            if (arrow) {
-                const title = arrow.getAttribute('data-title');
-                const content = arrow.getAttribute('data-content');
-                const date = arrow.getAttribute('data-date');
-                const type = arrow.getAttribute('data-type');
-                
-                showAnnouncementModal(title, content, date, type);
-            }
-        }, 500);
-    }
-});
-<?php endif; ?>
-</script>
-
-<?php include '../includes/footer.php'; ?>
