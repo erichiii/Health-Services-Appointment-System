@@ -622,24 +622,12 @@ REVERT: Restoring layout to previous structure before main-aligned-container ref
         width: 100%;
         position: relative;
         display: block;
-        border: none !important;
-        border-bottom: none !important;
+        border: none;
         background: transparent;
-        box-shadow: none !important;
     }
 
     .form-section legend::after {
-        display: none !important; /* Remove the old pseudo-element */
-        content: none !important;
-        border: none !important;
-        background: none !important;
-    }
-
-    .form-section legend::before {
-        display: none !important;
-        content: none !important;
-        border: none !important;
-        background: none !important;
+        display: none; /* Remove the old pseudo-element */
     }
 
     /* Responsive Design */
